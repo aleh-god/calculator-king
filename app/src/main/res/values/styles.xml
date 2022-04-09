@@ -1,14 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <style name="Widget.Button" parent="Widget.MaterialComponents.Button">
+    <style name="Widget.KingCalculator.ToolbarTheme" parent="@style/Widget.Material3.Toolbar">
+        <item name="android:background">?colorPrimary</item>
+<!--        <item name="titleTextAppearance">@style/CustomTitleTextAppearance</item>-->
+<!--        <item name="subtitleTextAppearance">@style/CustomSubTitleTextAppearance</item>-->
+    </style>
+
+    <style name="Widget.KingCalculator.Button" parent="Widget.MaterialComponents.Button">
+
 
     </style>
 
-    <style name="Widget.TextView" parent="Widget.MaterialComponents.TextView">
-
+    <style name="Widget.KingCalculator.TextView" parent="Widget.MaterialComponents.TextView">
+        <item name="android:layout_margin">@dimen/main_margin</item>
+        <item name="android:padding">@dimen/main_padding</item>
+        <item name="android:gravity">center</item>
     </style>
 
-    <style name="Widget.TextButton" parent="Widget.MaterialComponents.Button.TextButton">
+    <style name="Widget.KingCalculator.TextButton" parent="Widget.MaterialComponents.Button.TextButton">
 
     </style>
 </resources>

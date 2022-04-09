@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="5dp"
+    >
+
+<androidx.constraintlayout.widget.ConstraintLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    >
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/party_name"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/party_games_count"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/divider"
+        tools:text="Game #1"
+        android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
+        />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/party_games_count"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toEndOf="@+id/party_name"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/divider"
+        tools:text="17 in 56"
+        android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
+        />
+
+    <com.google.android.material.divider.MaterialDivider
+        android:id="@+id/divider"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/party_name"
+        app:layout_constraintBottom_toTopOf="@+id/player_one_name"
+        app:dividerInsetStart="15dp"
+        app:dividerInsetEnd="15dp"
+        />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/player_one_name"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/player_one_count"
+        app:layout_constraintTop_toBottomOf="@+id/divider"
+        app:layout_constraintBottom_toTopOf="@+id/player_two_name"
+        tools:text="Player #1"
+        android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
+        />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/player_one_count"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toEndOf="@+id/player_one_name"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/divider"
+        app:layout_constraintBottom_toTopOf="@+id/player_two_count"
+        tools:text="356"
+        android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
+        />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/player_two_name"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/player_two_count"
+        app:layout_constraintTop_toBottomOf="@+id/player_one_name"
+        app:layout_constraintBottom_toTopOf="@+id/player_three_name"
+        tools:text="Player #2"
+        android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
+        />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/player_two_count"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toEndOf="@+id/player_two_name"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/player_one_count"
+        app:layout_constraintBottom_toTopOf="@+id/player_three_count"
+        tools:text="-356"
+        android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
+        />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/player_three_name"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/player_three_count"
+        app:layout_constraintTop_toBottomOf="@+id/player_two_name"
+        app:layout_constraintBottom_toTopOf="@+id/player_four_name"
+        tools:text="Player #3"
+        android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
+        />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/player_three_count"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toEndOf="@+id/player_three_name"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/player_two_count"
+        app:layout_constraintBottom_toTopOf="@+id/player_four_count"
+        tools:text="56"
+        android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
+        />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/player_four_name"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/player_four_count"
+        app:layout_constraintTop_toBottomOf="@+id/player_three_name"
+        app:layout_constraintBottom_toBottomOf="parent"
+        tools:text="Player #4"
+        android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
+        />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/player_four_count"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toEndOf="@+id/player_four_name"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/player_three_count"
+        app:layout_constraintBottom_toBottomOf="parent"
+        tools:text="-56"
+        android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
+        />
+</androidx.constraintlayout.widget.ConstraintLayout>
+</com.google.android.material.card.MaterialCardView>
