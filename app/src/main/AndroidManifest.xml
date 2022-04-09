@@ -3,6 +3,7 @@
     package="by.godevelopment.kingcalculator">
 
     <application
+        android:name=".KingApp"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"

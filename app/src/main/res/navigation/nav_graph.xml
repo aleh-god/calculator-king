@@ -1,6 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/nav_graph">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/partiesListFragment">
 
+    <fragment
+        android:id="@+id/partiesListFragment"
+        android:name="by.godevelopment.kingcalculator.presentation.partieslist.PartiesListFragment"
+        android:label="Parties list"
+        tools:layout="@layout/fragment_parties_list" >
+        <action
+            android:id="@+id/action_partiesListFragment_to_playerListFragment"
+            app:destination="@id/playerListFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/playerListFragment"
+        android:name="by.godevelopment.kingcalculator.presentation.playerslist.PlayerListFragment"
+        android:label="Player list"
+        tools:layout="@layout/fragment_player_list" >
+        <action
+            android:id="@+id/action_playerListFragment_to_partiesListFragment"
+            app:destination="@id/partiesListFragment" />
+        <action
+            android:id="@+id/action_playerListFragment_to_playerCardFragment"
+            app:destination="@id/playerCardFragment" />
+        <action
+            android:id="@+id/action_playerListFragment_to_playerInfoFragment"
+            app:destination="@id/playerInfoFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/playerCardFragment"
+        android:name="by.godevelopment.kingcalculator.presentation.playercard.PlayerCardFragment"
+        android:label="Player card"
+        tools:layout="@layout/fragment_player_card" >
+        <action
+            android:id="@+id/action_playerCardFragment_to_playerListFragment"
+            app:destination="@id/playerListFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/playerInfoFragment"
+        android:name="by.godevelopment.kingcalculator.presentation.playerinfo.PlayerInfoFragment"
+        android:label="Player info"
+        tools:layout="@layout/fragment_player_info" >
+        <action
+            android:id="@+id/action_playerInfoFragment_to_playerListFragment"
+            app:destination="@id/playerListFragment" />
+    </fragment>
 </navigation>
