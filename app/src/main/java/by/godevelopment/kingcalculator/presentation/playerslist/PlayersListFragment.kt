@@ -8,10 +8,12 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import by.godevelopment.kingcalculator.R
 import by.godevelopment.kingcalculator.commons.TAG
 import by.godevelopment.kingcalculator.databinding.FragmentPlayersListBinding
+import by.godevelopment.kingcalculator.presentation.playeraddform.PlayerAddFormFragmentDirections
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
@@ -29,6 +31,7 @@ class PlayersListFragment : Fragment() {
 
     private val onClick: (Int) -> Unit = { key ->
         Log.i(TAG, "PlayersListFragment: onClick $key")
+        navigateToCardPlayer(key)
     }
 
     override fun onCreateView(
@@ -37,8 +40,15 @@ class PlayersListFragment : Fragment() {
     ): View {
         _binding = FragmentPlayersListBinding.inflate(inflater, container, false)
         setupUi()
+        setupListeners()
         setupEvent()
         return binding.root
+    }
+
+    private fun setupListeners() {
+        binding.buttonFloatingAction.setOnClickListener {
+            findNavController().navigate(R.id.action_playersListFragment_to_playerAddFormFragment)
+        }
     }
 
     private fun setupUi() {
@@ -68,6 +78,13 @@ class PlayersListFragment : Fragment() {
                     .show()
             }
         }
+    }
+
+    private fun navigateToCardPlayer(idPlayer: Int) {
+        // PlayerCardFragmentDirections.actionPlayerCardFragmentToPlayersListFragment()
+        val action = PlayerAddFormFragmentDirections
+            .actionPlayerAddFormFragmentToPlayersListFragment(idPlayer)
+        this.findNavController().navigate(action)
     }
 
     override fun onDestroy() {

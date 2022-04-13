@@ -26,6 +26,7 @@
     <string name="email_player">Email player</string>
     <string name="start_party">Start Party</string>
     <string name="exit">Exit</string>
+    <string name="ok">OK</string>
     <string name="save_player">Save player</string>
     <string name="enter_email">Enter email</string>
     <string name="enter_first_name">Enter first name</string>
@@ -47,4 +48,12 @@
     <string name="bttn_save_player">Save player</string>
     <string name="bttn_delete_player">Delete player</string>
     <string name="card_helper_text">Edit your name</string>
+    <string name="card_email">Email</string>
+    <string name="form_helper_name_text">Enter you name</string>
+    <string name="form_helper_email_text">Enter you email</string>
+    <string name="message_error_valid_name">Please enter a valid name</string>
+    <string name="message_error_valid_email">Please enter a valid email address</string>
+    <string name="message_error_data_load">Data not loaded</string>
+    <string name="message_data_load">Data load successfully</string>
+    <string name="nav_label_player_add_form">Player Add Form</string>
 </resources>

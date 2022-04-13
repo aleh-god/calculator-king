@@ -29,6 +29,12 @@
         <action
             android:id="@+id/action_playersListFragment_to_playerInfoFragment"
             app:destination="@id/playerInfoFragment" />
+        <action
+            android:id="@+id/action_playersListFragment_to_playerAddFormFragment"
+            app:destination="@id/playerAddFormFragment" />
+        <argument
+            android:name="idPlayer"
+            app:argType="integer" />
     </fragment>
     <fragment
         android:id="@+id/playerCardFragment"
@@ -38,6 +44,9 @@
         <action
             android:id="@+id/action_playerCardFragment_to_playersListFragment"
             app:destination="@id/playersListFragment" />
+        <argument
+            android:name="idPlayer"
+            app:argType="integer" />
     </fragment>
     <fragment
         android:id="@+id/playerInfoFragment"
@@ -46,6 +55,17 @@
         tools:layout="@layout/fragment_player_info" >
         <action
             android:id="@+id/action_playerInfoFragment_to_playersListFragment"
+            app:destination="@id/playersListFragment" />
+        <argument
+            android:name="idPlayer"
+            app:argType="integer" />
+    </fragment>
+    <fragment
+        android:id="@+id/playerAddFormFragment"
+        android:name="by.godevelopment.kingcalculator.presentation.playeraddform.PlayerAddFormFragment"
+        android:label="@string/nav_label_player_add_form" >
+        <action
+            android:id="@+id/action_playerAddFormFragment_to_playersListFragment"
             app:destination="@id/playersListFragment" />
     </fragment>
 </navigation>

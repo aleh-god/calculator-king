@@ -1,13 +1,14 @@
 package by.godevelopment.kingcalculator.domain.usecases
 
-import by.godevelopment.kingcalculator.data.SourceTestData
 import by.godevelopment.kingcalculator.domain.models.ItemPlayerModel
+import by.godevelopment.kingcalculator.domain.repositories.PlayerRepository
+import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 class GetListPlayerModelUseCase @Inject constructor(
-
-) : BaseUseCase<List<ItemPlayerModel>, EmptyParams>() {
-    override suspend fun run(params: EmptyParams): List<ItemPlayerModel> {
-        return SourceTestData.listPlayers
+    private val playerRepository: PlayerRepository
+) {
+    operator fun invoke(): Flow<List<ItemPlayerModel>> {
+        return playerRepository.getPlayers()
     }
 }

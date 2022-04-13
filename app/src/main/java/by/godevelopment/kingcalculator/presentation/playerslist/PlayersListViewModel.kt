@@ -7,7 +7,6 @@ import by.godevelopment.kingcalculator.R
 import by.godevelopment.kingcalculator.commons.TAG
 import by.godevelopment.kingcalculator.domain.helpers.StringHelper
 import by.godevelopment.kingcalculator.domain.models.ItemPlayerModel
-import by.godevelopment.kingcalculator.domain.usecases.EmptyParams
 import by.godevelopment.kingcalculator.domain.usecases.GetListPlayerModelUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
@@ -28,6 +27,8 @@ class PlayersListViewModel @Inject constructor(
     private val _uiEvent  = MutableSharedFlow<String>(0)
     val uiEvent: SharedFlow<String> = _uiEvent
 
+    private val navigateEvent  = MutableSharedFlow<Boolean>(0)
+
     private var fetchJob: Job? = null
 
     init {
@@ -37,7 +38,7 @@ class PlayersListViewModel @Inject constructor(
     fun fetchDataModel() {
         fetchJob?.cancel()
         fetchJob = viewModelScope.launch {
-            getListPlayerModelUseCase.execute(EmptyParams)
+            getListPlayerModelUseCase()
                 .onStart {
                     _uiState.value = UiState(
                         isFetchingData = true
