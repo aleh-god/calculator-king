@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+<navigation
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
@@ -8,43 +9,43 @@
     <fragment
         android:id="@+id/partiesListFragment"
         android:name="by.godevelopment.kingcalculator.presentation.partieslist.PartiesListFragment"
-        android:label="Parties list"
+        android:label="@string/nav_label_parties_list"
         tools:layout="@layout/fragment_parties_list" >
         <action
-            android:id="@+id/action_partiesListFragment_to_playerListFragment"
-            app:destination="@id/playerListFragment" />
+            android:id="@+id/action_partiesListFragment_to_playersListFragment"
+            app:destination="@id/playersListFragment" />
     </fragment>
     <fragment
-        android:id="@+id/playerListFragment"
-        android:name="by.godevelopment.kingcalculator.presentation.playerslist.PlayerListFragment"
-        android:label="Player list"
-        tools:layout="@layout/fragment_player_list" >
+        android:id="@+id/playersListFragment"
+        android:name="by.godevelopment.kingcalculator.presentation.playerslist.PlayersListFragment"
+        android:label="@string/nav_label_players_list"
+        tools:layout="@layout/fragment_players_list" >
         <action
-            android:id="@+id/action_playerListFragment_to_partiesListFragment"
+            android:id="@+id/action_playersListFragment_to_partiesListFragment"
             app:destination="@id/partiesListFragment" />
         <action
-            android:id="@+id/action_playerListFragment_to_playerCardFragment"
+            android:id="@+id/action_playersListFragment_to_playerCardFragment"
             app:destination="@id/playerCardFragment" />
         <action
-            android:id="@+id/action_playerListFragment_to_playerInfoFragment"
+            android:id="@+id/action_playersListFragment_to_playerInfoFragment"
             app:destination="@id/playerInfoFragment" />
     </fragment>
     <fragment
         android:id="@+id/playerCardFragment"
         android:name="by.godevelopment.kingcalculator.presentation.playercard.PlayerCardFragment"
-        android:label="Player card"
+        android:label="@string/nav_label_player_card"
         tools:layout="@layout/fragment_player_card" >
         <action
-            android:id="@+id/action_playerCardFragment_to_playerListFragment"
-            app:destination="@id/playerListFragment" />
+            android:id="@+id/action_playerCardFragment_to_playersListFragment"
+            app:destination="@id/playersListFragment" />
     </fragment>
     <fragment
         android:id="@+id/playerInfoFragment"
         android:name="by.godevelopment.kingcalculator.presentation.playerinfo.PlayerInfoFragment"
-        android:label="Player info"
+        android:label="@string/nav_label_player_info"
         tools:layout="@layout/fragment_player_info" >
         <action
-            android:id="@+id/action_playerInfoFragment_to_playerListFragment"
-            app:destination="@id/playerListFragment" />
+            android:id="@+id/action_playerInfoFragment_to_playersListFragment"
+            app:destination="@id/playersListFragment" />
     </fragment>
 </navigation>

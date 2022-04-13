@@ -1,13 +1,70 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".presentation.playercard.PlayerCardFragment">
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="Hello" />
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/player_email"
+        android:layout_width="@dimen/material_textview_width"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/player_name"
+        app:layout_constraintVertical_chainStyle="packed"
+        android:layout_marginBottom="@dimen/big_margin"
+        android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
+        tools:text="jesus@email.haven"
+        />
 
-</FrameLayout>
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/player_name"
+        android:layout_height="wrap_content"
+        android:layout_width="@dimen/material_textview_width"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/player_email"
+        app:layout_constraintBottom_toTopOf="@id/bttn_save"
+        android:hint="@string/card_name"
+        app:endIconMode="clear_text"
+        app:helperTextEnabled="true"
+        app:helperText="@string/card_helper_text"
+        app:counterEnabled="true"
+        app:counterMaxLength="20"
+        >
+        <com.google.android.material.textfield.TextInputEditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <Button
+        android:id="@+id/bttn_save"
+        android:layout_width="@dimen/material_textview_width"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/player_name"
+        app:layout_constraintBottom_toTopOf="@id/bttn_delete"
+        android:layout_marginTop="@dimen/big_margin"
+        android:text="@string/bttn_save_player"
+        style="?attr/materialButtonStyle"
+        />
+
+    <Button
+        android:id="@+id/bttn_delete"
+        android:layout_width="@dimen/material_textview_width"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/bttn_save"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:text="@string/bttn_delete_player"
+        style="?attr/materialButtonOutlinedStyle"
+        />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

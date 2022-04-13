@@ -16,7 +16,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        tools:listitem="@layout/item_parties_list"
+        tools:listitem="@layout/item_players_list"
         />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton

@@ -8,41 +8,52 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.LinearLayoutManager
 import by.godevelopment.kingcalculator.R
 import by.godevelopment.kingcalculator.commons.TAG
-import by.godevelopment.kingcalculator.databinding.FragmentPlayerListBinding
+import by.godevelopment.kingcalculator.databinding.FragmentPlayersListBinding
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 
 @AndroidEntryPoint
-class PlayerListFragment : Fragment() {
+class PlayersListFragment : Fragment() {
 
     companion object {
-        fun newInstance() = PlayerListFragment()
+        fun newInstance() = PlayersListFragment()
     }
 
-    private val viewModel: PlayerListViewModel by viewModels()
-    private var _binding: FragmentPlayerListBinding? = null
+    private val viewModel: PlayersListViewModel by viewModels()
+    private var _binding: FragmentPlayersListBinding? = null
     private val binding get() = _binding!!
+
+    private val onClick: (Int) -> Unit = { key ->
+        Log.i(TAG, "PlayersListFragment: onClick $key")
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentPlayerListBinding.inflate(inflater, container, false)
+        _binding = FragmentPlayersListBinding.inflate(inflater, container, false)
         setupUi()
         setupEvent()
         return binding.root
     }
 
     private fun setupUi() {
+        val rvAdapter = PlayersAdapter(onClick)
+        binding.apply {
+            rv.adapter = rvAdapter
+            rv.layoutManager = LinearLayoutManager(requireContext())
+        }
         lifecycleScope.launchWhenStarted {
             viewModel.uiState.collect { uiState ->
                 Log.i(TAG, "setupUi: $uiState")
-//                if (!uiState.isFetchingData) {
-//                    binding.progress.visibility = View.GONE
-//                } else binding.progress.visibility = View.VISIBLE
+                if (!uiState.isFetchingData) {
+                    binding.progress.visibility = View.GONE
+                } else binding.progress.visibility = View.VISIBLE
+                rvAdapter.itemList = uiState.dataList
             }
         }
     }

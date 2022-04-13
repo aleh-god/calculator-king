@@ -36,4 +36,15 @@
     <string name="setup_party">Setup party</string>
     <string name="email_check">This email not registered</string>
     <string name="party_view">Party view</string>
+    <string name="menu_settings">Settings</string>
+    <string name="menu_players">Players list</string>
+    <string name="descr_player_avatar">Player avatar</string>
+    <string name="nav_label_parties_list">Parties list</string>
+    <string name="nav_label_players_list">Players list</string>
+    <string name="nav_label_player_card">Player card</string>
+    <string name="nav_label_player_info">Player info</string>
+    <string name="card_name">Name</string>
+    <string name="bttn_save_player">Save player</string>
+    <string name="bttn_delete_player">Delete player</string>
+    <string name="card_helper_text">Edit your name</string>
 </resources>

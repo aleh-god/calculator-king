@@ -5,7 +5,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="5dp"
+    android:layout_margin="3dp"
     >
 
 <androidx.constraintlayout.widget.ConstraintLayout
@@ -21,6 +21,7 @@
         app:layout_constraintEnd_toStartOf="@+id/party_games_count"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toTopOf="@+id/divider"
+        app:layout_constraintHorizontal_weight="7"
         tools:text="Game #1"
         android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
         />
@@ -33,6 +34,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toTopOf="@+id/divider"
+        app:layout_constraintHorizontal_weight="3"
         tools:text="17 in 56"
         android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
         />
@@ -52,21 +54,23 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/player_one_count"
+        app:layout_constraintEnd_toStartOf="@+id/player_one_score"
         app:layout_constraintTop_toBottomOf="@+id/divider"
         app:layout_constraintBottom_toTopOf="@+id/player_two_name"
+        app:layout_constraintHorizontal_weight="7"
         tools:text="Player #1"
         android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
         />
 
     <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/player_one_count"
+        android:id="@+id/player_one_score"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         app:layout_constraintStart_toEndOf="@+id/player_one_name"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/divider"
-        app:layout_constraintBottom_toTopOf="@+id/player_two_count"
+        app:layout_constraintBottom_toTopOf="@+id/player_two_score"
+        app:layout_constraintHorizontal_weight="3"
         tools:text="356"
         android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
         />
@@ -76,21 +80,23 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/player_two_count"
+        app:layout_constraintEnd_toStartOf="@+id/player_two_score"
         app:layout_constraintTop_toBottomOf="@+id/player_one_name"
         app:layout_constraintBottom_toTopOf="@+id/player_three_name"
+        app:layout_constraintHorizontal_weight="7"
         tools:text="Player #2"
         android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
         />
 
     <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/player_two_count"
+        android:id="@+id/player_two_score"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         app:layout_constraintStart_toEndOf="@+id/player_two_name"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/player_one_count"
-        app:layout_constraintBottom_toTopOf="@+id/player_three_count"
+        app:layout_constraintTop_toBottomOf="@+id/player_one_score"
+        app:layout_constraintBottom_toTopOf="@+id/player_three_score"
+        app:layout_constraintHorizontal_weight="3"
         tools:text="-356"
         android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
         />
@@ -100,21 +106,23 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/player_three_count"
+        app:layout_constraintEnd_toStartOf="@+id/player_three_score"
         app:layout_constraintTop_toBottomOf="@+id/player_two_name"
         app:layout_constraintBottom_toTopOf="@+id/player_four_name"
+        app:layout_constraintHorizontal_weight="7"
         tools:text="Player #3"
         android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
         />
 
     <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/player_three_count"
+        android:id="@+id/player_three_score"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         app:layout_constraintStart_toEndOf="@+id/player_three_name"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/player_two_count"
-        app:layout_constraintBottom_toTopOf="@+id/player_four_count"
+        app:layout_constraintTop_toBottomOf="@+id/player_two_score"
+        app:layout_constraintBottom_toTopOf="@+id/player_four_score"
+        app:layout_constraintHorizontal_weight="3"
         tools:text="56"
         android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
         />
@@ -124,21 +132,23 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/player_four_count"
+        app:layout_constraintEnd_toStartOf="@+id/player_four_score"
         app:layout_constraintTop_toBottomOf="@+id/player_three_name"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_weight="7"
         tools:text="Player #4"
         android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
         />
 
     <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/player_four_count"
+        android:id="@+id/player_four_score"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         app:layout_constraintStart_toEndOf="@+id/player_four_name"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/player_three_count"
+        app:layout_constraintTop_toBottomOf="@+id/player_three_score"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_weight="3"
         tools:text="-56"
         android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
         />
