@@ -1,14 +1,13 @@
 package by.godevelopment.kingcalculator.domain.repositories
 
 import by.godevelopment.kingcalculator.domain.models.ItemPlayerModel
-import by.godevelopment.kingcalculator.domain.models.PlayerDataModel
-import by.godevelopment.kingcalculator.domain.models.PlayerModel
+import by.godevelopment.kingcalculator.domain.models.PlayerCardModel
 import kotlinx.coroutines.flow.Flow
 
 interface PlayerRepository {
 
-    suspend fun getPlayerById(): PlayerModel
-    fun getPlayers(): Flow<List<ItemPlayerModel>>
+    suspend fun getPlayerById(id: Int): PlayerCardModel
+    suspend fun saveNewPlayer(params: PlayerCardModel): Boolean
 
-    suspend fun saveNewPlayer(params: PlayerDataModel): Boolean
+    fun getAllPlayers(): Flow<List<ItemPlayerModel>>
 }

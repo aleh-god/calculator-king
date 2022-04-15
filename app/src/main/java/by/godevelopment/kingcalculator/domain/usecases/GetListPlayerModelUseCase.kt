@@ -9,6 +9,6 @@ class GetListPlayerModelUseCase @Inject constructor(
     private val playerRepository: PlayerRepository
 ) {
     operator fun invoke(): Flow<List<ItemPlayerModel>> {
-        return playerRepository.getPlayers()
+        return playerRepository.getAllPlayers()
     }
 }
