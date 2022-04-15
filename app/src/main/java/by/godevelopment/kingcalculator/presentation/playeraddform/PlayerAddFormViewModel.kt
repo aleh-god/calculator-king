@@ -7,7 +7,7 @@ import androidx.lifecycle.viewModelScope
 import by.godevelopment.kingcalculator.R
 import by.godevelopment.kingcalculator.commons.TAG
 import by.godevelopment.kingcalculator.domain.helpers.StringHelper
-import by.godevelopment.kingcalculator.domain.models.PlayerDataModel
+import by.godevelopment.kingcalculator.domain.models.PlayerCardModel
 import by.godevelopment.kingcalculator.domain.usecases.SavePlayerDataToRepositoryUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
@@ -33,42 +33,48 @@ class PlayerAddFormViewModel @Inject constructor(
     private var fetchJob: Job? = null
 
     fun savePlayerDataToRepository(name: Editable?, email: Editable?) {
-        _uiState.value = UiState(isFetchingData = true)
-        if (checkTextFields(name, email)) {
+        val currentState = uiState.value
+        if (currentState.nameIsValid && currentState.emailIsValid) {
+            _uiState.value = currentState.copy(isSavingData = true)
             fetchJob?.cancel()
             fetchJob = viewModelScope.launch {
                 val result = savePlayerDataToRepositoryUseCase.run(
-                    PlayerDataModel(
+                    PlayerCardModel(
                         name = name.toString(),
                         email = email.toString()
                     )
                 )
-                if (!result) {
-                    _uiEvent.emit(stringHelper.getString(R.string.message_error_data_load))
-                } else {
+                if (result) {
                     _uiEvent.emit(stringHelper.getString(R.string.message_data_load))
+                } else {
+                    _uiEvent.emit(stringHelper.getString(R.string.message_error_data_load))
                 }
             }
+            _uiState.value = uiState.value.copy(isSavingData = false)
         }
-        _uiState.value = UiState(isFetchingData = false)
     }
 
-    private fun checkTextFields(name: Editable?, email: Editable?): Boolean {
-        val checkedName = !name.isNullOrBlank()
+    fun checkNameFields(name: Editable?) {
+        val checkedName = !name.isNullOrBlank() && name.length > 2
+        Log.i(TAG, "checkNameFields: $name = $checkedName")
+        val currentState = uiState.value
+         _uiState.value = currentState.copy(
+             nameIsValid = checkedName
+         )
+    }
+
+    fun checkEmailFields(email: Editable?) {
         val checkedEmail = !email.isNullOrBlank() && android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()
-        viewModelScope.launch {
-            if (!checkedName) _uiEvent.emit(stringHelper.getString(R.string.message_error_valid_name))
-        }
-        viewModelScope.launch {
-            if (!checkedEmail) _uiEvent.emit(stringHelper.getString(R.string.message_error_valid_email))
-        }
-        Log.i(TAG, "checkTextFields: $checkedName + $checkedEmail = ${checkedName && checkedEmail}")
-        return checkedName && checkedEmail
+        Log.i(TAG, "checkEmailFields: $email = $checkedEmail")
+        val currentState = uiState.value
+        _uiState.value = currentState.copy(
+            emailIsValid = checkedEmail
+        )
     }
 
     data class UiState(
-        val isFetchingData: Boolean = false,
-        val playerName: String? = null,
-        val playerEmail: String? = null
+        val isSavingData: Boolean = false,
+        val nameIsValid: Boolean = false,
+        val emailIsValid: Boolean = false
     )
 }

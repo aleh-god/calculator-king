@@ -5,6 +5,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -41,33 +42,43 @@ class PlayerAddFormFragment : Fragment() {
         binding.apply {
             lifecycleScope.launchWhenStarted {
                 viewModel.uiState.collect { uiState ->
-                    if (uiState.isFetchingData) {
-                        bttnSave.visibility = View.GONE
-                        bttnSave.isClickable = false
+                    Log.i(TAG, "setupUI: $uiState")
+                    if (uiState.isSavingData) {
                         progress.visibility = View.VISIBLE
                     } else {
-                        bttnSave.visibility = View.VISIBLE
-                        bttnSave.isClickable = true
                         progress.visibility = View.GONE
                     }
-                    uiState.playerName?.let {
-                        playerName.editText?.setText(it)
+                    if (uiState.nameIsValid && uiState.emailIsValid) {
+                        bttnSave.visibility = View.VISIBLE
+                        bttnSave.isClickable = true
+                    } else {
+                        bttnSave.visibility = View.GONE
+                        bttnSave.isClickable = false
                     }
-                    uiState.playerEmail?.let {
-                        playerEmail.editText?.setText(it)
-                    }
+                    if (playerNameEdit.text.isNullOrBlank() || uiState.nameIsValid)
+                        playerName.error = null
+                        else playerName.error = getString(R.string.error_name_no_valid)
+                    if (playerEmailEdit.text.isNullOrBlank() || uiState.emailIsValid)
+                        playerEmail.error = null
+                        else playerEmail.error = getString(R.string.error_email_no_valid)
                 }
             }
         }
     }
 
     private fun setupListeners() {
-        binding.bttnSave.setOnClickListener {
-            binding.apply {
-                viewModel.savePlayerDataToRepository(
-                    playerName.editText?.text,
-                    playerEmail.editText?.text
-                )
+        binding.apply {
+            playerNameEdit.doAfterTextChanged {
+                viewModel.checkNameFields(it)
+            }
+            playerEmailEdit.doAfterTextChanged {
+                viewModel.checkEmailFields(it)
+            }
+            bttnSave.setOnClickListener {
+                    viewModel.savePlayerDataToRepository(
+                        playerNameEdit.text,
+                        playerEmailEdit.text
+                    )
             }
         }
     }

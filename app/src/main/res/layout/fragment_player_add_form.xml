@@ -17,7 +17,6 @@
         app:layout_constraintBottom_toTopOf="@id/player_email"
         android:layout_marginBottom="@dimen/big_margin"
         android:hint="@string/card_name"
-        android:inputType="textPersonName"
         app:endIconMode="clear_text"
         app:helperTextEnabled="true"
         app:helperText="@string/form_helper_name_text"
@@ -25,8 +24,10 @@
         app:counterMaxLength="20"
         >
         <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/player_name_edit"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:maxLines="1"
             />
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -38,8 +39,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toTopOf="@id/line_1"
         android:layout_marginBottom="@dimen/big_margin"
-        android:hint="@string/card_email"
-        android:inputType="textEmailAddress"
         app:endIconMode="clear_text"
         app:helperTextEnabled="true"
         app:helperText="@string/form_helper_email_text"
@@ -47,8 +46,12 @@
         app:counterMaxLength="20"
         >
         <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/player_email_edit"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:hint="@string/card_email"
+            android:inputType="textEmailAddress"
+            android:maxLines="1"
             />
     </com.google.android.material.textfield.TextInputLayout>
 

@@ -56,4 +56,6 @@
     <string name="message_error_data_load">Data not loaded</string>
     <string name="message_data_load">Data load successfully</string>
     <string name="nav_label_player_add_form">Player Add Form</string>
+    <string name="error_name_no_valid">Name length less than 3</string>
+    <string name="error_email_no_valid">Email no valid</string>
 </resources>
