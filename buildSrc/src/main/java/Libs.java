@@ -2,10 +2,10 @@ public class Libs {
     static String kotlinStdLib = "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_ver";
     //presentation
     static String corektx = "androidx.core:core-ktx:" + Versions.core_version;
-    static String appcompat = "androidx.appcompat:appcompat:1.3.1";
+    static String appcompat = "androidx.appcompat:appcompat:1.4.1";
     static String legacySupport = "androidx.legacy:legacy-support-v4:1.0.0";
-    static String material = "com.google.android.material:material:1.4.0";
-    static String constraint = "androidx.constraintlayout:constraintlayout:2.1.1";
+    static String material = "com.google.android.material:material:1.5.0";
+    static String constraint = "androidx.constraintlayout:constraintlayout:2.1.3";
     static String recyclerView = "androidx.recyclerview:recyclerview:" + Versions.recyclerView_version;
     // For control over item selection of both touch and mouse driven selection
     static String recyclerViewSelection = "androidx.recyclerview:recyclerview-selection:" + Versions.recyclerViewSelection_version;
@@ -13,8 +13,12 @@ public class Libs {
     static String viewPager2 = "androidx.viewpager2:viewpager2:" + Versions.viewPager2_version;
 
     //navigation
+    // Kotlin
     static String navFragment = "androidx.navigation:navigation-fragment-ktx:" + Versions.navigation_version;
     static String navUi = "androidx.navigation:navigation-ui-ktx:" + Versions.navigation_version;
+    // Feature module Support
+    static String navFeatures = "androidx.navigation:navigation-dynamic-features-fragment:$nav_version" + Versions.navigation_version;
+
     //coroutines
     static String coroutines = "org.jetbrains.kotlinx:kotlinx-coroutines-android:" + Versions.coroutines_version;
     //ktx

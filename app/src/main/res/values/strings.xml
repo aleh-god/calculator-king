@@ -1,3 +1,61 @@
 <resources>
     <string name="app_name">King calculator</string>
+
+    <string name="alert_error_loading">Data not available</string>
+    <string name="snackbar_btn_return">Return to table</string>
+    <string name="snackbar_btn_reload">Reload table</string>
+    <string name="dialog_neutral_btn_text">OK</string>
+    <string name="fab_content_desc">add new data</string>
+
+    <string name="game_type_tt">Take Tricks</string>
+    <string name="game_type_tb">Take Boys</string>
+    <string name="game_type_tg">Take Girls</string>
+    <string name="game_type_th">Take Hearts</string>
+    <string name="game_type_tk">Take King</string>
+    <string name="game_type_tl">Take Last Two</string>
+    <string name="game_type_tfg">Take BFG</string>
+    <string name="game_type_ntt">Do not take Tricks</string>
+    <string name="game_type_ntb">Do not take Boys</string>
+    <string name="game_type_ntg">Do not take Girls</string>
+    <string name="game_type_nth">Do not take Hearts</string>
+    <string name="game_type_ntk">Do not take King</string>
+    <string name="game_type_ntl">Do not take Last Two</string>
+    <string name="game_type_ntfg">Do not take BFG</string>
+
+    <string name="name_player">Name player</string>
+    <string name="email_player">Email player</string>
+    <string name="start_party">Start Party</string>
+    <string name="exit">Exit</string>
+    <string name="ok">OK</string>
+    <string name="save_player">Save player</string>
+    <string name="enter_email">Enter email</string>
+    <string name="enter_first_name">Enter first name</string>
+    <string name="game_finished">Game finished</string>
+    <string name="game_no_finished">Game NO finished</string>
+    <string name="error_email_check">This email is already registered</string>
+    <string name="delete_player">DELETE PLAYER</string>
+    <string name="setup_party">Setup party</string>
+    <string name="email_check">This email not registered</string>
+    <string name="party_view">Party view</string>
+    <string name="menu_settings">Settings</string>
+    <string name="menu_players">Players list</string>
+    <string name="descr_player_avatar">Player avatar</string>
+    <string name="nav_label_parties_list">Parties list</string>
+    <string name="nav_label_players_list">Players list</string>
+    <string name="nav_label_player_card">Player card</string>
+    <string name="nav_label_player_info">Player info</string>
+    <string name="card_name">Name</string>
+    <string name="bttn_save_player">Save player</string>
+    <string name="bttn_delete_player">Delete player</string>
+    <string name="card_helper_text">Edit your name</string>
+    <string name="card_email">Email</string>
+    <string name="form_helper_name_text">Enter you name</string>
+    <string name="form_helper_email_text">Enter you email</string>
+    <string name="message_error_valid_name">Please enter a valid name</string>
+    <string name="message_error_valid_email">Please enter a valid email address</string>
+    <string name="message_error_data_load">Data not loaded</string>
+    <string name="message_data_load">Data load successfully</string>
+    <string name="nav_label_player_add_form">Player Add Form</string>
+    <string name="error_name_no_valid">Name length less than 3</string>
+    <string name="error_email_no_valid">Email no valid</string>
 </resources>
