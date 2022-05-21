@@ -6,6 +6,6 @@ import javax.inject.Inject
 
 class SavePlayerDataToRepositoryUseCase @Inject constructor(
     private val playerRepository: PlayerRepository
-) : BaseUseCase<Boolean, PlayerCardModel>() {
-    override suspend fun run(params: PlayerCardModel): Boolean = playerRepository.saveNewPlayer(params)
+) {
+    suspend operator fun invoke(params: PlayerCardModel): Boolean = playerRepository.saveNewPlayer(params)
 }

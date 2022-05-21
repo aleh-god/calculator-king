@@ -1,6 +1,5 @@
 package by.godevelopment.kingcalculator.presentation.playeraddform
 
-import android.text.Editable
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -9,72 +8,94 @@ import by.godevelopment.kingcalculator.commons.TAG
 import by.godevelopment.kingcalculator.domain.helpers.StringHelper
 import by.godevelopment.kingcalculator.domain.models.PlayerCardModel
 import by.godevelopment.kingcalculator.domain.usecases.SavePlayerDataToRepositoryUseCase
+import by.godevelopment.kingcalculator.domain.usecases.validationusecase.ValidateEmailUseCase
+import by.godevelopment.kingcalculator.domain.usecases.validationusecase.ValidatePlayerNameUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharedFlow
-import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class PlayerAddFormViewModel @Inject constructor(
     private val savePlayerDataToRepositoryUseCase: SavePlayerDataToRepositoryUseCase,
-    private val stringHelper: StringHelper
+    private val stringHelper: StringHelper,
+    private val validateEmailUseCase: ValidateEmailUseCase,
+    private val validatePlayerNameUseCase: ValidatePlayerNameUseCase
 ): ViewModel() {
 
-    private val _uiState: MutableStateFlow<UiState> = MutableStateFlow(UiState())
-    val uiState: StateFlow<UiState> = _uiState
+    private val _uiState: MutableStateFlow<AddFormState> = MutableStateFlow(AddFormState())
+    val uiState: StateFlow<AddFormState> = _uiState
 
-    private val _uiEvent  = MutableSharedFlow<String>(0)
-    val uiEvent: SharedFlow<String> = _uiEvent
+    private val _uiEvent  = Channel<UiEvent>()
+    val uiEvent: Flow<UiEvent> = _uiEvent.receiveAsFlow()
 
     private var fetchJob: Job? = null
 
-    fun savePlayerDataToRepository(name: Editable?, email: Editable?) {
-        val currentState = uiState.value
-        if (currentState.nameIsValid && currentState.emailIsValid) {
-            _uiState.value = currentState.copy(isSavingData = true)
-            fetchJob?.cancel()
-            fetchJob = viewModelScope.launch {
-                val result = savePlayerDataToRepositoryUseCase.run(
-                    PlayerCardModel(
-                        name = name.toString(),
-                        email = email.toString()
-                    )
+    fun onEvent(event: AddFormUserEvent) {
+        when(event) {
+            is AddFormUserEvent.EmailChanged -> {
+                val emailResult = validateEmailUseCase.execute(event.email)
+                _uiState.value = _uiState.value.copy(
+                    email = event.email,
+                    emailError = emailResult.errorMessage
                 )
-                if (result) {
-                    _uiEvent.emit(stringHelper.getString(R.string.message_data_load))
+            }
+            is AddFormUserEvent.PlayerNameChanged -> {
+                val playerNameResult = validatePlayerNameUseCase
+                    .execute(event.playerName)
+                _uiState.value = _uiState.value.copy(
+                    playerName = event.playerName,
+                    playerNameError = playerNameResult.errorMessage
+                )
+            }
+            is AddFormUserEvent.PressSaveButton -> {
+                if(!checkErrorInFiledUiState()) {
+                    savePlayerDataToRepository()
                 } else {
-                    _uiEvent.emit(stringHelper.getString(R.string.message_error_data_load))
+                    viewModelScope.launch {
+                        _uiEvent.send(
+                            UiEvent.ShowSnackbar(stringHelper.getString(R.string.message_error_data_save))
+                        )
+                    }
                 }
             }
-            _uiState.value = uiState.value.copy(isSavingData = false)
         }
     }
 
-    fun checkNameFields(name: Editable?) {
-        val checkedName = !name.isNullOrBlank() && name.length > 2
-        Log.i(TAG, "checkNameFields: $name = $checkedName")
-        val currentState = uiState.value
-         _uiState.value = currentState.copy(
-             nameIsValid = checkedName
-         )
+    private fun checkErrorInFiledUiState(): Boolean {
+        val emailResult = validateEmailUseCase.execute(_uiState.value.email)
+        val playerNameResult = validatePlayerNameUseCase
+            .execute(_uiState.value.playerName)
+        return listOf(emailResult, playerNameResult).any { !it.successful }
     }
 
-    fun checkEmailFields(email: Editable?) {
-        val checkedEmail = !email.isNullOrBlank() && android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()
-        Log.i(TAG, "checkEmailFields: $email = $checkedEmail")
-        val currentState = uiState.value
-        _uiState.value = currentState.copy(
-            emailIsValid = checkedEmail
-        )
+    private fun savePlayerDataToRepository() {
+        fetchJob?.cancel()
+        fetchJob = viewModelScope.launch {
+            _uiState.value = uiState.value.copy(showsProgress = true)
+            if (savePlayerDataToRepositoryUseCase(
+                    PlayerCardModel(
+                        name = uiState.value.playerName,
+                        email = uiState.value.email
+                    )
+                )
+            ) {
+                Log.i(TAG, "savePlayerDataToRepository: R.string.message_data_save")
+                _uiEvent.send(UiEvent.NavigateToList)
+            } else {
+                Log.i(TAG, "savePlayerDataToRepository: R.string.message_error_data_save")
+                _uiEvent.send(
+                    UiEvent.ShowSnackbar(stringHelper.getString(R.string.message_error_data_save))
+                )
+            }
+            _uiState.value = uiState.value.copy(showsProgress = false)
+        }
     }
 
-    data class UiState(
-        val isSavingData: Boolean = false,
-        val nameIsValid: Boolean = false,
-        val emailIsValid: Boolean = false
-    )
+    sealed class UiEvent {
+        data class ShowSnackbar(val message: String) : UiEvent()
+        object NavigateToList : UiEvent()
+    }
 }

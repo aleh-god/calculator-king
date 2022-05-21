@@ -31,7 +31,7 @@ class PlayersListFragment : Fragment() {
 
     private val onClick: (Int) -> Unit = { key ->
         Log.i(TAG, "PlayersListFragment: onClick $key")
-        navigateToCardPlayer(key)
+        navigateToPlayerCard(key)
     }
 
     override fun onCreateView(
@@ -80,11 +80,10 @@ class PlayersListFragment : Fragment() {
         }
     }
 
-    private fun navigateToCardPlayer(idPlayer: Int) {
-        // PlayerCardFragmentDirections.actionPlayerCardFragmentToPlayersListFragment()
-        val action = PlayerAddFormFragmentDirections
+    private fun navigateToPlayerCard(idPlayer: Int) {
+        val direction = PlayerAddFormFragmentDirections
             .actionPlayerAddFormFragmentToPlayersListFragment(idPlayer)
-        this.findNavController().navigate(action)
+        findNavController().navigate(direction)
     }
 
     override fun onDestroy() {
