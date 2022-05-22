@@ -43,7 +43,10 @@
         tools:layout="@layout/fragment_player_card" >
         <action
             android:id="@+id/action_playerCardFragment_to_playersListFragment"
-            app:destination="@id/playersListFragment" />
+            app:destination="@id/playersListFragment"
+            app:popUpTo="@+id/playersListFragment"
+            app:popUpToInclusive="true"
+            />
         <argument
             android:name="idPlayer"
             app:argType="integer" />
@@ -55,7 +58,10 @@
         tools:layout="@layout/fragment_player_info" >
         <action
             android:id="@+id/action_playerInfoFragment_to_playersListFragment"
-            app:destination="@id/playersListFragment" />
+            app:destination="@id/playersListFragment"
+            app:popUpTo="@+id/playersListFragment"
+            app:popUpToInclusive="true"
+            />
         <argument
             android:name="idPlayer"
             app:argType="integer" />
@@ -68,6 +74,9 @@
         >
         <action
             android:id="@+id/action_playerAddFormFragment_to_playersListFragment"
-            app:destination="@id/playersListFragment" />
+            app:destination="@id/playersListFragment"
+            app:popUpTo="@+id/playersListFragment"
+            app:popUpToInclusive="true"
+            />
     </fragment>
 </navigation>

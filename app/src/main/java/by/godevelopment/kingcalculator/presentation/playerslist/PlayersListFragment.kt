@@ -81,8 +81,8 @@ class PlayersListFragment : Fragment() {
     }
 
     private fun navigateToPlayerCard(idPlayer: Int) {
-        val direction = PlayerAddFormFragmentDirections
-            .actionPlayerAddFormFragmentToPlayersListFragment(idPlayer)
+        val direction = PlayersListFragmentDirections
+            .actionPlayersListFragmentToPlayerCardFragment(idPlayer)
         findNavController().navigate(direction)
     }
 
