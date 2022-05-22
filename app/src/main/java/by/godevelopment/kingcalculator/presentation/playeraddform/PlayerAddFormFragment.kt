@@ -1,7 +1,6 @@
 package by.godevelopment.kingcalculator.presentation.playeraddform
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,8 +8,8 @@ import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import by.godevelopment.kingcalculator.R
-import by.godevelopment.kingcalculator.commons.TAG
 import by.godevelopment.kingcalculator.databinding.FragmentPlayerAddFormBinding
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
@@ -42,25 +41,9 @@ class PlayerAddFormFragment : Fragment() {
         binding.apply {
             lifecycleScope.launchWhenStarted {
                 viewModel.uiState.collect { uiState ->
-                    Log.i(TAG, "setupUI: $uiState")
-                    if (uiState.isSavingData) {
-                        progress.visibility = View.VISIBLE
-                    } else {
-                        progress.visibility = View.GONE
-                    }
-                    if (uiState.nameIsValid && uiState.emailIsValid) {
-                        bttnSave.visibility = View.VISIBLE
-                        bttnSave.isClickable = true
-                    } else {
-                        bttnSave.visibility = View.GONE
-                        bttnSave.isClickable = false
-                    }
-                    if (playerNameEdit.text.isNullOrBlank() || uiState.nameIsValid)
-                        playerName.error = null
-                        else playerName.error = getString(R.string.error_name_no_valid)
-                    if (playerEmailEdit.text.isNullOrBlank() || uiState.emailIsValid)
-                        playerEmail.error = null
-                        else playerEmail.error = getString(R.string.error_email_no_valid)
+                    showProgressUi(uiState.showsProgress)
+                    binding.playerName.error = uiState.playerNameError
+                    binding.playerEmail.error = uiState.emailError
                 }
             }
         }
@@ -68,31 +51,45 @@ class PlayerAddFormFragment : Fragment() {
 
     private fun setupListeners() {
         binding.apply {
+            bttnSave.setOnClickListener {
+                viewModel.onEvent(AddFormUserEvent.PressSaveButton)
+            }
             playerNameEdit.doAfterTextChanged {
-                viewModel.checkNameFields(it)
+                viewModel.onEvent(AddFormUserEvent.PlayerNameChanged(it.toString()))
             }
             playerEmailEdit.doAfterTextChanged {
-                viewModel.checkEmailFields(it)
-            }
-            bttnSave.setOnClickListener {
-                    viewModel.savePlayerDataToRepository(
-                        playerNameEdit.text,
-                        playerEmailEdit.text
-                    )
+                viewModel.onEvent(AddFormUserEvent.EmailChanged(it.toString()))
             }
         }
     }
 
     private fun setupEvent() {
         lifecycleScope.launchWhenStarted {
-            viewModel.uiEvent.collect {
-                Snackbar
-                    .make(binding.root, it, Snackbar.LENGTH_INDEFINITE)
-                    .setAction(getString(R.string.ok))
-                    {
-                        Log.i(TAG, "Snackbar: Action")
+            viewModel.uiEvent.collect { event ->
+                when(event) {
+                    is PlayerAddFormViewModel.UiEvent.ShowSnackbar -> {
+                        Snackbar.make(binding.root, event.message, Snackbar.LENGTH_LONG).show()
                     }
-                    .show()
+                    is PlayerAddFormViewModel.UiEvent.NavigateToList -> {
+                        navigateToListUser()
+                    }
+                }
+            }
+        }
+    }
+
+    private fun navigateToListUser() {
+        findNavController().navigate(R.id.action_playerAddFormFragment_to_playersListFragment)
+    }
+
+    private fun showProgressUi(key: Boolean) {
+        binding.apply {
+            if (key) {
+                progress.visibility = View.VISIBLE
+                bttnSave.visibility = View.GONE
+            } else {
+                progress.visibility = View.GONE
+                bttnSave.visibility = View.VISIBLE
             }
         }
     }

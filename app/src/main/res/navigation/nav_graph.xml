@@ -19,7 +19,7 @@
         android:id="@+id/playersListFragment"
         android:name="by.godevelopment.kingcalculator.presentation.playerslist.PlayersListFragment"
         android:label="@string/nav_label_players_list"
-        tools:layout="@layout/fragment_players_list" >
+        tools:layout="@layout/fragment_players_list">
         <action
             android:id="@+id/action_playersListFragment_to_partiesListFragment"
             app:destination="@id/partiesListFragment" />
@@ -43,7 +43,10 @@
         tools:layout="@layout/fragment_player_card" >
         <action
             android:id="@+id/action_playerCardFragment_to_playersListFragment"
-            app:destination="@id/playersListFragment" />
+            app:destination="@id/playersListFragment"
+            app:popUpTo="@+id/playersListFragment"
+            app:popUpToInclusive="true"
+            />
         <argument
             android:name="idPlayer"
             app:argType="integer" />
@@ -55,7 +58,10 @@
         tools:layout="@layout/fragment_player_info" >
         <action
             android:id="@+id/action_playerInfoFragment_to_playersListFragment"
-            app:destination="@id/playersListFragment" />
+            app:destination="@id/playersListFragment"
+            app:popUpTo="@+id/playersListFragment"
+            app:popUpToInclusive="true"
+            />
         <argument
             android:name="idPlayer"
             app:argType="integer" />
@@ -63,9 +69,14 @@
     <fragment
         android:id="@+id/playerAddFormFragment"
         android:name="by.godevelopment.kingcalculator.presentation.playeraddform.PlayerAddFormFragment"
-        android:label="@string/nav_label_player_add_form" >
+        android:label="@string/nav_label_player_add_form"
+        tools:layout="@layout/fragment_player_add_form"
+        >
         <action
             android:id="@+id/action_playerAddFormFragment_to_playersListFragment"
-            app:destination="@id/playersListFragment" />
+            app:destination="@id/playersListFragment"
+            app:popUpTo="@+id/playersListFragment"
+            app:popUpToInclusive="true"
+            />
     </fragment>
 </navigation>

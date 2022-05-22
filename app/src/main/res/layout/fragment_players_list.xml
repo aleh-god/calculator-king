@@ -27,7 +27,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_margin="16dp"
         android:contentDescription="@string/fab_content_desc"
-        app:srcCompat="@drawable/ic_plus_24"
+        app:srcCompat="@drawable/ic_baseline_person_add_24"
         />
 
     <ProgressBar
