@@ -14,5 +14,9 @@ interface PlayerRepository {
 
     suspend fun deletePlayerById(params: PlayerCardModel): Boolean
 
+    suspend fun getAllPlayersNamesToId(): Map<String, Int>
+
+    suspend fun getAllPlayersNames(): List<String>
+
     fun getAllPlayers(): Flow<List<ItemPlayerModel>>
 }
