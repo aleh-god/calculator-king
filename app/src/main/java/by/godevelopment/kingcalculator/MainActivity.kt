@@ -31,7 +31,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        // Inflate the menu; this adds items to the action bar if it is present.
         menuInflater.inflate(R.menu.menu_toolbar, menu)
         return true
     }
@@ -39,14 +38,13 @@ class MainActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
         R.id.menu_players -> {
             navController.navigate(R.id.action_partiesListFragment_to_playersListFragment)
+            // TODO("fix crash in list fragment")
             true
         }
-
         R.id.menu_settings -> {
             Log.i(TAG, "onOptionsItemSelected: R.id.menu_settings")
             true
         }
-
         else -> {
             // If we got here, the user's action was not recognized.
             // Invoke the superclass to handle it.
