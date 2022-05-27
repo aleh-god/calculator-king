@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <dimen name="ultra_margin">24dp</dimen>
+    <dimen name="big_margin">16dp</dimen>
+    <dimen name="medium_margin">8dp</dimen>
+    <dimen name="small_margin">4dp</dimen>
     <dimen name="main_margin">3dp</dimen>
-    <dimen name="big_margin">15dp</dimen>
-    <dimen name="main_padding">3dp</dimen>
+    <dimen name="main_padding">4dp</dimen>
     <dimen name="title_text_size">18sp</dimen>
     <dimen name="subtitle_text_size">16sp</dimen>
     <dimen name="material_textview_width">245dp</dimen>

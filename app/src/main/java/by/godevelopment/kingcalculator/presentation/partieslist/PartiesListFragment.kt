@@ -6,12 +6,15 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import by.godevelopment.kingcalculator.R
 import by.godevelopment.kingcalculator.commons.TAG
 import by.godevelopment.kingcalculator.databinding.FragmentPartiesListBinding
+import by.godevelopment.kingcalculator.presentation.partyaddform.AddPartyFormUserEvent
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
@@ -38,6 +41,7 @@ class PartiesListFragment : Fragment() {
         _binding = FragmentPartiesListBinding.inflate(inflater, container, false)
         setupUi()
         setupEvent()
+        setupListeners()
         return binding.root
     }
 
@@ -67,6 +71,12 @@ class PartiesListFragment : Fragment() {
                     { viewModel.fetchDataModel() }
                     .show()
             }
+        }
+    }
+
+    private fun setupListeners() {
+        binding.floatingActionButton.setOnClickListener {
+            findNavController().navigate(R.id.action_partiesListFragment_to_partyAddFormFragment)
         }
     }
 

@@ -19,6 +19,9 @@ interface PlayersDao {
     @Query("SELECT * FROM players ORDER BY id DESC")
     fun getAllPlayerProfiles(): Flow<List<PlayerProfile>>
 
+    @Query("SELECT * FROM players ORDER BY id DESC")
+    suspend fun getSuspendAllPlayerProfiles(): List<PlayerProfile>
+
     @Query("SELECT * from players WHERE email = :key")
     suspend fun getPlayerProfileByEmail(key: String): PlayerProfile?
 

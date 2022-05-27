@@ -1,13 +1,11 @@
 package by.godevelopment.kingcalculator.presentation.playeraddform
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import by.godevelopment.kingcalculator.R
-import by.godevelopment.kingcalculator.commons.TAG
 import by.godevelopment.kingcalculator.domain.helpers.StringHelper
 import by.godevelopment.kingcalculator.domain.models.PlayerCardModel
-import by.godevelopment.kingcalculator.domain.usecases.SavePlayerDataToRepositoryUseCase
+import by.godevelopment.kingcalculator.domain.repositories.PlayerRepository
 import by.godevelopment.kingcalculator.domain.usecases.validationusecase.ValidateEmailUseCase
 import by.godevelopment.kingcalculator.domain.usecases.validationusecase.ValidatePlayerNameUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -19,36 +17,40 @@ import javax.inject.Inject
 
 @HiltViewModel
 class PlayerAddFormViewModel @Inject constructor(
-    private val savePlayerDataToRepositoryUseCase: SavePlayerDataToRepositoryUseCase,
+    private val playerRepository: PlayerRepository,
     private val stringHelper: StringHelper,
     private val validateEmailUseCase: ValidateEmailUseCase,
     private val validatePlayerNameUseCase: ValidatePlayerNameUseCase
 ): ViewModel() {
 
     private val _uiState: MutableStateFlow<AddFormState> = MutableStateFlow(AddFormState())
-    val uiState: StateFlow<AddFormState> = _uiState
+    val uiState: StateFlow<AddFormState> = _uiState.asStateFlow()
 
     private val _uiEvent  = Channel<UiEvent>()
     val uiEvent: Flow<UiEvent> = _uiEvent.receiveAsFlow()
 
-    private var fetchJob: Job? = null
+    private var suspendJob: Job? = null
 
     fun onEvent(event: AddFormUserEvent) {
         when(event) {
             is AddFormUserEvent.EmailChanged -> {
                 val emailResult = validateEmailUseCase.execute(event.email)
-                _uiState.value = _uiState.value.copy(
-                    email = event.email,
-                    emailError = emailResult.errorMessage
-                )
+                _uiState.update {
+                    it.copy(
+                        email = event.email,
+                        emailError = emailResult.errorMessage
+                    )
+                }
             }
             is AddFormUserEvent.PlayerNameChanged -> {
                 val playerNameResult = validatePlayerNameUseCase
                     .execute(event.playerName)
-                _uiState.value = _uiState.value.copy(
-                    playerName = event.playerName,
-                    playerNameError = playerNameResult.errorMessage
-                )
+                _uiState.update {
+                    it.copy(
+                        playerName = event.playerName,
+                        playerNameError = playerNameResult.errorMessage
+                    )
+                }
             }
             is AddFormUserEvent.PressSaveButton -> {
                 if(!checkErrorInFiledUiState()) {
@@ -56,7 +58,9 @@ class PlayerAddFormViewModel @Inject constructor(
                 } else {
                     viewModelScope.launch {
                         _uiEvent.send(
-                            UiEvent.ShowSnackbar(stringHelper.getString(R.string.message_error_data_save))
+                            UiEvent.ShowSnackbar(
+                                stringHelper.getString(R.string.message_error_player_info)
+                            )
                         )
                     }
                 }
@@ -72,25 +76,17 @@ class PlayerAddFormViewModel @Inject constructor(
     }
 
     private fun savePlayerDataToRepository() {
-        fetchJob?.cancel()
-        fetchJob = viewModelScope.launch {
-            _uiState.value = uiState.value.copy(showsProgress = true)
-            if (savePlayerDataToRepositoryUseCase(
-                    PlayerCardModel(
-                        name = uiState.value.playerName,
-                        email = uiState.value.email
-                    )
-                )
-            ) {
-                Log.i(TAG, "savePlayerDataToRepository: R.string.message_data_save")
-                _uiEvent.send(UiEvent.NavigateToList)
-            } else {
-                Log.i(TAG, "savePlayerDataToRepository: R.string.message_error_data_save")
-                _uiEvent.send(
-                    UiEvent.ShowSnackbar(stringHelper.getString(R.string.message_error_data_save))
-                )
-            }
-            _uiState.value = uiState.value.copy(showsProgress = false)
+        suspendJob?.cancel()
+        suspendJob = viewModelScope.launch {
+            _uiState.update { it.copy(showsProgress = true) }
+            val result = playerRepository.saveNewPlayer(PlayerCardModel(
+                name = uiState.value.playerName,
+                email = uiState.value.email
+            )
+            )
+            if (result) { _uiEvent.send(UiEvent.NavigateToList)
+            } else { _uiEvent.send(UiEvent.ShowSnackbar(stringHelper.getString(R.string.message_error_data_save))) }
+            _uiState.update { it.copy(showsProgress = false) }
         }
     }
 

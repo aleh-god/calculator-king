@@ -31,13 +31,13 @@ class PlayerAddFormFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentPlayerAddFormBinding.inflate(inflater, container, false)
-        setupUI()
+        setupUi()
         setupListeners()
-        setupEvent()
+        setupEvents()
         return binding.root
     }
 
-    private fun setupUI() {
+    private fun setupUi() {
         binding.apply {
             lifecycleScope.launchWhenStarted {
                 viewModel.uiState.collect { uiState ->
@@ -63,7 +63,7 @@ class PlayerAddFormFragment : Fragment() {
         }
     }
 
-    private fun setupEvent() {
+    private fun setupEvents() {
         lifecycleScope.launchWhenStarted {
             viewModel.uiEvent.collect { event ->
                 when(event) {

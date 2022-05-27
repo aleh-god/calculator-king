@@ -48,4 +48,16 @@ class PlayerRepositoriesImpl @Inject constructor(
         Log.i(TAG, "PlayerRepositoriesImpl deletePlayerById: $params -> $result")
         return result != ROWS_NOT_UPDATED
     }
+
+    override suspend fun getAllPlayersNamesToId(): Map<String, Int> {
+        val result = playersDao.getSuspendAllPlayerProfiles()
+        Log.i(TAG, "PlayerRepositoriesImpl getAllPlayersNamesToId: ${result.size}")
+        return result.associate { it.name to it.id }
+    }
+
+    override suspend fun getAllPlayersNames(): List<String> {
+        val result = playersDao.getSuspendAllPlayerProfiles()
+        Log.i(TAG, "PlayerRepositoriesImpl getAllPlayersNames: ${result.size}")
+        return result.map { it.name }
+    }
 }

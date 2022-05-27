@@ -32,28 +32,37 @@
     <string name="enter_first_name">Enter first name</string>
     <string name="game_finished">Game finished</string>
     <string name="game_no_finished">Game NO finished</string>
-    <string name="error_email_check">This email is already registered</string>
     <string name="delete_player">DELETE PLAYER</string>
     <string name="setup_party">Setup party</string>
     <string name="email_check">This email not registered</string>
     <string name="party_view">Party view</string>
     <string name="menu_settings">Settings</string>
     <string name="menu_players">Players list</string>
+
     <string name="descr_player_avatar">Player avatar</string>
+
     <string name="nav_label_parties_list">Parties list</string>
     <string name="nav_label_players_list">Players list</string>
     <string name="nav_label_player_card">Player card</string>
     <string name="nav_label_player_info">Player info</string>
     <string name="nav_label_player_add_form">Player add Form</string>
-    <string name="card_name">Name</string>
+    <string name="nav_label_party_card">Party card</string>
+
     <string name="bttn_save_player">Save player</string>
     <string name="bttn_delete_player">Delete player</string>
+    <string name="bttn_start_party">Start party</string>
+
     <string name="card_helper_text">Edit your name</string>
     <string name="card_email">Email</string>
+    <string name="card_name">Party name</string>
+
     <string name="form_helper_name_text">Enter you name</string>
     <string name="form_helper_email_text">Enter you email</string>
+    <string name="form_helper_party_text">Enter party name</string>
+
     <string name="message_error_valid_name">Please enter a valid name</string>
     <string name="message_error_valid_email">Please enter a valid email address</string>
+    <string name="message_error_data_null">Data is unavailable</string>
     <string name="message_error_data_load">Data not loaded</string>
     <string name="message_data_load">Data load successfully</string>
     <string name="message_error_data_save">Data not saved</string>
@@ -61,9 +70,16 @@
     <string name="message_error_player_info">Player info invalidated</string>
     <string name="message_error_player_id">Player with this id not found</string>
     <string name="message_data_save">Data save successfully</string>
-    <string name="error_name_no_valid">Name length less than 3</string>
-    <string name="error_email_no_valid">Email no valid</string>
     <string name="message_error_validate_email_blank">The email can\'t be blank</string>
     <string name="message_error_validate_email">That\'s not a valid email</string>
     <string name="message_error_validate_email_length">The player name needs to consist of at least 3 characters</string>
+    <string name="message_error_validate_email_different">Players must be different</string>
+
+    <string name="message_error_email_check">This email is already registered</string>
+
+    <string name="hint_text_player_one_email">player one email</string>
+    <string name="hint_text_player_two_email">player two email</string>
+    <string name="hint_text_player_three_email">player three email</string>
+    <string name="hint_text_player_four_email">player four email</string>
+
 </resources>

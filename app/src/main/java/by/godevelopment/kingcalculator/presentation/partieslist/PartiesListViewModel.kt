@@ -8,8 +8,6 @@ import by.godevelopment.kingcalculator.commons.TAG
 import by.godevelopment.kingcalculator.domain.helpers.StringHelper
 import by.godevelopment.kingcalculator.domain.models.DataModel
 import by.godevelopment.kingcalculator.domain.models.ItemPartyModel
-import by.godevelopment.kingcalculator.domain.usecases.EmptyParams
-import by.godevelopment.kingcalculator.domain.usecases.GetDataUseCase
 import by.godevelopment.kingcalculator.domain.usecases.GetListPartyModelUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
@@ -39,7 +37,7 @@ class PartiesListViewModel @Inject constructor(
     fun fetchDataModel() {
         fetchJob?.cancel()
         fetchJob = viewModelScope.launch {
-            getListPartyModelUseCase.execute(EmptyParams)
+            getListPartyModelUseCase()
                 .onStart {
                     _uiState.value = UiState(
                         isFetchingData = true
