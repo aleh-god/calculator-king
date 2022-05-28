@@ -1,11 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
+<ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".presentation.partyaddform.PartyAddFormFragment"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
+<androidx.constraintlayout.widget.ConstraintLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingTop="@dimen/ultra_padding"
     >
 
     <com.google.android.material.textfield.TextInputLayout
@@ -17,7 +22,8 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toTopOf="@id/player_one_menu"
         app:layout_constraintVertical_chainStyle="packed"
-        android:layout_margin="@dimen/medium_margin"
+        android:layout_marginTop="@dimen/medium_margin"
+        android:layout_margin="@dimen/small_margin"
         android:hint="@string/card_name"
         app:endIconMode="clear_text"
         app:helperTextEnabled="true"
@@ -42,8 +48,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/party_name"
         app:layout_constraintBottom_toTopOf="@id/player_two_menu"
-        android:layout_margin="@dimen/medium_margin"
-        android:hint="@string/hint_text_player_name"
+        android:layout_margin="@dimen/small_margin"
+        android:hint="@string/hint_text_player_one_email"
         >
 
         <AutoCompleteTextView
@@ -64,8 +70,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/player_one_menu"
         app:layout_constraintBottom_toTopOf="@id/player_three_menu"
-        android:layout_margin="@dimen/medium_margin"
-        android:hint="@string/hint_text_player_name"
+        android:layout_margin="@dimen/small_margin"
+        android:hint="@string/hint_text_player_two_email"
         >
 
         <AutoCompleteTextView
@@ -86,8 +92,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/player_two_menu"
         app:layout_constraintBottom_toTopOf="@id/player_four_menu"
-        android:layout_margin="@dimen/medium_margin"
-        android:hint="@string/hint_text_player_name"
+        android:layout_margin="@dimen/small_margin"
+        android:hint="@string/hint_text_player_three_email"
         >
 
         <AutoCompleteTextView
@@ -108,8 +114,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/player_three_menu"
         app:layout_constraintBottom_toTopOf="@id/bttn_start"
-        android:layout_margin="@dimen/medium_margin"
-        android:hint="@string/hint_text_player_name"
+        android:layout_margin="@dimen/small_margin"
+        android:hint="@string/hint_text_player_four_email"
         >
 
         <AutoCompleteTextView
@@ -128,7 +134,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/player_four_menu"
         app:layout_constraintBottom_toBottomOf="parent"
-        android:layout_marginTop="@dimen/big_margin"
+        android:layout_marginTop="@dimen/medium_margin"
         android:text="@string/bttn_start_party"
         style="?attr/materialButtonStyle"
         />
@@ -143,3 +149,4 @@
         />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>

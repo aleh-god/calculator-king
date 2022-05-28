@@ -20,6 +20,6 @@ data class AddPartyFormState(
     val playerFourError: String? = null,
     val playerFourHelper: String? = null,
 
-    val players: List<String> = listOf(), // listOf("Option 1", "Option 2", "Option 3", "Option 4")
+    val players: Map<String, String> = emptyMap(),
     val showsProgress: Boolean = false
 )

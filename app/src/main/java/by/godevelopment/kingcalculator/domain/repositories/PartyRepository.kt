@@ -1,8 +1,11 @@
 package by.godevelopment.kingcalculator.domain.repositories
 
-import by.godevelopment.kingcalculator.domain.models.PartyModel
+import by.godevelopment.kingcalculator.domain.models.ItemPartyModel
 import kotlinx.coroutines.flow.Flow
 
 interface PartyRepository {
-    fun getParties(): Flow<PartyModel>
+
+    fun getParties(): Flow<List<ItemPartyModel>>
+
+    suspend fun createNewPartyAndReturnId(playerEmails: Set<String>): Int
 }
