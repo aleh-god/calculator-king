@@ -44,23 +44,29 @@ class PartyAddFormFragment : Fragment() {
         lifecycleScope.launchWhenStarted {
             viewModel.uiState.collect { uiState ->
                 showProgressUi(uiState.showsProgress)
-                binding.partyName.error = uiState.partyNameError
+                binding.apply {
+                    partyName.error = uiState.partyNameError
 
-                binding.playerOneMenu.error = uiState.playerOneError
-                binding.playerTwoMenu.error = uiState.playerTwoError
-                binding.playerThreeMenu.error = uiState.playerThreeError
-                binding.playerFourMenu.error = uiState.playerFourError
+                    playerOneMenu.error = uiState.playerOneError
+                    playerTwoMenu.error = uiState.playerTwoError
+                    playerThreeMenu.error = uiState.playerThreeError
+                    playerFourMenu.error = uiState.playerFourError
 
-                binding.playerOneMenu.helperText = uiState.playerOneHelper
-                binding.playerTwoMenu.helperText = uiState.playerTwoHelper
-                binding.playerThreeMenu.helperText = uiState.playerThreeHelper
-                binding.playerFourMenu.helperText = uiState.playerFourHelper
+                    playerOneMenu.helperText = uiState.playerOneHelper
+                    playerTwoMenu.helperText = uiState.playerTwoHelper
+                    playerThreeMenu.helperText = uiState.playerThreeHelper
+                    playerFourMenu.helperText = uiState.playerFourHelper
 
-                ArrayAdapter(requireContext(), R.layout.list_item, uiState.players).also {
-                    binding.playerOneInputMenu.setAdapter(it)
-                    binding.playerTwoInputMenu.setAdapter(it)
-                    binding.playerThreeInputMenu.setAdapter(it)
-                    binding.playerFourInputMenu.setAdapter(it)
+                    ArrayAdapter(
+                        requireContext(),
+                        R.layout.menu_item,
+                        uiState.players.keys.toTypedArray()
+                    ).also {
+                        playerTwoInputMenu.setAdapter(it)
+                        playerOneInputMenu.setAdapter(it)
+                        playerThreeInputMenu.setAdapter(it)
+                        playerFourInputMenu.setAdapter(it)
+                    }
                 }
             }
         }
@@ -74,7 +80,7 @@ class PartyAddFormFragment : Fragment() {
                         Snackbar.make(binding.root, event.message, Snackbar.LENGTH_LONG).show()
                     }
                     is PartyAddFormViewModel.UiEvent.NavigateToList -> {
-                        navigateToPartyCard()
+                        navigateToPartyCard(event.idParty)
                     }
                 }
             }
@@ -114,8 +120,10 @@ class PartyAddFormFragment : Fragment() {
         }
     }
 
-    private fun navigateToPartyCard() {
-        findNavController().navigate(R.id.action_partyAddFormFragment_to_partyCardFragment)
+    private fun navigateToPartyCard(idParty: Int) {
+        val directions = PartyAddFormFragmentDirections
+            .actionPartyAddFormFragmentToPartyCardFragment(idParty)
+        findNavController().navigate(directions)
     }
 
     override fun onDestroy() {

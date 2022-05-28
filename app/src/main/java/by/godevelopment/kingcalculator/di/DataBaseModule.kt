@@ -10,7 +10,6 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
-import javax.inject.Provider
 import javax.inject.Singleton
 
 @Module
@@ -23,8 +22,7 @@ object DataBaseModule {
     @Provides
     @Singleton
     fun provideKingDatabase(
-        @ApplicationContext appContext: Context,
-        providerPlayers: Provider<PlayersDao>
+        @ApplicationContext appContext: Context
     ): KingDatabase = Room.databaseBuilder(
         appContext,
         KingDatabase::class.java,

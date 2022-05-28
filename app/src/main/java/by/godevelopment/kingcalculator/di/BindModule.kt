@@ -1,6 +1,8 @@
 package by.godevelopment.kingcalculator.di
 
-import by.godevelopment.kingcalculator.data.repositories.PlayerRepositoriesImpl
+import by.godevelopment.kingcalculator.data.repositories.PartyRepositoryImpl
+import by.godevelopment.kingcalculator.data.repositories.PlayerRepositoryImpl
+import by.godevelopment.kingcalculator.domain.repositories.PartyRepository
 import by.godevelopment.kingcalculator.domain.repositories.PlayerRepository
 import dagger.Binds
 import dagger.Module
@@ -12,5 +14,8 @@ import dagger.hilt.components.SingletonComponent
 abstract class BindModule {
 
     @Binds
-    abstract fun bindPlayerRepository(playerRepositoriesImpl: PlayerRepositoriesImpl): PlayerRepository
+    abstract fun bindPlayerRepository(playerRepositoryImpl: PlayerRepositoryImpl): PlayerRepository
+
+    @Binds
+    abstract fun bindPartyRepository(partyRepositoryImpl: PartyRepositoryImpl): PartyRepository
 }
