@@ -1,12 +1,12 @@
 package by.godevelopment.kingcalculator.presentation.playerinfo
 
-import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import by.godevelopment.kingcalculator.R
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
+import by.godevelopment.kingcalculator.databinding.FragmentPlayerInfoBinding
 
 class PlayerInfoFragment : Fragment() {
 
@@ -14,19 +14,26 @@ class PlayerInfoFragment : Fragment() {
         fun newInstance() = PlayerInfoFragment()
     }
 
-    private lateinit var viewModel: PlayerInfoViewModel
+    private val viewModel: PlayerInfoViewModel by viewModels()
+    private var _binding: FragmentPlayerInfoBinding? = null
+    private val binding get() = _binding!!
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        return inflater.inflate(R.layout.fragment_player_info, container, false)
+    ): View {
+        _binding = FragmentPlayerInfoBinding.inflate(inflater, container, false)
+        setupUi()
+        return binding.root
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProvider(this).get(PlayerInfoViewModel::class.java)
-        // TODO: Use the ViewModel
+    private fun setupUi() {
+        val helloMessage = "Player: ${viewModel.idPlayer}"
+        binding.message.text = helloMessage
     }
 
+    override fun onDestroy() {
+        _binding = null
+        super.onDestroy()
+    }
 }

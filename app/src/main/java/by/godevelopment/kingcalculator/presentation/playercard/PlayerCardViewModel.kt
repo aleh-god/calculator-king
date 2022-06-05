@@ -35,7 +35,7 @@ class PlayerCardViewModel @Inject constructor(
     private val _uiEvent  = Channel<UiEvent>()
     val uiEvent: Flow<UiEvent> = _uiEvent.receiveAsFlow()
 
-    private val idPlayer = state.get<Int>("idPlayer")
+    private val idPlayer = state.get<Long>("idPlayer")
     private var suspendJob: Job? = null
 
     init {
@@ -43,7 +43,7 @@ class PlayerCardViewModel @Inject constructor(
         loadPlayerCardModelById(idPlayer)
     }
 
-    private fun loadPlayerCardModelById(idPlayer: Int?) {
+    private fun loadPlayerCardModelById(idPlayer: Long?) {
         viewModelScope.launch {
             if (idPlayer != null) {
                 _uiState.update { it.copy(showsProgress = true) }

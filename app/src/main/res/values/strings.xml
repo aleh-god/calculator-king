@@ -68,12 +68,13 @@
     <string name="message_error_data_save">Data not saved</string>
     <string name="message_error_data_delete">Data not deleted</string>
     <string name="message_error_player_info">Player info invalidated</string>
+    <string name="message_error_players_info_empty">Please fill in the fields with the names of the players</string>
     <string name="message_error_player_id">Player with this id not found</string>
     <string name="message_data_save">Data save successfully</string>
     <string name="message_error_validate_email_blank">The email can\'t be blank</string>
     <string name="message_error_validate_email">That\'s not a valid email</string>
     <string name="message_error_validate_email_length">The player name needs to consist of at least 3 characters</string>
-    <string name="message_error_validate_email_different">Players must be different</string>
+    <string name="message_error_validate_email_different">Players names must be different</string>
 
     <string name="message_error_email_check">This email is already registered</string>
 
