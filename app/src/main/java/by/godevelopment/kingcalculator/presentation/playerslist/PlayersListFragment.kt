@@ -29,7 +29,7 @@ class PlayersListFragment : Fragment() {
     private var _binding: FragmentPlayersListBinding? = null
     private val binding get() = _binding!!
 
-    private val onClick: (Int) -> Unit = { key ->
+    private val onClick: (Long) -> Unit = { key ->
         Log.i(TAG, "PlayersListFragment: onClick $key")
         navigateToPlayerCard(key)
     }
@@ -80,7 +80,7 @@ class PlayersListFragment : Fragment() {
         }
     }
 
-    private fun navigateToPlayerCard(idPlayer: Int) {
+    private fun navigateToPlayerCard(idPlayer: Long) {
         val direction = PlayersListFragmentDirections
             .actionPlayersListFragmentToPlayerCardFragment(idPlayer)
         findNavController().navigate(direction)

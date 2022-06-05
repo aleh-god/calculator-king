@@ -2,7 +2,7 @@ package by.godevelopment.kingcalculator.di
 
 import by.godevelopment.kingcalculator.data.repositories.PartyRepositoryImpl
 import by.godevelopment.kingcalculator.data.repositories.PlayerRepositoryImpl
-import by.godevelopment.kingcalculator.domain.repositories.PartyRepository
+import by.godevelopment.kingcalculator.domain.partiesdomain.repositories.PartyRepository
 import by.godevelopment.kingcalculator.domain.repositories.PlayerRepository
 import dagger.Binds
 import dagger.Module

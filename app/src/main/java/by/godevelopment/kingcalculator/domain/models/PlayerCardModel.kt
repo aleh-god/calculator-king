@@ -4,7 +4,7 @@ import androidx.annotation.ColorRes
 import androidx.annotation.DrawableRes
 
 data class PlayerCardModel(
-    val id: Int = 0,
+    val id: Long = 0,
     val name: String,
     val email: String,
     @ColorRes

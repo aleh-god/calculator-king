@@ -10,6 +10,7 @@ import by.godevelopment.kingcalculator.domain.models.ItemPlayerModel
 import by.godevelopment.kingcalculator.domain.usecases.GetListPlayerModelUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
@@ -22,12 +23,10 @@ class PlayersListViewModel @Inject constructor(
 ) : ViewModel() {
 
     private val _uiState: MutableStateFlow<UiState> = MutableStateFlow(UiState())
-    val uiState: StateFlow<UiState> = _uiState
+    val uiState: StateFlow<UiState> = _uiState.asStateFlow()
 
-    private val _uiEvent  = MutableSharedFlow<String>(0)
-    val uiEvent: SharedFlow<String> = _uiEvent
-
-    private val navigateEvent  = MutableSharedFlow<Boolean>(0)
+    private val _uiEvent  = Channel<String>()
+    val uiEvent: Flow<String> = _uiEvent.receiveAsFlow()
 
     private var fetchJob: Job? = null
 
@@ -50,7 +49,7 @@ class PlayersListViewModel @Inject constructor(
                         isFetchingData = false
                     )
                     delay(1000)
-                    _uiEvent.emit(stringHelper.getString(R.string.alert_error_loading))
+                    _uiEvent.send(stringHelper.getString(R.string.alert_error_loading))
                 }
                 .collect {
                     _uiState.value = UiState(

@@ -1,4 +1,4 @@
-package by.godevelopment.kingcalculator.data.datasource
+package by.godevelopment.kingcalculator.data.database
 
 import androidx.room.*
 import by.godevelopment.kingcalculator.data.entities.PlayerProfile
@@ -26,7 +26,7 @@ interface PlayersDao {
     suspend fun getPlayerProfileByEmail(key: String): PlayerProfile?
 
     @Query("SELECT * from players WHERE id = :key")
-    suspend fun getPlayerProfileById(key: Int): PlayerProfile?
+    suspend fun getPlayerProfileById(key: Long): PlayerProfile?
 
     @Query("DELETE FROM players WHERE email = :key")
     suspend fun deletePlayerProfileByEmail(key: String): Int
