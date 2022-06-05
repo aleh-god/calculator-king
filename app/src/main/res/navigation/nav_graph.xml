@@ -24,6 +24,7 @@
             android:id="@+id/action_partiesListFragment_to_partyAddFormFragment"
             app:destination="@id/partyAddFormFragment" />
     </fragment>
+
     <fragment
         android:id="@+id/playersListFragment"
         android:name="by.godevelopment.kingcalculator.presentation.playerslist.PlayersListFragment"
@@ -43,8 +44,9 @@
             app:destination="@id/playerAddFormFragment" />
         <argument
             android:name="idPlayer"
-            app:argType="integer" />
+            app:argType="long" />
     </fragment>
+
     <fragment
         android:id="@+id/playerCardFragment"
         android:name="by.godevelopment.kingcalculator.presentation.playercard.PlayerCardFragment"
@@ -58,8 +60,9 @@
             />
         <argument
             android:name="idPlayer"
-            app:argType="integer" />
+            app:argType="long" />
     </fragment>
+
     <fragment
         android:id="@+id/playerInfoFragment"
         android:name="by.godevelopment.kingcalculator.presentation.playerinfo.PlayerInfoFragment"
@@ -73,8 +76,9 @@
             />
         <argument
             android:name="idPlayer"
-            app:argType="integer" />
+            app:argType="long" />
     </fragment>
+
     <fragment
         android:id="@+id/playerAddFormFragment"
         android:name="by.godevelopment.kingcalculator.presentation.playeraddform.PlayerAddFormFragment"
@@ -88,6 +92,7 @@
             app:popUpToInclusive="true"
             />
     </fragment>
+
     <fragment
         android:id="@+id/partyCardFragment"
         android:name="by.godevelopment.kingcalculator.presentation.partycard.PartyCardFragment"
@@ -97,28 +102,37 @@
             android:id="@+id/action_partyCardFragment_to_partiesListFragment2"
             app:destination="@id/partiesListFragment" />
         <argument
-            android:name="PartyId"
-            app:argType="integer" />
+            android:name="partyId"
+            app:argType="long" />
     </fragment>
+
     <fragment
         android:id="@+id/partyInfoFragment"
         android:name="by.godevelopment.kingcalculator.presentation.partyinfo.PartyInfoFragment"
-        android:label="Party info"
+        android:label="@string/nav_label_party_info"
         tools:layout="@layout/fragment_party_info" >
         <action
             android:id="@+id/action_partyInfoFragment_to_partiesListFragment"
             app:destination="@id/partiesListFragment" />
+        <argument
+            android:name="partyId"
+            app:argType="long" />
     </fragment>
+
     <fragment
         android:id="@+id/partyAddFormFragment"
         android:name="by.godevelopment.kingcalculator.presentation.partyaddform.PartyAddFormFragment"
-        android:label="Party add form"
+        android:label="@string/nav_label_party_add_form"
         tools:layout="@layout/fragment_party_add_form" >
         <action
             android:id="@+id/action_partyAddFormFragment_to_partiesListFragment"
             app:destination="@id/partiesListFragment" />
         <action
             android:id="@+id/action_partyAddFormFragment_to_partyCardFragment"
-            app:destination="@id/partyCardFragment" />
+            app:destination="@id/partyCardFragment"
+            app:popUpTo="@+id/partiesListFragment"
+            app:popUpToInclusive="true"
+            />
     </fragment>
+
 </navigation>

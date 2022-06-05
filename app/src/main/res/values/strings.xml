@@ -82,5 +82,7 @@
     <string name="hint_text_player_two_email">player two email</string>
     <string name="hint_text_player_three_email">player three email</string>
     <string name="hint_text_player_four_email">player four email</string>
+    <string name="nav_label_party_add_form">Party add form</string>
+    <string name="nav_label_party_info">Party info</string>
 
 </resources>

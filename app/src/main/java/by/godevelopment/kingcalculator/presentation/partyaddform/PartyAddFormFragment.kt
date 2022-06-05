@@ -40,7 +40,6 @@ class PartyAddFormFragment : Fragment() {
     }
 
     private fun setupUi() {
-
         lifecycleScope.launchWhenStarted {
             viewModel.uiState.collect { uiState ->
                 showProgressUi(uiState.showsProgress)
@@ -51,11 +50,6 @@ class PartyAddFormFragment : Fragment() {
                     playerTwoMenu.error = uiState.playerTwoError
                     playerThreeMenu.error = uiState.playerThreeError
                     playerFourMenu.error = uiState.playerFourError
-
-                    playerOneMenu.helperText = uiState.playerOneHelper
-                    playerTwoMenu.helperText = uiState.playerTwoHelper
-                    playerThreeMenu.helperText = uiState.playerThreeHelper
-                    playerFourMenu.helperText = uiState.playerFourHelper
 
                     ArrayAdapter(
                         requireContext(),
@@ -120,7 +114,7 @@ class PartyAddFormFragment : Fragment() {
         }
     }
 
-    private fun navigateToPartyCard(idParty: Int) {
+    private fun navigateToPartyCard(idParty: Long) {
         val directions = PartyAddFormFragmentDirections
             .actionPartyAddFormFragmentToPartyCardFragment(idParty)
         findNavController().navigate(directions)
