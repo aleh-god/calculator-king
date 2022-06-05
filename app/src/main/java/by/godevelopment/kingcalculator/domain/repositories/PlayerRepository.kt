@@ -6,15 +6,13 @@ import kotlinx.coroutines.flow.Flow
 
 interface PlayerRepository {
 
-    suspend fun getPlayerById(id: Int): PlayerCardModel?
+    suspend fun getPlayerById(id: Long): PlayerCardModel?
 
     suspend fun saveNewPlayer(params: PlayerCardModel): Boolean
 
     suspend fun updatePlayerById(params: PlayerCardModel): Boolean
 
     suspend fun deletePlayerById(params: PlayerCardModel): Boolean
-
-    suspend fun getAllPlayersNamesToId(): Map<String, Int>
 
     suspend fun getAllPlayersNames(): List<String>
 
