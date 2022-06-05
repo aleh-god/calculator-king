@@ -1,9 +1,11 @@
 package by.godevelopment.kingcalculator.data.utils
 
 import by.godevelopment.kingcalculator.commons.INT_NULL_VALUE
+import by.godevelopment.kingcalculator.data.entities.PartyNote
 import by.godevelopment.kingcalculator.data.entities.PlayerProfile
 import by.godevelopment.kingcalculator.domain.models.ItemPlayerModel
 import by.godevelopment.kingcalculator.domain.models.PlayerCardModel
+import by.godevelopment.kingcalculator.domain.partiesdomain.models.PartyModel
 
 fun PlayerCardModel.toPlayerProfile(): PlayerProfile =
     PlayerProfile(
