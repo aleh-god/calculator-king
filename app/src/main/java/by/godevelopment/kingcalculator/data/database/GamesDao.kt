@@ -16,6 +16,9 @@ interface GamesDao {
     @Query("SELECT * FROM games ORDER BY id DESC")
     fun getAllGameNotes(): Flow<List<GameNote>>
 
+    @Query("SELECT * from games WHERE partyId = :key")
+    suspend fun getGameNotesByPartyId(key: Long): List<GameNote>
+
     @Query("SELECT * from games WHERE id = :key")
-    suspend fun getGameNoteById(key: Int): GameNote?
+    suspend fun getGameNoteById(key: Long): GameNote?
 }

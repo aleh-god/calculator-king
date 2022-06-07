@@ -1,7 +1,7 @@
-package by.godevelopment.kingcalculator.domain.repositories
+package by.godevelopment.kingcalculator.domain.playersdomain.repositories
 
-import by.godevelopment.kingcalculator.domain.models.ItemPlayerModel
-import by.godevelopment.kingcalculator.domain.models.PlayerCardModel
+import by.godevelopment.kingcalculator.domain.playersdomain.models.ItemPlayerModel
+import by.godevelopment.kingcalculator.domain.playersdomain.models.PlayerCardModel
 import kotlinx.coroutines.flow.Flow
 
 interface PlayerRepository {

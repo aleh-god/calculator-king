@@ -3,10 +3,7 @@ package by.godevelopment.kingcalculator.di
 import android.content.Context
 import androidx.room.Room
 import by.godevelopment.kingcalculator.commons.DB_NAME
-import by.godevelopment.kingcalculator.data.database.GamesDao
-import by.godevelopment.kingcalculator.data.database.KingDatabase
-import by.godevelopment.kingcalculator.data.database.PartiesDao
-import by.godevelopment.kingcalculator.data.database.PlayersDao
+import by.godevelopment.kingcalculator.data.database.*
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -26,6 +23,9 @@ object DataBaseModule {
 
     @Provides
     fun provideGamesDao(kingDatabase: KingDatabase): GamesDao = kingDatabase.gamesDao()
+
+    @Provides
+    fun provideTricksDao(kingDatabase: KingDatabase): TricksDao = kingDatabase.tricksDao()
 
     @Provides
     @Singleton

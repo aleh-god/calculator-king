@@ -30,7 +30,7 @@ class PartiesListFragment : Fragment() {
     private var _binding: FragmentPartiesListBinding? = null
     private val binding get() = _binding!!
 
-    private val onClick: (Int) -> Unit = { key ->
+    private val onClick: (Long) -> Unit = { key ->
         Log.i(TAG, "PartiesListFragment: onClick $key")
     }
 

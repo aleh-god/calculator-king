@@ -6,7 +6,7 @@ import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import by.godevelopment.kingcalculator.databinding.ItemPlayersListBinding
-import by.godevelopment.kingcalculator.domain.models.ItemPlayerModel
+import by.godevelopment.kingcalculator.domain.playersdomain.models.ItemPlayerModel
 
 class PlayersAdapter(
     private val onClick: (Long) -> Unit

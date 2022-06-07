@@ -38,17 +38,14 @@ class MainActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
         R.id.menu_players -> {
             navController.navigate(R.id.action_partiesListFragment_to_playersListFragment)
-            // TODO("fix crash in list fragment")
+            // TODO("fix nav action crash in list fragment")
             true
         }
         R.id.menu_settings -> {
             Log.i(TAG, "onOptionsItemSelected: R.id.menu_settings")
+            // TODO("implement menu settings")
             true
         }
-        else -> {
-            // If we got here, the user's action was not recognized.
-            // Invoke the superclass to handle it.
-            super.onOptionsItemSelected(item)
-        }
+        else -> { super.onOptionsItemSelected(item) }
     }
 }

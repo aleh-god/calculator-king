@@ -1,4 +1,4 @@
-package by.godevelopment.kingcalculator.commons
+package by.godevelopment.kingcalculator.domain.commons.models
 
 import android.content.Context
 import androidx.annotation.StringRes
@@ -6,7 +6,7 @@ import by.godevelopment.kingcalculator.R
 
 enum class GameType (
     val id: Int,
-    val scoreTrick: Int,
+    val trickScores: Int,
     val countAllTricks: Int,
     @StringRes
     val res: Int
@@ -26,11 +26,13 @@ enum class GameType (
     DoNotTakeLastTwo(16, -20,2, R.string.game_type_ntl),
     DoNotTakeBFG(17, -240,31, R.string.game_type_ntfg);
 
-    fun calcScore(countTricks: Int): Int {
-        return countTricks * this.scoreTrick
+    fun getTotalGameScore(countTricks: Int): Int {
+        return countTricks * this.trickScores
     }
 
     fun getDescription(context: Context): String {
         return context.getString(res)
     }
+
+    // Every enum has both a name() and a valueOf(String) method. The former returns the string name of the enum, and the latter gives the enum value whose name is the string.
 }

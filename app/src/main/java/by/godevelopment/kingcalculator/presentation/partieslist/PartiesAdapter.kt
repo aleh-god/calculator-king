@@ -6,10 +6,10 @@ import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import by.godevelopment.kingcalculator.databinding.ItemPartiesListBinding
-import by.godevelopment.kingcalculator.domain.models.ItemPartyModel
+import by.godevelopment.kingcalculator.domain.partiesdomain.models.ItemPartyModel
 
 class PartiesAdapter(
-    private val onClick: (Int) -> Unit
+    private val onClick: (Long) -> Unit
 ) : RecyclerView.Adapter<PartiesAdapter.ItemViewHolder>() {
 
     private val diffCallback = object : DiffUtil.ItemCallback<ItemPartyModel>() {
