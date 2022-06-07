@@ -1,4 +1,4 @@
-package by.godevelopment.kingcalculator.domain.models
+package by.godevelopment.kingcalculator.domain.commons.models
 
 data class ValidationResult(
     val successful: Boolean,

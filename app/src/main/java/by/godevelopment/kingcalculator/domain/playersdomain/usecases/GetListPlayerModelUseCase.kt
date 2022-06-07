@@ -1,7 +1,7 @@
-package by.godevelopment.kingcalculator.domain.usecases
+package by.godevelopment.kingcalculator.domain.playersdomain.usecases
 
-import by.godevelopment.kingcalculator.domain.models.ItemPlayerModel
-import by.godevelopment.kingcalculator.domain.repositories.PlayerRepository
+import by.godevelopment.kingcalculator.domain.playersdomain.models.ItemPlayerModel
+import by.godevelopment.kingcalculator.domain.playersdomain.repositories.PlayerRepository
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 

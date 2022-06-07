@@ -73,7 +73,8 @@
     <string name="message_data_save">Data save successfully</string>
     <string name="message_error_validate_email_blank">The email can\'t be blank</string>
     <string name="message_error_validate_email">That\'s not a valid email</string>
-    <string name="message_error_validate_email_length">The player name needs to consist of at least 3 characters</string>
+    <string name="message_error_validate_player_name_length">The player name needs to consist of at least 3 characters</string>
+    <string name="message_error_validate_party_name_length">The party name needs to consist of at least 3 characters</string>
     <string name="message_error_validate_email_different">Players names must be different</string>
 
     <string name="message_error_email_check">This email is already registered</string>

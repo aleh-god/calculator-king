@@ -1,4 +1,4 @@
-package by.godevelopment.kingcalculator.domain.helpers
+package by.godevelopment.kingcalculator.domain.commons.helpers
 
 import android.content.Context
 import androidx.annotation.StringRes

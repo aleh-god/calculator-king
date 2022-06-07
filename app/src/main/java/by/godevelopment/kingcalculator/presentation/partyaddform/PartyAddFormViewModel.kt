@@ -4,11 +4,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import by.godevelopment.kingcalculator.R
 import by.godevelopment.kingcalculator.data.entities.PartyNote
-import by.godevelopment.kingcalculator.domain.helpers.StringHelper
-import by.godevelopment.kingcalculator.domain.models.ValidationResult
+import by.godevelopment.kingcalculator.domain.commons.helpers.StringHelper
+import by.godevelopment.kingcalculator.domain.commons.models.ValidationResult
 import by.godevelopment.kingcalculator.domain.partiesdomain.repositories.PartyRepository
-import by.godevelopment.kingcalculator.domain.usecases.validationusecase.ValidatePlayerNameUseCase
-import by.godevelopment.kingcalculator.domain.usecases.validationusecase.ValidatePlayersChoiceUseCase
+import by.godevelopment.kingcalculator.domain.partiesdomain.usecases.ValidatePartyNameUseCase
+import by.godevelopment.kingcalculator.domain.playersdomain.usecases.ValidatePlayersChoiceUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.Channel
@@ -20,7 +20,7 @@ import javax.inject.Inject
 class PartyAddFormViewModel @Inject constructor(
     private val partyRepository: PartyRepository,
     private val stringHelper: StringHelper,
-    private val validatePlayerNameUseCase: ValidatePlayerNameUseCase,
+    private val validatePartyNameUseCase: ValidatePartyNameUseCase,
     private val validatePlayersChoiceUseCase: ValidatePlayersChoiceUseCase
 ) : ViewModel() {
 
@@ -43,7 +43,7 @@ class PartyAddFormViewModel @Inject constructor(
     fun onEvent(event: AddPartyFormUserEvent) {
         when(event) {
             is AddPartyFormUserEvent.PartyNameChanged -> {
-                val result = validatePlayerNameUseCase.execute(event.partyName)
+                val result = validatePartyNameUseCase.execute(event.partyName)
                 _uiState.update { it.copy(
                     partyName = event.partyName,
                     partyNameError = result.errorMessage
@@ -115,7 +115,7 @@ class PartyAddFormViewModel @Inject constructor(
     }
 
     private fun checkInputFieldsUiState(): Boolean {
-        val partyNameCheck = validatePlayerNameUseCase.execute(_uiState.value.partyName).successful
+        val partyNameCheck = validatePartyNameUseCase.execute(_uiState.value.partyName).successful
         val playerNamesCheck = runValidatePlayersChoice().successful
         return (partyNameCheck && playerNamesCheck)
     }

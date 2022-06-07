@@ -1,8 +1,8 @@
-package by.godevelopment.kingcalculator.domain.usecases.validationusecase
+package by.godevelopment.kingcalculator.domain.playersdomain.usecases
 
 import by.godevelopment.kingcalculator.R
-import by.godevelopment.kingcalculator.domain.helpers.StringHelper
-import by.godevelopment.kingcalculator.domain.models.ValidationResult
+import by.godevelopment.kingcalculator.domain.commons.helpers.StringHelper
+import by.godevelopment.kingcalculator.domain.commons.models.ValidationResult
 import javax.inject.Inject
 
 class ValidatePlayersChoiceUseCase @Inject constructor(

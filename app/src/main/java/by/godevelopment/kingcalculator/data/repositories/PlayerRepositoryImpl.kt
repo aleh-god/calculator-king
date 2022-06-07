@@ -1,14 +1,14 @@
 package by.godevelopment.kingcalculator.data.repositories
 
-import by.godevelopment.kingcalculator.data.datasource.PlayerDataSource
-import by.godevelopment.kingcalculator.domain.models.ItemPlayerModel
-import by.godevelopment.kingcalculator.domain.models.PlayerCardModel
-import by.godevelopment.kingcalculator.domain.repositories.PlayerRepository
+import by.godevelopment.kingcalculator.data.datasource.PlayersDataSource
+import by.godevelopment.kingcalculator.domain.playersdomain.models.ItemPlayerModel
+import by.godevelopment.kingcalculator.domain.playersdomain.models.PlayerCardModel
+import by.godevelopment.kingcalculator.domain.playersdomain.repositories.PlayerRepository
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 class PlayerRepositoryImpl @Inject constructor(
-    private val playersDataSource: PlayerDataSource
+    private val playersDataSource: PlayersDataSource
 ) : PlayerRepository {
     override suspend fun getPlayerById(id: Long): PlayerCardModel? {
         return playersDataSource.getPlayerById(id)

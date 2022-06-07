@@ -1,6 +1,6 @@
 package by.godevelopment.kingcalculator.presentation.playercard
 
-import by.godevelopment.kingcalculator.domain.models.PlayerCardModel
+import by.godevelopment.kingcalculator.domain.playersdomain.models.PlayerCardModel
 
 data class CardUiState(
     val playerCardModel: PlayerCardModel,

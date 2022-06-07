@@ -5,13 +5,16 @@ import androidx.room.RoomDatabase
 import by.godevelopment.kingcalculator.data.entities.GameNote
 import by.godevelopment.kingcalculator.data.entities.PartyNote
 import by.godevelopment.kingcalculator.data.entities.PlayerProfile
+import by.godevelopment.kingcalculator.data.entities.TrickNote
 
-@Database(entities = [PlayerProfile::class, GameNote::class, PartyNote::class], version = 1, exportSchema = false)
+@Database(entities = [PlayerProfile::class, GameNote::class, PartyNote::class, TrickNote::class], version = 1, exportSchema = false)
 abstract class KingDatabase: RoomDatabase() {
 
     abstract fun playersDao(): PlayersDao
 
+    abstract fun partiesDao(): PartiesDao
+
     abstract fun gamesDao(): GamesDao
 
-    abstract fun partiesDao(): PartiesDao
+    abstract fun tricksDao(): TricksDao
 }

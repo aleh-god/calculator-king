@@ -7,3 +7,4 @@ const val INT_NULL_VALUE = 0
 const val BLANK_STRING_VALUE = ""
 const val ROWS_NOT_INSERTED = -1L
 const val ROWS_NOT_UPDATED = -1
+const val NUMBER_OF_ALL_KING_GAMES = 58

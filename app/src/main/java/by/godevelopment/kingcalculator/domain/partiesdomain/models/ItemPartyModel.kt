@@ -3,7 +3,8 @@ package by.godevelopment.kingcalculator.domain.partiesdomain.models
 data class ItemPartyModel(
     val id: Long = 0,
     val partyName: String,
-    val partyDate: String,
+    val partyStartDate: String,
+    val partyLastDate: String,
     val isComplete: Boolean,
     val partyGamesCount: String,
     val player_one_name: String,

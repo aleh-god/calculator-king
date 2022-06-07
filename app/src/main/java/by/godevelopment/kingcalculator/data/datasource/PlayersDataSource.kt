@@ -1,6 +1,7 @@
 package by.godevelopment.kingcalculator.data.datasource
 
 import android.util.Log
+import by.godevelopment.kingcalculator.commons.DELETED_STRING_VALUE
 import by.godevelopment.kingcalculator.commons.ROWS_NOT_INSERTED
 import by.godevelopment.kingcalculator.commons.ROWS_NOT_UPDATED
 import by.godevelopment.kingcalculator.commons.TAG
@@ -9,13 +10,13 @@ import by.godevelopment.kingcalculator.data.entities.PlayerProfile
 import by.godevelopment.kingcalculator.data.utils.toItemPlayerModel
 import by.godevelopment.kingcalculator.data.utils.toPlayerCardModel
 import by.godevelopment.kingcalculator.data.utils.toPlayerProfile
-import by.godevelopment.kingcalculator.domain.models.ItemPlayerModel
-import by.godevelopment.kingcalculator.domain.models.PlayerCardModel
+import by.godevelopment.kingcalculator.domain.playersdomain.models.ItemPlayerModel
+import by.godevelopment.kingcalculator.domain.playersdomain.models.PlayerCardModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
-class PlayerDataSource @Inject constructor(
+class PlayersDataSource @Inject constructor(
     private val playersDao: PlayersDao
 ) {
     fun getAllPlayers(): Flow<List<ItemPlayerModel>> =
@@ -29,7 +30,13 @@ class PlayerDataSource @Inject constructor(
         playersDao.getPlayerProfileById(id)?.toPlayerCardModel()
 
     suspend fun getPlayerProfileById(playerId: Long): PlayerProfile {
-        return playersDao.getPlayerProfileById(playerId) ?: TODO()
+        return playersDao.getPlayerProfileById(playerId) ?:
+        PlayerProfile(
+            name = DELETED_STRING_VALUE,
+            email = DELETED_STRING_VALUE,
+            avatar = 0,
+            color = 0
+        )
     }
 
     suspend fun saveNewPlayer(params: PlayerCardModel): Boolean {

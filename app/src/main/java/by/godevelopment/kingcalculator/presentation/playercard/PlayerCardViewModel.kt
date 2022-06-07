@@ -6,10 +6,10 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import by.godevelopment.kingcalculator.R
 import by.godevelopment.kingcalculator.commons.TAG
-import by.godevelopment.kingcalculator.domain.helpers.StringHelper
-import by.godevelopment.kingcalculator.domain.models.PlayerCardModel
-import by.godevelopment.kingcalculator.domain.repositories.PlayerRepository
-import by.godevelopment.kingcalculator.domain.usecases.validationusecase.ValidatePlayerNameUseCase
+import by.godevelopment.kingcalculator.domain.commons.helpers.StringHelper
+import by.godevelopment.kingcalculator.domain.playersdomain.models.PlayerCardModel
+import by.godevelopment.kingcalculator.domain.playersdomain.repositories.PlayerRepository
+import by.godevelopment.kingcalculator.domain.playersdomain.usecases.ValidatePlayerNameUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.Channel
@@ -29,7 +29,8 @@ class PlayerCardViewModel @Inject constructor(
         PlayerCardModel(
          name = "",
          email = ""
-        )))
+        )
+    ))
     val uiState: StateFlow<CardUiState> = _uiState.asStateFlow()
 
     private val _uiEvent  = Channel<UiEvent>()

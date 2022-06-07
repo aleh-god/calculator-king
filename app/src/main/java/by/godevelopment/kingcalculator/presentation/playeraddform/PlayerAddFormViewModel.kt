@@ -3,11 +3,11 @@ package by.godevelopment.kingcalculator.presentation.playeraddform
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import by.godevelopment.kingcalculator.R
-import by.godevelopment.kingcalculator.domain.helpers.StringHelper
-import by.godevelopment.kingcalculator.domain.models.PlayerCardModel
-import by.godevelopment.kingcalculator.domain.repositories.PlayerRepository
-import by.godevelopment.kingcalculator.domain.usecases.validationusecase.ValidateEmailUseCase
-import by.godevelopment.kingcalculator.domain.usecases.validationusecase.ValidatePlayerNameUseCase
+import by.godevelopment.kingcalculator.domain.commons.helpers.StringHelper
+import by.godevelopment.kingcalculator.domain.playersdomain.models.PlayerCardModel
+import by.godevelopment.kingcalculator.domain.playersdomain.repositories.PlayerRepository
+import by.godevelopment.kingcalculator.domain.playersdomain.usecases.ValidateEmailUseCase
+import by.godevelopment.kingcalculator.domain.playersdomain.usecases.ValidatePlayerNameUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.Channel
@@ -79,7 +79,8 @@ class PlayerAddFormViewModel @Inject constructor(
         suspendJob?.cancel()
         suspendJob = viewModelScope.launch {
             _uiState.update { it.copy(showsProgress = true) }
-            val result = playerRepository.saveNewPlayer(PlayerCardModel(
+            val result = playerRepository.saveNewPlayer(
+                PlayerCardModel(
                 name = uiState.value.playerName,
                 email = uiState.value.email
             )
