@@ -1,4 +1,4 @@
-package by.godevelopment.kingcalculator.presentation.playercard
+package by.godevelopment.kingcalculator.presentation.playerpresentation.playercard
 
 import android.util.Log
 import androidx.lifecycle.SavedStateHandle
@@ -25,12 +25,14 @@ class PlayerCardViewModel @Inject constructor(
     private val validatePlayerNameUseCase: ValidatePlayerNameUseCase
 ) : ViewModel() {
 
-    private val _uiState: MutableStateFlow<CardUiState> = MutableStateFlow(CardUiState(
+    private val _uiState: MutableStateFlow<CardUiState> = MutableStateFlow(
+        CardUiState(
         PlayerCardModel(
          name = "",
          email = ""
         )
-    ))
+    )
+    )
     val uiState: StateFlow<CardUiState> = _uiState.asStateFlow()
 
     private val _uiEvent  = Channel<UiEvent>()

@@ -1,4 +1,4 @@
-package by.godevelopment.kingcalculator.presentation.playerslist
+package by.godevelopment.kingcalculator.presentation.playerpresentation.playerslist
 
 import android.os.Bundle
 import android.util.Log
@@ -13,7 +13,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import by.godevelopment.kingcalculator.R
 import by.godevelopment.kingcalculator.commons.TAG
 import by.godevelopment.kingcalculator.databinding.FragmentPlayersListBinding
-import by.godevelopment.kingcalculator.presentation.playeraddform.PlayerAddFormFragmentDirections
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect

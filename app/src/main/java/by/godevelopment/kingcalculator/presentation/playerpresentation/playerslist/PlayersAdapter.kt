@@ -1,4 +1,4 @@
-package by.godevelopment.kingcalculator.presentation.playerslist
+package by.godevelopment.kingcalculator.presentation.playerpresentation.playerslist
 
 import android.view.LayoutInflater
 import android.view.ViewGroup

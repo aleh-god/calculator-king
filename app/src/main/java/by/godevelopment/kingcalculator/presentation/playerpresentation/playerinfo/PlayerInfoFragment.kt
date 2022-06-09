@@ -1,4 +1,4 @@
-package by.godevelopment.kingcalculator.presentation.playerinfo
+package by.godevelopment.kingcalculator.presentation.playerpresentation.playerinfo
 
 import android.os.Bundle
 import android.view.LayoutInflater

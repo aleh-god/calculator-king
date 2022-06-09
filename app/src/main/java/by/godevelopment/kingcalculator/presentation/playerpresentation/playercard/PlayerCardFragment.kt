@@ -1,4 +1,4 @@
-package by.godevelopment.kingcalculator.presentation.playercard
+package by.godevelopment.kingcalculator.presentation.playerpresentation.playercard
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -12,7 +12,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import by.godevelopment.kingcalculator.R
 import by.godevelopment.kingcalculator.databinding.FragmentPlayerCardBinding
-import by.godevelopment.kingcalculator.presentation.playeraddform.PlayerAddFormViewModel
+import by.godevelopment.kingcalculator.presentation.playerpresentation.playeraddform.PlayerAddFormViewModel
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect

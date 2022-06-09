@@ -1,4 +1,4 @@
-package by.godevelopment.kingcalculator.presentation.playeraddform
+package by.godevelopment.kingcalculator.presentation.playerpresentation.playeraddform
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

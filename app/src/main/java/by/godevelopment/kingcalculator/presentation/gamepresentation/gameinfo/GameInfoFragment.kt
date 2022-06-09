@@ -1,4 +1,4 @@
-package by.godevelopment.kingcalculator.presentation.gameinfo
+package by.godevelopment.kingcalculator.presentation.gamepresentation.gameinfo
 
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle

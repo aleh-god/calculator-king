@@ -1,4 +1,4 @@
-package by.godevelopment.kingcalculator.presentation.playeraddform
+package by.godevelopment.kingcalculator.presentation.playerpresentation.playeraddform
 
 sealed class AddFormUserEvent {
     data class EmailChanged(val email: String) : AddFormUserEvent()

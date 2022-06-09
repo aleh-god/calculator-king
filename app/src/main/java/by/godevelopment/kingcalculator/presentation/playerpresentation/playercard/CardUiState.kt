@@ -1,4 +1,4 @@
-package by.godevelopment.kingcalculator.presentation.playercard
+package by.godevelopment.kingcalculator.presentation.playerpresentation.playercard
 
 import by.godevelopment.kingcalculator.domain.playersdomain.models.PlayerCardModel
 

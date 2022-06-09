@@ -1,4 +1,4 @@
-package by.godevelopment.kingcalculator.presentation.playerslist
+package by.godevelopment.kingcalculator.presentation.playerpresentation.playerslist
 
 import android.util.Log
 import androidx.lifecycle.ViewModel
@@ -11,7 +11,6 @@ import by.godevelopment.kingcalculator.domain.playersdomain.usecases.GetListPlay
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -38,24 +37,14 @@ class PlayersListViewModel @Inject constructor(
         fetchJob?.cancel()
         fetchJob = viewModelScope.launch {
             getListPlayerModelUseCase()
-                .onStart {
-                    _uiState.value = UiState(
-                        isFetchingData = true
-                    )
-                }
+                .onStart { _uiState.update { it.copy(isFetchingData = true) } }
                 .catch { exception ->
                     Log.i(TAG, "viewModelScope.catch ${exception.message}")
-                    _uiState.value = UiState(
-                        isFetchingData = false
-                    )
-                    delay(1000)
+                    _uiState.update { it.copy(isFetchingData = false) }
                     _uiEvent.send(stringHelper.getString(R.string.alert_error_loading))
                 }
-                .collect {
-                    _uiState.value = UiState(
-                        isFetchingData = false,
-                        dataList = it
-                    )
+                .collect { list ->
+                    _uiState.update { it.copy(isFetchingData = false, dataList = list) }
                 }
         }
     }

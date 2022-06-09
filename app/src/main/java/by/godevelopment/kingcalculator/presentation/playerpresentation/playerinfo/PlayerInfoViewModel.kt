@@ -1,4 +1,4 @@
-package by.godevelopment.kingcalculator.presentation.playerinfo
+package by.godevelopment.kingcalculator.presentation.playerpresentation.playerinfo
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel

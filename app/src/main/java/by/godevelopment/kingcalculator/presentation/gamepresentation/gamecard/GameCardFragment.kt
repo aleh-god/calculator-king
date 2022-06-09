@@ -1,4 +1,4 @@
-package by.godevelopment.kingcalculator.presentation.gameslist
+package by.godevelopment.kingcalculator.presentation.gamepresentation.gamecard
 
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
@@ -8,24 +8,24 @@ import android.view.View
 import android.view.ViewGroup
 import by.godevelopment.kingcalculator.R
 
-class GamesListFragment : Fragment() {
+class GameCardFragment : Fragment() {
 
     companion object {
-        fun newInstance() = GamesListFragment()
+        fun newInstance() = GameCardFragment()
     }
 
-    private lateinit var viewModel: GamesListViewModel
+    private lateinit var viewModel: GameCardViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_games_list, container, false)
+        return inflater.inflate(R.layout.fragment_game_card, container, false)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProvider(this).get(GamesListViewModel::class.java)
+        viewModel = ViewModelProvider(this).get(GameCardViewModel::class.java)
         // TODO: Use the ViewModel
     }
 
