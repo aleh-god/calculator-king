@@ -85,5 +85,6 @@
     <string name="hint_text_player_four_email">player four email</string>
     <string name="nav_label_party_add_form">Party add form</string>
     <string name="nav_label_party_info">Party info</string>
+    <string name="nav_label_game_add_form">Game add form</string>
 
 </resources>

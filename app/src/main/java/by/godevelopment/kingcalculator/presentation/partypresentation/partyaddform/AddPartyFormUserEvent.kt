@@ -1,4 +1,4 @@
-package by.godevelopment.kingcalculator.presentation.partyaddform
+package by.godevelopment.kingcalculator.presentation.partypresentation.partyaddform
 
 sealed class AddPartyFormUserEvent {
     data class PartyNameChanged(val partyName: String) : AddPartyFormUserEvent()

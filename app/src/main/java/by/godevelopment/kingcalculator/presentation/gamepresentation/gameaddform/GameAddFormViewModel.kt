@@ -1,19 +1,21 @@
-package by.godevelopment.kingcalculator.presentation.partycard
+package by.godevelopment.kingcalculator.presentation.gamepresentation.gameaddform
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class PartyCardViewModel @Inject constructor(
+class GameAddFormViewModel @Inject constructor(
     state: SavedStateHandle
 ) : ViewModel() {
 
-    val idPlayer = state.get<Long>("partyId")
+    val idParty = state.get<Long>("partyId")
 
     private val _uiState: MutableStateFlow<UiState> = MutableStateFlow(UiState())
     val uiState: StateFlow<UiState> = _uiState.asStateFlow()
@@ -23,9 +25,18 @@ class PartyCardViewModel @Inject constructor(
 
     private var fetchJob: Job? = null
 
+    init {
+        load()
+    }
+
+    private fun load() {
+        fetchJob?.cancel()
+        fetchJob = viewModelScope.launch {
+
+        }
+    }
 
     data class UiState(
         val isFetchingData: Boolean = false
     )
-
 }

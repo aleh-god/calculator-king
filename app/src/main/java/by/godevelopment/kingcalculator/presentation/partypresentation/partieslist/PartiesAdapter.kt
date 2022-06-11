@@ -1,4 +1,4 @@
-package by.godevelopment.kingcalculator.presentation.partieslist
+package by.godevelopment.kingcalculator.presentation.partypresentation.partieslist
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -23,7 +23,8 @@ class PartiesAdapter(
     }
 
     private val differ = AsyncListDiffer(this, diffCallback)
-    var itemList: List<ItemPartyModel>
+
+    var items: List<ItemPartyModel>
         get() = differ.currentList
         set(value) {
             differ.submitList(value)
@@ -50,16 +51,18 @@ class PartiesAdapter(
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemViewHolder {
-        return ItemViewHolder(ItemPartiesListBinding.inflate(
-            LayoutInflater.from(parent.context),
-            parent,
-            false)
+        return ItemViewHolder(
+            ItemPartiesListBinding.inflate(
+                LayoutInflater.from(parent.context),
+                parent,
+                false
+            )
         )
     }
 
     override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
-        holder.bind(itemList[position])
+        holder.bind(items[position])
     }
 
-    override fun getItemCount(): Int = itemList.size
+    override fun getItemCount(): Int = items.size
 }

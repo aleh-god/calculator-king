@@ -1,4 +1,4 @@
-package by.godevelopment.kingcalculator.presentation.partieslist
+package by.godevelopment.kingcalculator.presentation.partypresentation.partieslist
 
 import android.os.Bundle
 import android.util.Log
@@ -6,7 +6,6 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -14,7 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import by.godevelopment.kingcalculator.R
 import by.godevelopment.kingcalculator.commons.TAG
 import by.godevelopment.kingcalculator.databinding.FragmentPartiesListBinding
-import by.godevelopment.kingcalculator.presentation.partyaddform.AddPartyFormUserEvent
+import by.godevelopment.kingcalculator.presentation.playerpresentation.playerslist.PlayersListFragmentDirections
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
@@ -32,6 +31,7 @@ class PartiesListFragment : Fragment() {
 
     private val onClick: (Long) -> Unit = { key ->
         Log.i(TAG, "PartiesListFragment: onClick $key")
+        navigateToPartyCard(key)
     }
 
     override fun onCreateView(
@@ -57,7 +57,7 @@ class PartiesListFragment : Fragment() {
                 if (!uiState.isFetchingData) {
                     binding.progress.visibility = View.GONE
                 } else binding.progress.visibility = View.VISIBLE
-                rvAdapter.itemList = uiState.dataList
+                rvAdapter.items = uiState.dataList
             }
         }
     }
@@ -76,8 +76,15 @@ class PartiesListFragment : Fragment() {
 
     private fun setupListeners() {
         binding.floatingActionButton.setOnClickListener {
+            // TODO("validate min players count")
             findNavController().navigate(R.id.action_partiesListFragment_to_partyAddFormFragment)
         }
+    }
+
+    private fun navigateToPartyCard(idParty: Long) {
+        val direction = PartiesListFragmentDirections
+            .actionPartiesListFragmentToPartyCardFragment(idParty)
+        findNavController().navigate(direction)
     }
 
     override fun onDestroy() {

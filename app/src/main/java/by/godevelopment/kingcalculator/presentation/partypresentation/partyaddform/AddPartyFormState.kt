@@ -1,4 +1,4 @@
-package by.godevelopment.kingcalculator.presentation.partyaddform
+package by.godevelopment.kingcalculator.presentation.partypresentation.partyaddform
 
 data class AddPartyFormState(
     val partyName: String = "",

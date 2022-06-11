@@ -1,4 +1,4 @@
-package by.godevelopment.kingcalculator.presentation.partieslist
+package by.godevelopment.kingcalculator.presentation.partypresentation.partieslist
 
 import android.util.Log
 import androidx.lifecycle.ViewModel
@@ -7,7 +7,6 @@ import by.godevelopment.kingcalculator.R
 import by.godevelopment.kingcalculator.commons.TAG
 import by.godevelopment.kingcalculator.domain.commons.helpers.StringHelper
 import by.godevelopment.kingcalculator.domain.partiesdomain.models.ItemPartyModel
-import by.godevelopment.kingcalculator.domain.partiesdomain.repositories.PartyRepository
 import by.godevelopment.kingcalculator.domain.partiesdomain.usecases.GetPartyModelItemsUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
@@ -38,23 +37,14 @@ class PartiesListViewModel @Inject constructor(
         fetchJob?.cancel()
         fetchJob = viewModelScope.launch {
             getPartyModelItemsUseCase()
-                .onStart {
-                    _uiState.value = UiState(
-                        isFetchingData = true
-                    )
-                }
+                .onStart { _uiState.update { it.copy(isFetchingData = true) } }
                 .catch { exception ->
                     Log.i(TAG, "viewModelScope.catch ${exception.message}")
-                    _uiState.value = UiState(
-                        isFetchingData = false
-                    )
+                    _uiState.update { it.copy(isFetchingData = false) }
                     _uiEvent.send(stringHelper.getString(R.string.alert_error_loading))
                 }
-                .collect {
-                    _uiState.value = UiState(
-                        isFetchingData = false,
-                        dataList = it
-                    )
+                .collect { list ->
+                    _uiState.update { it.copy(isFetchingData = false, dataList = list) }
                 }
         }
     }

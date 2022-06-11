@@ -1,4 +1,4 @@
-package by.godevelopment.kingcalculator.presentation.gamepresentation.gameinfo
+package by.godevelopment.kingcalculator.presentation.partypresentation.partyinfo
 
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
@@ -8,24 +8,24 @@ import android.view.View
 import android.view.ViewGroup
 import by.godevelopment.kingcalculator.R
 
-class GameInfoFragment : Fragment() {
+class PartyInfoFragment : Fragment() {
 
     companion object {
-        fun newInstance() = GameInfoFragment()
+        fun newInstance() = PartyInfoFragment()
     }
 
-    private lateinit var viewModel: GameInfoViewModel
+    private lateinit var viewModel: PartyInfoViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_game_info, container, false)
+        return inflater.inflate(R.layout.fragment_party_info, container, false)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProvider(this).get(GameInfoViewModel::class.java)
+        viewModel = ViewModelProvider(this).get(PartyInfoViewModel::class.java)
         // TODO: Use the ViewModel
     }
 

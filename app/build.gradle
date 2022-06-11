@@ -43,7 +43,6 @@ dependencies {
     implementation Libs.legacySupport
     implementation Libs.appcompat
     implementation Libs.corektx
-    implementation Libs.lifecycleLiveDataktx
     implementation Libs.lifecycleViewModelktx
     implementation Libs.lifecycleRuntimeOnlyktx
     implementation Libs.constraint
@@ -60,9 +59,6 @@ dependencies {
     // Navigation
     implementation Libs.navFragment
     implementation Libs.navUi
-    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
-    implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.4.1'
-    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.4.1'
 
     // Testing
     testImplementation 'junit:junit:4.13.2'
