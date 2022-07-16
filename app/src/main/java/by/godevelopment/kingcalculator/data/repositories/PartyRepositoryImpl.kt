@@ -67,4 +67,19 @@ class PartyRepositoryImpl @Inject constructor(
 
     override suspend fun getAllPlayersIdToNames(): Map<String, Long> =
         playersDataSource.getAllPlayersIdToNames()
+
+    override suspend fun getPlayersByPartyId(partyId: Long): List<String> {
+        // TODO("to implemented getPlayersByPartyId")
+        return listOf(
+            "Leonardo",
+            "Raphael",
+            "Donatello",
+            "Michelangelo"
+        )
+    }
+
+    override suspend fun getContractorPlayerByPartyId(partyId: Long): String {
+        // TODO("to implemented getContractorPlayerByPartyId")
+        return "Michelangelo"
+    }
 }

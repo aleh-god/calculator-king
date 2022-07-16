@@ -3,12 +3,14 @@ package by.godevelopment.kingcalculator.presentation.playerpresentation.playerad
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import by.godevelopment.kingcalculator.R
+import by.godevelopment.kingcalculator.di.IoDispatcher
 import by.godevelopment.kingcalculator.domain.commons.helpers.StringHelper
 import by.godevelopment.kingcalculator.domain.playersdomain.models.PlayerCardModel
 import by.godevelopment.kingcalculator.domain.playersdomain.repositories.PlayerRepository
 import by.godevelopment.kingcalculator.domain.playersdomain.usecases.ValidateEmailUseCase
 import by.godevelopment.kingcalculator.domain.playersdomain.usecases.ValidatePlayerNameUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.*
@@ -20,7 +22,8 @@ class PlayerAddFormViewModel @Inject constructor(
     private val playerRepository: PlayerRepository,
     private val stringHelper: StringHelper,
     private val validateEmailUseCase: ValidateEmailUseCase,
-    private val validatePlayerNameUseCase: ValidatePlayerNameUseCase
+    private val validatePlayerNameUseCase: ValidatePlayerNameUseCase,
+    @IoDispatcher private val ioDispatcher: CoroutineDispatcher
 ): ViewModel() {
 
     private val _uiState: MutableStateFlow<AddFormState> = MutableStateFlow(AddFormState())
@@ -77,7 +80,7 @@ class PlayerAddFormViewModel @Inject constructor(
 
     private fun savePlayerDataToRepository() {
         suspendJob?.cancel()
-        suspendJob = viewModelScope.launch {
+        suspendJob = viewModelScope.launch(ioDispatcher) {
             _uiState.update { it.copy(showsProgress = true) }
             val result = playerRepository.saveNewPlayer(
                 PlayerCardModel(

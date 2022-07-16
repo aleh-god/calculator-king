@@ -9,11 +9,15 @@ class GetPlayersByPartyIdUseCase @Inject constructor(
 ) {
 
     suspend operator fun invoke(partyId: Long): PlayersInPartyModel {
+
+        val trimList = partyRepository.getPlayersByPartyId(partyId).map {
+            it.take(4)
+        }
         return PlayersInPartyModel(
-            "Leonardo",
-            "Raphael",
-            "Donatello",
-            "Michelangelo"
+            trimList[0],
+            trimList[1],
+            trimList[2],
+            trimList[3]
         )
     }
 }

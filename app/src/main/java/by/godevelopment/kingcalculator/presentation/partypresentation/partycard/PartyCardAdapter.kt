@@ -1,13 +1,17 @@
 package by.godevelopment.kingcalculator.presentation.partypresentation.partycard
 
+import android.util.Log
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import by.godevelopment.kingcalculator.R
+import by.godevelopment.kingcalculator.commons.EMPTY_STRING
+import by.godevelopment.kingcalculator.commons.TAG
 import by.godevelopment.kingcalculator.databinding.ItemGamesTableBinding
 import by.godevelopment.kingcalculator.domain.commons.models.TestItem
+import com.google.android.material.textview.MaterialTextView
 
 class PartyCardAdapter(
     private val onClick: (String) -> Unit
@@ -32,15 +36,63 @@ class PartyCardAdapter(
         }
 
     inner class ViewHolder(private val binding: ItemGamesTableBinding) : RecyclerView.ViewHolder(binding.root) {
+
         fun bind(testItem: TestItem) {
-            binding.gameName.text = testItem.name
-            if (testItem.isFinishedOneGame) binding.gameCollumOne.text = "X"
-            if (testItem.isFinishedTwoGame) binding.gameCollumTwo.text = "X"
-            if (testItem.isFinishedThreeGame) binding.gameCollumThree.text = "X"
-            if (testItem.isFinishedFourGame) binding.gameCollumFour.text = "X"
-            binding.root.setOnClickListener {
-                onClick.invoke(testItem.name)
+            Log.i(TAG, "bind: ${testItem.isFinishedOneGame} - ${testItem.isFinishedTwoGame} - ${testItem.isFinishedThreeGame} - ${testItem.isFinishedFourGame}")
+            binding.apply {
+                gameName.text = testItem.gameTypeName
+
+                when (testItem.openedColumnNumber) {
+                    1 -> {
+                        if (testItem.isFinishedOneGame) { setCompleteFrame(gameCollumOne) }
+                        else {
+                            setOpenFrame(gameCollumOne, testItem.gameTypeName)
+                            setCloseFrame(gameCollumTwo)
+                            setCloseFrame(gameCollumThree)
+                            setCloseFrame(gameCollumFour)
+                        }
+                    }
+                    2 -> {
+                        if (testItem.isFinishedTwoGame) { setCompleteFrame(gameCollumTwo) }
+                        else {
+                            setOpenFrame(gameCollumTwo, testItem.gameTypeName)
+                            setCloseFrame(gameCollumOne)
+                            setCloseFrame(gameCollumThree)
+                            setCloseFrame(gameCollumFour)
+                        }
+                    }
+                    3 -> {
+                        if (testItem.isFinishedThreeGame) { setCompleteFrame(gameCollumThree) }
+                        else {
+                            setOpenFrame(gameCollumThree, testItem.gameTypeName)
+                            setCloseFrame(gameCollumOne)
+                            setCloseFrame(gameCollumTwo)
+                            setCloseFrame(gameCollumFour)
+                        }
+                    }
+                    4 -> {
+                        if (testItem.isFinishedFourGame) { setCompleteFrame(gameCollumFour) }
+                            setOpenFrame(gameCollumFour, testItem.gameTypeName)
+                            setCloseFrame(gameCollumOne)
+                            setCloseFrame(gameCollumTwo)
+                            setCloseFrame(gameCollumThree)
+                        }
+                    }
+                }
             }
+
+        private fun setCompleteFrame(view: MaterialTextView) {
+            view.text = "X"
+            view.setBackgroundResource(R.drawable.frame_complete)
+        }
+        private fun setOpenFrame(view: MaterialTextView, gameTypeName: String) {
+            view.setOnClickListener { onClick.invoke(gameTypeName) }
+            view.setBackgroundResource(R.drawable.frame_open)
+            view.text = EMPTY_STRING
+        }
+        private fun setCloseFrame(view: MaterialTextView) {
+            view.setBackgroundResource(R.drawable.frame_close)
+            view.text = EMPTY_STRING
         }
     }
 

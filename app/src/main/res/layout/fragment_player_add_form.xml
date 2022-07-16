@@ -21,7 +21,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toTopOf="@id/player_email"
         android:layout_marginBottom="@dimen/big_margin"
-        android:hint="@string/card_name"
+        android:hint="@string/card_player_name"
         app:endIconMode="clear_text"
         app:helperTextEnabled="true"
         app:helperText="@string/form_helper_name_text"

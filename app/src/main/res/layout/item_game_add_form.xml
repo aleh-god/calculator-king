@@ -18,7 +18,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/game_collum_one"
+            app:layout_constraintEnd_toStartOf="@id/game_total_score"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintHorizontal_chainStyle="spread"
@@ -30,12 +30,35 @@
             android:textAppearance="@style/TextAppearance.Material3.BodyLarge"
             />
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/game_collum_one"
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/game_total_score"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:layout_constraintStart_toEndOf="@id/game_name"
-            app:layout_constraintEnd_toStartOf="@id/game_collum_two"
+            app:layout_constraintEnd_toStartOf="@id/divider"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginVertical="@dimen/main_margin"
+            tools:text="-240"
+            android:textAppearance="@style/TextAppearance.Material3.BodyLarge"
+            />
+
+        <View
+            android:id="@+id/divider"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@id/game_total_score"
+            app:layout_constraintEnd_toStartOf="@id/button_decrease_tricks"
+            android:layout_margin="@dimen/main_margin"
+            style="@style/Divider"
+            />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/button_decrease_tricks"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toEndOf="@id/divider"
+            app:layout_constraintEnd_toStartOf="@id/input_tricks_count"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             android:layout_marginVertical="@dimen/main_margin"
@@ -45,44 +68,32 @@
             />
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/game_collum_two"
+            android:id="@+id/input_tricks_count"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintStart_toEndOf="@id/game_collum_one"
-            app:layout_constraintEnd_toStartOf="@id/game_collum_three"
+            app:layout_constraintStart_toEndOf="@id/button_decrease_tricks"
+            app:layout_constraintEnd_toStartOf="@id/button_increase_tricks"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             android:layout_marginVertical="@dimen/main_margin"
+            android:inputType="number"
             android:textAppearance="@style/TextAppearance.Material3.BodyLarge"
             tools:text="8"
             />
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/game_collum_three"
+            android:id="@+id/button_increase_tricks"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintStart_toEndOf="@id/game_collum_two"
-            app:layout_constraintEnd_toStartOf="@id/game_collum_four"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            android:layout_marginVertical="@dimen/main_margin"
-            app:icon="@drawable/ic_plus_24"
-            android:text="inc"
-            style="?attr/materialButtonOutlinedStyle"
-            />
-
-        <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/game_collum_four"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintStart_toEndOf="@id/game_collum_three"
+            app:layout_constraintStart_toEndOf="@id/input_tricks_count"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             android:layout_marginVertical="@dimen/main_margin"
             android:layout_marginEnd="@dimen/big_margin"
-            tools:text="-240"
-            android:textAppearance="@style/TextAppearance.Material3.BodyLarge"
+            app:icon="@drawable/ic_plus_24"
+            android:text="inc"
+            style="?attr/materialButtonOutlinedStyle"
             />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

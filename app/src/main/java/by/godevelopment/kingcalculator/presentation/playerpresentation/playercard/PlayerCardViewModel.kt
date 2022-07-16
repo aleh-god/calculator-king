@@ -6,11 +6,13 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import by.godevelopment.kingcalculator.R
 import by.godevelopment.kingcalculator.commons.TAG
+import by.godevelopment.kingcalculator.di.IoDispatcher
 import by.godevelopment.kingcalculator.domain.commons.helpers.StringHelper
 import by.godevelopment.kingcalculator.domain.playersdomain.models.PlayerCardModel
 import by.godevelopment.kingcalculator.domain.playersdomain.repositories.PlayerRepository
 import by.godevelopment.kingcalculator.domain.playersdomain.usecases.ValidatePlayerNameUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.*
@@ -22,7 +24,8 @@ class PlayerCardViewModel @Inject constructor(
     state: SavedStateHandle,
     private val playerRepository: PlayerRepository,
     private val stringHelper: StringHelper,
-    private val validatePlayerNameUseCase: ValidatePlayerNameUseCase
+    private val validatePlayerNameUseCase: ValidatePlayerNameUseCase,
+    @IoDispatcher private val ioDispatcher: CoroutineDispatcher
 ) : ViewModel() {
 
     private val _uiState: MutableStateFlow<CardUiState> = MutableStateFlow(
@@ -47,7 +50,7 @@ class PlayerCardViewModel @Inject constructor(
     }
 
     private fun loadPlayerCardModelById(idPlayer: Long?) {
-        viewModelScope.launch {
+        viewModelScope.launch(ioDispatcher) {
             if (idPlayer != null) {
                 _uiState.update { it.copy(showsProgress = true) }
                 val response = playerRepository.getPlayerById(idPlayer)
@@ -106,7 +109,7 @@ class PlayerCardViewModel @Inject constructor(
 
     private fun deletePlayerDataFromRepository() {
         suspendJob?.cancel()
-        suspendJob = viewModelScope.launch {
+        suspendJob = viewModelScope.launch(ioDispatcher) {
             _uiState.update { it.copy(showsProgress = true) }
             val result = playerRepository.deletePlayerById(uiState.value.playerCardModel)
             if (result) {
@@ -122,7 +125,7 @@ class PlayerCardViewModel @Inject constructor(
 
     private fun updatePlayerDataToRepository() {
         suspendJob?.cancel()
-        suspendJob = viewModelScope.launch {
+        suspendJob = viewModelScope.launch(ioDispatcher) {
             _uiState.update { it.copy(showsProgress = true) }
             val result = playerRepository.updatePlayerById(uiState.value.playerCardModel)
             if (result) {

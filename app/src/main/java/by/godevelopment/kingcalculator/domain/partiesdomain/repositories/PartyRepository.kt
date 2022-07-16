@@ -12,4 +12,8 @@ interface PartyRepository {
     suspend fun createNewPartyAndReturnId(party: PartyNote): Long
 
     suspend fun getAllPlayersIdToNames(): Map<String, Long>
+
+    suspend fun getPlayersByPartyId(partyId: Long): List<String>
+
+    suspend fun getContractorPlayerByPartyId(partyId: Long): String
 }

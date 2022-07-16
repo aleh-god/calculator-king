@@ -4,12 +4,14 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import by.godevelopment.kingcalculator.R
 import by.godevelopment.kingcalculator.data.entities.PartyNote
+import by.godevelopment.kingcalculator.di.IoDispatcher
 import by.godevelopment.kingcalculator.domain.commons.helpers.StringHelper
 import by.godevelopment.kingcalculator.domain.commons.models.ValidationResult
 import by.godevelopment.kingcalculator.domain.partiesdomain.repositories.PartyRepository
 import by.godevelopment.kingcalculator.domain.partiesdomain.usecases.ValidatePartyNameUseCase
 import by.godevelopment.kingcalculator.domain.playersdomain.usecases.ValidatePlayersChoiceUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.*
@@ -21,7 +23,8 @@ class PartyAddFormViewModel @Inject constructor(
     private val partyRepository: PartyRepository,
     private val stringHelper: StringHelper,
     private val validatePartyNameUseCase: ValidatePartyNameUseCase,
-    private val validatePlayersChoiceUseCase: ValidatePlayersChoiceUseCase
+    private val validatePlayersChoiceUseCase: ValidatePlayersChoiceUseCase,
+    @IoDispatcher private val ioDispatcher: CoroutineDispatcher
 ) : ViewModel() {
 
     private val _uiState: MutableStateFlow<AddPartyFormState> = MutableStateFlow(AddPartyFormState())
@@ -33,7 +36,7 @@ class PartyAddFormViewModel @Inject constructor(
     private var suspendJob: Job? = null
 
     init {
-        viewModelScope.launch {
+        viewModelScope.launch(ioDispatcher) {
             _uiState.update {
                 it.copy(players = partyRepository.getAllPlayersIdToNames())
             }
@@ -73,7 +76,7 @@ class PartyAddFormViewModel @Inject constructor(
 
     private fun createNewParty() {
         suspendJob?.cancel()
-        suspendJob = viewModelScope.launch {
+        suspendJob = viewModelScope.launch(ioDispatcher) {
             _uiState.update { it.copy(showsProgress = true) }
             if(checkInputFieldsUiState()) {
                 try {

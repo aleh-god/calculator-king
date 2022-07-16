@@ -29,7 +29,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/player_email"
         app:layout_constraintBottom_toTopOf="@id/bttn_save"
-        android:hint="@string/card_name"
+        android:hint="@string/card_player_name"
         app:endIconMode="clear_text"
         app:helperTextEnabled="true"
         app:helperText="@string/card_helper_text"

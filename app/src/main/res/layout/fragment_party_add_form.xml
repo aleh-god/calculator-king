@@ -24,7 +24,7 @@
         app:layout_constraintVertical_chainStyle="packed"
         android:layout_marginTop="@dimen/medium_margin"
         android:layout_margin="@dimen/small_margin"
-        android:hint="@string/card_name"
+        android:hint="@string/card_party_name"
         app:endIconMode="clear_text"
         app:helperTextEnabled="true"
         app:helperText="@string/form_helper_party_text"

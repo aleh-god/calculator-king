@@ -3,7 +3,9 @@ package by.godevelopment.kingcalculator.presentation.gamepresentation.gameaddfor
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import by.godevelopment.kingcalculator.di.IoDispatcher
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.*
@@ -12,7 +14,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class GameAddFormViewModel @Inject constructor(
-    state: SavedStateHandle
+    state: SavedStateHandle,
+    @IoDispatcher private val ioDispatcher: CoroutineDispatcher
 ) : ViewModel() {
 
     val idParty = state.get<Long>("partyId")
@@ -31,7 +34,7 @@ class GameAddFormViewModel @Inject constructor(
 
     private fun load() {
         fetchJob?.cancel()
-        fetchJob = viewModelScope.launch {
+        fetchJob = viewModelScope.launch(ioDispatcher) {
 
         }
     }

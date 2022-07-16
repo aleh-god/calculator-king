@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import by.godevelopment.kingcalculator.R
 import by.godevelopment.kingcalculator.commons.TAG
+import by.godevelopment.kingcalculator.di.IoDispatcher
 import by.godevelopment.kingcalculator.domain.commons.helpers.StringHelper
 import by.godevelopment.kingcalculator.domain.commons.models.TestItem
 import by.godevelopment.kingcalculator.domain.partiesdomain.models.PlayersInPartyModel
@@ -13,6 +14,7 @@ import by.godevelopment.kingcalculator.domain.partiesdomain.usecases.GetContract
 import by.godevelopment.kingcalculator.domain.partiesdomain.usecases.GetGamesByPartyIdUseCase
 import by.godevelopment.kingcalculator.domain.partiesdomain.usecases.GetPlayersByPartyIdUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.*
@@ -25,6 +27,7 @@ class PartyCardViewModel @Inject constructor(
     private val getContractorPlayerByPartyIdUseCase: GetContractorPlayerByPartyIdUseCase,
     private val getPlayersByPartyIdUseCase: GetPlayersByPartyIdUseCase,
     private val stringHelper: StringHelper,
+    @IoDispatcher private val ioDispatcher: CoroutineDispatcher,
     state: SavedStateHandle
 ) : ViewModel() {
 
@@ -45,11 +48,11 @@ class PartyCardViewModel @Inject constructor(
 
     fun fetchDataModel() {
         suspendJob?.cancel()
-        suspendJob = viewModelScope.launch {
+        suspendJob = viewModelScope.launch(ioDispatcher) {
             if (idParty != null) {
                 launch { fetchContractorPlayer(idParty) }
-                launch { fetchDataList(idParty) }
                 launch { fetchPlayers(idParty) }
+                launch { fetchDataList(idParty) }
             } else {
                 _uiEvent.send(stringHelper.getString(R.string.alert_error_loading))
             }
@@ -95,5 +98,4 @@ class PartyCardViewModel @Inject constructor(
         val dataList: List<TestItem> = emptyList(),
         val isFetchingData: Boolean = false
     )
-
 }

@@ -27,11 +27,12 @@ class GetGamesByPartyIdUseCase @Inject constructor(
                 result.add(
                     TestItem(
                         id = x * (y + 1),
-                        name = typeNames[y],
+                        gameTypeName = typeNames[y],
                         isFinishedOneGame = Random.nextBoolean(),
                         isFinishedTwoGame = Random.nextBoolean(),
                         isFinishedThreeGame = Random.nextBoolean(),
-                        isFinishedFourGame = Random.nextBoolean()
+                        isFinishedFourGame = Random.nextBoolean(),
+                        openedColumnNumber = 2
                     )
                 )
             }
