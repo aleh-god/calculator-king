@@ -44,42 +44,56 @@ class PartyCardAdapter(
 
                 when (testItem.openedColumnNumber) {
                     1 -> {
-                        if (testItem.isFinishedOneGame) { setCompleteFrame(gameCollumOne) }
+                        if (testItem.isFinishedOneGame) setCompleteFrame(gameCollumOne)
                         else {
                             setOpenFrame(gameCollumOne, testItem.gameTypeName)
-                            setCloseFrame(gameCollumTwo)
-                            setCloseFrame(gameCollumThree)
-                            setCloseFrame(gameCollumFour)
+                            if (testItem.isFinishedTwoGame) setCompleteFrame(gameCollumTwo)
+                            else setCloseFrame(gameCollumTwo)
+                            if (testItem.isFinishedThreeGame) setCompleteFrame(gameCollumThree)
+                            else setCloseFrame(gameCollumThree)
+                            if (testItem.isFinishedFourGame) setCompleteFrame(gameCollumFour)
+                            else setCloseFrame(gameCollumFour)
                         }
                     }
                     2 -> {
                         if (testItem.isFinishedTwoGame) { setCompleteFrame(gameCollumTwo) }
                         else {
                             setOpenFrame(gameCollumTwo, testItem.gameTypeName)
-                            setCloseFrame(gameCollumOne)
-                            setCloseFrame(gameCollumThree)
-                            setCloseFrame(gameCollumFour)
+                            if (testItem.isFinishedOneGame) setCompleteFrame(gameCollumOne)
+                            else setCloseFrame(gameCollumOne)
+                            if (testItem.isFinishedThreeGame) setCompleteFrame(gameCollumThree)
+                            else setCloseFrame(gameCollumThree)
+                            if (testItem.isFinishedFourGame) setCompleteFrame(gameCollumFour)
+                            else setCloseFrame(gameCollumFour)
                         }
                     }
                     3 -> {
                         if (testItem.isFinishedThreeGame) { setCompleteFrame(gameCollumThree) }
                         else {
                             setOpenFrame(gameCollumThree, testItem.gameTypeName)
-                            setCloseFrame(gameCollumOne)
-                            setCloseFrame(gameCollumTwo)
-                            setCloseFrame(gameCollumFour)
+                            if (testItem.isFinishedOneGame) setCompleteFrame(gameCollumOne)
+                            else setCloseFrame(gameCollumOne)
+                            if (testItem.isFinishedTwoGame) setCompleteFrame(gameCollumTwo)
+                            else setCloseFrame(gameCollumTwo)
+                            if (testItem.isFinishedFourGame) setCompleteFrame(gameCollumFour)
+                            else setCloseFrame(gameCollumFour)
                         }
                     }
                     4 -> {
                         if (testItem.isFinishedFourGame) { setCompleteFrame(gameCollumFour) }
+                        else {
                             setOpenFrame(gameCollumFour, testItem.gameTypeName)
-                            setCloseFrame(gameCollumOne)
-                            setCloseFrame(gameCollumTwo)
-                            setCloseFrame(gameCollumThree)
+                            if (testItem.isFinishedOneGame) setCompleteFrame(gameCollumOne)
+                            else setCloseFrame(gameCollumOne)
+                            if (testItem.isFinishedTwoGame) setCompleteFrame(gameCollumTwo)
+                            else setCloseFrame(gameCollumTwo)
+                            if (testItem.isFinishedThreeGame) setCompleteFrame(gameCollumThree)
+                            else setCloseFrame(gameCollumThree)
                         }
                     }
                 }
             }
+        }
 
         private fun setCompleteFrame(view: MaterialTextView) {
             view.text = "X"
