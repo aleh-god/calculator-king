@@ -2,10 +2,10 @@ public class Libs {
     static String kotlinStdLib = "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_ver";
     //presentation
     static String corektx = "androidx.core:core-ktx:" + Versions.core_version;
-    static String appcompat = "androidx.appcompat:appcompat:1.4.1";
+    static String appcompat = "androidx.appcompat:appcompat:1.4.2";
     static String legacySupport = "androidx.legacy:legacy-support-v4:1.0.0";
-    static String material = "com.google.android.material:material:1.5.0";
-    static String constraint = "androidx.constraintlayout:constraintlayout:2.1.3";
+    static String material = "com.google.android.material:material:1.6.1";
+    static String constraint = "androidx.constraintlayout:constraintlayout:2.1.4";
     static String recyclerView = "androidx.recyclerview:recyclerview:" + Versions.recyclerView_version;
     // For control over item selection of both touch and mouse driven selection
     static String recyclerViewSelection = "androidx.recyclerview:recyclerview-selection:" + Versions.recyclerViewSelection_version;
@@ -22,7 +22,7 @@ public class Libs {
     //coroutines
     static String coroutines = "org.jetbrains.kotlinx:kotlinx-coroutines-android:" + Versions.coroutines_version;
     //ktx
-    static String fragmentktx = "androidx.fragment:fragment-ktx:1.3.6";
+    static String fragmentktx = "androidx.fragment:fragment-ktx:1.4.1";
     static String activityktx = "androidx.activity:activity-ktx:1.4.0";
 
     // androidx.lifecycle
@@ -58,8 +58,8 @@ public class Libs {
     //dagger
     static String dagger = "com.google.dagger:dagger:" + Versions.dagger_version;
     //hilt
-    static String hilt = "com.google.dagger:hilt-android:" + Versions.dagger_version;
-    static String hiltCompiler = "com.google.dagger:hilt-compiler:" + Versions.dagger_version;
+    static String hilt = "com.google.dagger:hilt-android:" + Versions.hilt_version;
+    static String hiltCompiler = "com.google.dagger:hilt-compiler:" + Versions.hilt_version;
 
     // androidx.room + androidx.room.migration + androidx.room.testing
     static String room = "androidx.room:room-runtime:" + Versions.room_version;

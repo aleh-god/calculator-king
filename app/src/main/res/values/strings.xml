@@ -14,13 +14,13 @@
     <string name="game_type_tk">Take King</string>
     <string name="game_type_tl">Take Last Two</string>
     <string name="game_type_tfg">Take BFG</string>
-    <string name="game_type_ntt">Do not take Tricks</string>
-    <string name="game_type_ntb">Do not take Boys</string>
-    <string name="game_type_ntg">Do not take Girls</string>
-    <string name="game_type_nth">Do not take Hearts</string>
-    <string name="game_type_ntk">Do not take King</string>
-    <string name="game_type_ntl">Do not take Last Two</string>
-    <string name="game_type_ntfg">Do not take BFG</string>
+    <string name="game_type_ntt">Don\'t take Tricks</string>
+    <string name="game_type_ntb">Don\'t take Boys</string>
+    <string name="game_type_ntg">Don\'t take Girls</string>
+    <string name="game_type_nth">Don\'t take Hearts</string>
+    <string name="game_type_ntk">Don\'t take King</string>
+    <string name="game_type_ntl">Don\'t take Last Two</string>
+    <string name="game_type_ntfg">Don\'t take BFG</string>
 
     <string name="name_player">Name player</string>
     <string name="email_player">Email player</string>
@@ -47,18 +47,26 @@
     <string name="nav_label_player_info">Player info</string>
     <string name="nav_label_player_add_form">Player add Form</string>
     <string name="nav_label_party_card">Party card</string>
+    <string name="nav_label_party_add_form">Party add form</string>
+    <string name="nav_label_party_info">Party info</string>
+    <string name="nav_label_game_add_form">Game add form</string>
 
     <string name="bttn_save_player">Save player</string>
     <string name="bttn_delete_player">Delete player</string>
     <string name="bttn_start_party">Start party</string>
+    <string name="bttn_save_result">save result</string>
+    <string name="bttn_dec">dec</string>
+    <string name="bttn_inc">inc</string>
 
     <string name="card_helper_text">Edit your name</string>
     <string name="card_email">Email</string>
-    <string name="card_name">Party name</string>
+    <string name="card_party_name">Party name</string>
+    <string name="card_player_name">Player name</string>
 
     <string name="form_helper_name_text">Enter you name</string>
     <string name="form_helper_email_text">Enter you email</string>
     <string name="form_helper_party_text">Enter party name</string>
+    <string name="form_game_type_text">Game type</string>
 
     <string name="message_error_valid_name">Please enter a valid name</string>
     <string name="message_error_valid_email">Please enter a valid email address</string>
@@ -83,7 +91,11 @@
     <string name="hint_text_player_two_email">player two email</string>
     <string name="hint_text_player_three_email">player three email</string>
     <string name="hint_text_player_four_email">player four email</string>
-    <string name="nav_label_party_add_form">Party add form</string>
-    <string name="nav_label_party_info">Party info</string>
+
+    <string name="ui_text_contacts">\ contracts the game</string>
+    <string name="alert_confirm_title">Confirm your the selected game</string>
+    <string name="alert_confirm_message">Your the selected game is %1s</string>
+    <string name="action_yes">Yes</string>
+    <string name="action_dismiss">Dismiss</string>
 
 </resources>
