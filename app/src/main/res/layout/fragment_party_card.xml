@@ -41,7 +41,7 @@
         android:layout_marginStart="@dimen/rule_table_item_horizontal_margin"
         android:layout_marginEnd="@dimen/medium_margin"
         android:layout_marginVertical="@dimen/small_margin"
-        android:text="Game type"
+        android:text="@string/form_game_type_text"
         style="@style/TextAppearance.Material3.TitleMedium"
         />
 

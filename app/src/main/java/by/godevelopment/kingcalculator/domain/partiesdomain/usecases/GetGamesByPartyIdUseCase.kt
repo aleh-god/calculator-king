@@ -32,7 +32,7 @@ class GetGamesByPartyIdUseCase @Inject constructor(
                         isFinishedTwoGame = Random.nextBoolean(),
                         isFinishedThreeGame = Random.nextBoolean(),
                         isFinishedFourGame = Random.nextBoolean(),
-                        openedColumnNumber = 2
+                        openedColumnNumber = 4
                     )
                 )
             }

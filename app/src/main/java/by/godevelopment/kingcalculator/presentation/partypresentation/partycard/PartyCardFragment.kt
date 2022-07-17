@@ -1,15 +1,19 @@
 package by.godevelopment.kingcalculator.presentation.partypresentation.partycard
 
+import android.content.DialogInterface
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import by.godevelopment.kingcalculator.R
@@ -32,8 +36,10 @@ class PartyCardFragment : Fragment() {
     private val binding: FragmentPartyCardBinding
         get() = _binding!!
 
+    private var gameTypeName: String? = null
     private val onClick: (String) -> Unit = { key ->
-        navigateToGameAddForm(key)
+        gameTypeName = key
+        showConfirmDialog(key)
     }
 
     override fun onCreateView(
@@ -44,6 +50,7 @@ class PartyCardFragment : Fragment() {
 
         setupUi()
         setupEvent()
+        setupConfirmDialogListener()
         return binding.root
     }
 
@@ -85,10 +92,30 @@ class PartyCardFragment : Fragment() {
         }
     }
 
-    private fun navigateToGameAddForm(typeGame: String) {
-        Log.i(TAG, "PartyCardFragment: onClick $typeGame")
-        Snackbar.make(binding.root, typeGame, Snackbar.LENGTH_LONG).show()
-        // TODO("Not yet implemented")
+    private fun showConfirmDialog(gameTypeName: String) {
+        val dialogFragment = ConfirmDialogFragment.newFragmentInstance(gameTypeName)
+        dialogFragment.show(parentFragmentManager, ConfirmDialogFragment.TAG)
+    }
+
+    private fun setupConfirmDialogListener() {
+        parentFragmentManager.setFragmentResultListener(
+            ConfirmDialogFragment.REQUEST_KEY,
+            this,
+            FragmentResultListener { _, result ->
+            when(result.getInt(ConfirmDialogFragment.KEY_RESPONSE)) {
+                DialogInterface.BUTTON_POSITIVE -> { navigateToGameAddForm() }
+                DialogInterface.BUTTON_NEGATIVE -> {}
+            }
+        }
+        )
+    }
+
+    private fun navigateToGameAddForm() {
+        Log.i(TAG, "PartyCardFragment: onClick $gameTypeName")
+        gameTypeName?.let {
+            val direction = PartyCardFragmentDirections.actionPartyCardFragmentToGameAddFormFragment(5)
+            findNavController().navigate(direction)
+        }
     }
 
     override fun onDestroy() {

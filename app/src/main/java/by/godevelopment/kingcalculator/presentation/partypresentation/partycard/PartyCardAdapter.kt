@@ -98,15 +98,17 @@ class PartyCardAdapter(
         private fun setCompleteFrame(view: MaterialTextView) {
             view.text = "X"
             view.setBackgroundResource(R.drawable.frame_complete)
+            view.setOnClickListener {  }
         }
         private fun setOpenFrame(view: MaterialTextView, gameTypeName: String) {
-            view.setOnClickListener { onClick.invoke(gameTypeName) }
             view.setBackgroundResource(R.drawable.frame_open)
             view.text = EMPTY_STRING
+            view.setOnClickListener { onClick.invoke(gameTypeName) }
         }
         private fun setCloseFrame(view: MaterialTextView) {
             view.setBackgroundResource(R.drawable.frame_close)
             view.text = EMPTY_STRING
+            view.setOnClickListener {  }
         }
     }
 
