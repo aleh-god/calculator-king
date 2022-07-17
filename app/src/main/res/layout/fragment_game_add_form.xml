@@ -10,23 +10,23 @@
     tools:context=".presentation.gamepresentation.gameaddform.GameAddFormFragment">
 
     <TextView
-        android:id="@+id/game_name_header"
+        android:id="@+id/header_game_add_form"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:text="Jesus player's contract of choice"
+        tools:text="Game total score = 240"
         style="@style/TextAppearance.Material3.TitleLarge"
         />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/games_table"
+        android:id="@+id/tricks_table"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/game_name_header"
+        app:layout_constraintTop_toBottomOf="@+id/header_game_add_form"
         app:layout_constraintBottom_toTopOf="@id/game_confirm"
         tools:listitem="@layout/item_game_add_form"
         />
@@ -37,11 +37,11 @@
         android:layout_height="wrap_content"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/games_table"
+        app:layout_constraintTop_toBottomOf="@id/tricks_table"
         app:layout_constraintBottom_toBottomOf="parent"
         android:layout_marginVertical="@dimen/main_margin"
         app:icon="@drawable/ic_save_24"
-        android:text="save result"
+        android:text= "@string/bttn_save_result"
         style="?attr/materialButtonOutlinedStyle"
         />
 

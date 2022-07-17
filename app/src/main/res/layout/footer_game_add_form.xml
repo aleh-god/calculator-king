@@ -10,16 +10,16 @@
 
     <View
         android:layout_width="wrap_content"
-        android:background="@drawable/header_shape"
+        android:background="@drawable/footer_shape"
         android:layout_height="0dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="@id/header_text"
+        app:layout_constraintBottom_toBottomOf="@id/footer_text"
         />
 
     <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/header_text"
+        android:id="@+id/footer_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintStart_toStartOf="parent"
@@ -27,7 +27,7 @@
         app:layout_constraintTop_toTopOf="parent"
         android:paddingVertical="@dimen/main_margin"
         android:paddingHorizontal="16dp"
-        tools:text="Player one tricks"
+        tools:text="Total score 240 points"
         android:textColor="?attr/colorOnSurface"
         android:textAppearance="@style/TextAppearance.Material3.BodyLarge"
         />

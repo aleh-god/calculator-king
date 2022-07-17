@@ -54,6 +54,9 @@
     <string name="bttn_save_player">Save player</string>
     <string name="bttn_delete_player">Delete player</string>
     <string name="bttn_start_party">Start party</string>
+    <string name="bttn_save_result">save result</string>
+    <string name="bttn_dec">dec</string>
+    <string name="bttn_inc">inc</string>
 
     <string name="card_helper_text">Edit your name</string>
     <string name="card_email">Email</string>
@@ -63,6 +66,7 @@
     <string name="form_helper_name_text">Enter you name</string>
     <string name="form_helper_email_text">Enter you email</string>
     <string name="form_helper_party_text">Enter party name</string>
+    <string name="form_game_type_text">Game type</string>
 
     <string name="message_error_valid_name">Please enter a valid name</string>
     <string name="message_error_valid_email">Please enter a valid email address</string>
@@ -89,5 +93,9 @@
     <string name="hint_text_player_four_email">player four email</string>
 
     <string name="ui_text_contacts">\ contracts the game</string>
+    <string name="alert_confirm_title">Confirm your the selected game</string>
+    <string name="alert_confirm_message">Your the selected game is %1s</string>
+    <string name="action_yes">Yes</string>
+    <string name="action_dismiss">Dismiss</string>
 
 </resources>
