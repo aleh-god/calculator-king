@@ -76,7 +76,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/line_1"
         android:layout_marginTop="@dimen/big_margin"
-        android:text="@string/bttn_save_player"
+        android:text="@string/button_save_player"
         style="?attr/materialButtonStyle"
         />
 

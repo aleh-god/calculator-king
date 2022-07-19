@@ -10,26 +10,26 @@ import by.godevelopment.kingcalculator.R
 import by.godevelopment.kingcalculator.commons.EMPTY_STRING
 import by.godevelopment.kingcalculator.commons.TAG
 import by.godevelopment.kingcalculator.databinding.ItemGamesTableBinding
-import by.godevelopment.kingcalculator.domain.commons.models.TestItem
+import by.godevelopment.kingcalculator.domain.partiesdomain.models.GamesTableItemModel
 import com.google.android.material.textview.MaterialTextView
 
 class PartyCardAdapter(
     private val onClick: (String) -> Unit
 ) : RecyclerView.Adapter<PartyCardAdapter.ViewHolder>() {
 
-    private val diffCallback = object : DiffUtil.ItemCallback<TestItem>() {
-        override fun areItemsTheSame(oldItem: TestItem, newItem: TestItem): Boolean {
+    private val diffCallback = object : DiffUtil.ItemCallback<GamesTableItemModel>() {
+        override fun areItemsTheSame(oldItem: GamesTableItemModel, newItem: GamesTableItemModel): Boolean {
             return oldItem == newItem
         }
 
-        override fun areContentsTheSame(oldItem: TestItem, newItem: TestItem): Boolean {
+        override fun areContentsTheSame(oldItem: GamesTableItemModel, newItem: GamesTableItemModel): Boolean {
             return oldItem == newItem
         }
     }
 
     private val differ = AsyncListDiffer(this, diffCallback)
 
-    var items: List<TestItem>
+    var items: List<GamesTableItemModel>
         get() = differ.currentList
         set(value) {
             differ.submitList(value)
@@ -37,7 +37,7 @@ class PartyCardAdapter(
 
     inner class ViewHolder(private val binding: ItemGamesTableBinding) : RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(testItem: TestItem) {
+        fun bind(testItem: GamesTableItemModel) {
             Log.i(TAG, "bind: ${testItem.isFinishedOneGame} - ${testItem.isFinishedTwoGame} - ${testItem.isFinishedThreeGame} - ${testItem.isFinishedFourGame}")
             binding.apply {
                 gameName.text = testItem.gameTypeName

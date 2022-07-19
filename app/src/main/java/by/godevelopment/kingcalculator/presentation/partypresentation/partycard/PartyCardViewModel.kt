@@ -8,7 +8,7 @@ import by.godevelopment.kingcalculator.R
 import by.godevelopment.kingcalculator.commons.TAG
 import by.godevelopment.kingcalculator.di.IoDispatcher
 import by.godevelopment.kingcalculator.domain.commons.helpers.StringHelper
-import by.godevelopment.kingcalculator.domain.commons.models.TestItem
+import by.godevelopment.kingcalculator.domain.partiesdomain.models.GamesTableItemModel
 import by.godevelopment.kingcalculator.domain.partiesdomain.models.PlayersInPartyModel
 import by.godevelopment.kingcalculator.domain.partiesdomain.usecases.GetContractorPlayerByPartyIdUseCase
 import by.godevelopment.kingcalculator.domain.partiesdomain.usecases.GetGamesByPartyIdUseCase
@@ -95,7 +95,7 @@ class PartyCardViewModel @Inject constructor(
     data class UiState(
         val contractorPlayer: String = "",
         val playersInPartyModel:PlayersInPartyModel = PlayersInPartyModel(),
-        val dataList: List<TestItem> = emptyList(),
+        val dataList: List<GamesTableItemModel> = emptyList(),
         val isFetchingData: Boolean = false
     )
 }

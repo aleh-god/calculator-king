@@ -7,6 +7,11 @@
     <string name="dialog_neutral_btn_text">OK</string>
     <string name="fab_content_desc">add new data</string>
 
+    <string name="players_one">Player One</string>
+    <string name="players_two">Player Two</string>
+    <string name="players_three">Player Three</string>
+    <string name="players_four">Player Four</string>
+
     <string name="game_type_tt">Take Tricks</string>
     <string name="game_type_tb">Take Boys</string>
     <string name="game_type_tg">Take Girls</string>
@@ -51,12 +56,12 @@
     <string name="nav_label_party_info">Party info</string>
     <string name="nav_label_game_add_form">Game add form</string>
 
-    <string name="bttn_save_player">Save player</string>
-    <string name="bttn_delete_player">Delete player</string>
-    <string name="bttn_start_party">Start party</string>
-    <string name="bttn_save_result">save result</string>
-    <string name="bttn_dec">dec</string>
-    <string name="bttn_inc">inc</string>
+    <string name="button_save_player">Save player</string>
+    <string name="button_delete_player">Delete player</string>
+    <string name="button_start_party">Start party</string>
+    <string name="button_save_result">save result</string>
+    <string name="button_dec">dec</string>
+    <string name="button_inc">inc</string>
 
     <string name="card_helper_text">Edit your name</string>
     <string name="card_email">Email</string>
@@ -97,5 +102,6 @@
     <string name="alert_confirm_message">Your the selected game is %1s</string>
     <string name="action_yes">Yes</string>
     <string name="action_dismiss">Dismiss</string>
+    <string name="rv_footer_text_total_score">\"Total game score = \"</string>
 
 </resources>

@@ -52,7 +52,11 @@ class GameAddFormFragment : Fragment() {
                     if (!uiState.isFetchingData) {
                         binding.progress.visibility = View.GONE
                     } else binding.progress.visibility = View.VISIBLE
+                    binding.headerGameAddForm.text = uiState.gameTotalScore
                     multiAdapter.multiList = uiState.listMultiItems
+                    binding.buttonSaveResult.setOnClickListener {
+                        viewModel.saveGameData()
+                    }
                 }
             }
         }
