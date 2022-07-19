@@ -52,7 +52,7 @@
         app:layout_constraintTop_toBottomOf="@id/player_name"
         app:layout_constraintBottom_toTopOf="@id/bttn_delete"
         android:layout_marginTop="@dimen/big_margin"
-        android:text="@string/bttn_save_player"
+        android:text="@string/button_save_player"
         style="?attr/materialButtonStyle"
         />
 
@@ -64,7 +64,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/bttn_save"
         app:layout_constraintBottom_toBottomOf="parent"
-        android:text="@string/bttn_delete_player"
+        android:text="@string/button_delete_player"
         style="?attr/materialButtonOutlinedStyle"
         />
 

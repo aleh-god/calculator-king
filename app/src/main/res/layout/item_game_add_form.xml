@@ -60,7 +60,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         android:layout_marginVertical="@dimen/main_margin"
         app:icon="@drawable/ic_remove_24"
-        android:text="@string/bttn_dec"
+        android:text="@string/button_dec"
         style="?attr/materialButtonOutlinedStyle"
         />
 
@@ -90,7 +90,7 @@
         android:layout_marginVertical="@dimen/main_margin"
         android:layout_marginEnd="@dimen/big_margin"
         app:icon="@drawable/ic_plus_24"
-        android:text="@string/bttn_inc"
+        android:text="@string/button_inc"
         style="?attr/materialButtonOutlinedStyle"
         />
 

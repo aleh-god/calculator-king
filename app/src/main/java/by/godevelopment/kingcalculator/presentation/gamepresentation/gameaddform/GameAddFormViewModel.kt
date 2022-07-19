@@ -46,10 +46,13 @@ class GameAddFormViewModel @Inject constructor(
         fetchJob = viewModelScope.launch(ioDispatcher) {
             idGame?.let {
                 try {
-                    _uiState.value = UiState(isFetchingData = true)
+                    _uiState.value = UiState(
+                        isFetchingData = true,
+                        gameTotalScore = "Loading data..."
+                    )
                     _uiState.value = UiState(
                         isFetchingData = false,
-                        gameTotalScore = "gameTotalScore",
+                        gameTotalScore = "Total Game Score = ",
                         listMultiItems = getMultiItemModels.invoke(idGame)
                     )
                 } catch (e: Exception) {
@@ -64,7 +67,11 @@ class GameAddFormViewModel @Inject constructor(
     }
 
     fun fetchDataModel() {
-        TODO("Not yet implemented")
+        load()
+    }
+
+    fun saveGameData() {
+        Log.i(TAG, "saveGameData: invoke")
     }
 
     data class UiState(

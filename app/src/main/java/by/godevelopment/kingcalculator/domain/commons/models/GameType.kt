@@ -7,7 +7,7 @@ import by.godevelopment.kingcalculator.R
 enum class GameType (
     val id: Int,
     val trickScores: Int,
-    val countAllTricks: Int,
+    val tricksCount: Int,
     @StringRes
     val res: Int
     ) {
@@ -25,6 +25,13 @@ enum class GameType (
     DoNotTakeKing(15, -40,1, R.string.game_type_ntk),
     DoNotTakeLastTwo(16, -20,2, R.string.game_type_ntl),
     DoNotTakeBFG(17, -240,31, R.string.game_type_ntfg);
+
+    fun getGamesList(): Set<String> {
+        val t = GameType.values().map {
+            it.res
+        }
+        return TODO()
+    }
 
     fun getTotalGameScore(countTricks: Int): Int {
         return countTricks * this.trickScores
