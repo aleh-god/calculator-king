@@ -9,7 +9,9 @@ import by.godevelopment.kingcalculator.presentation.gamepresentation.gameaddform
 import by.godevelopment.kingcalculator.presentation.gamepresentation.gameaddform.viewholdes.ViewHolderFactory
 
 class MultiAdapter(
-
+    onClickDec: (Int) -> Unit,
+    onClickInc: (Int) -> Unit,
+    onChangeEdit: (Int, Int) -> Unit
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private val diffCallBack =
@@ -19,7 +21,11 @@ class MultiAdapter(
                 return oldItem == newItem
             }
             override fun areContentsTheSame(oldItem: MultiItemModel, newItem: MultiItemModel): Boolean {
-                return oldItem.rowId == newItem.rowId
+                return oldItem == newItem
+            }
+
+            override fun getChangePayload(oldItem: MultiItemModel, newItem: MultiItemModel): Any? {
+                return super.getChangePayload(oldItem, newItem)
             }
         }
 
@@ -28,7 +34,11 @@ class MultiAdapter(
         get() = differ.currentList
         set(value) { differ.submitList(value) }
 
-    private val viewHolderFactory: ViewHolderFactory = ViewHolderFactory()
+    private val viewHolderFactory: ViewHolderFactory = ViewHolderFactory(
+        onClickDec = onClickDec,
+        onClickInc = onClickInc,
+        onChangeEdit = onChangeEdit
+    )
 
     override fun getItemViewType(position: Int): Int = multiList[position].itemViewType
 

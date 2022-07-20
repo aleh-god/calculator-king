@@ -6,6 +6,7 @@ import by.godevelopment.kingcalculator.commons.BODY_ROW_TYPE
 import by.godevelopment.kingcalculator.commons.FOOTER_ROW_TYPE
 import by.godevelopment.kingcalculator.commons.HEADER_ROW_TYPE
 import by.godevelopment.kingcalculator.data.entities.PlayerProfile
+import by.godevelopment.kingcalculator.domain.commons.models.GameType
 
 sealed class MultiItemModel {
     abstract val rowId: Int
@@ -26,7 +27,7 @@ data class BodyItemModel(
     override val rowId: Int,
     override val itemViewType: Int = BODY_ROW_TYPE,
     @StringRes
-    val gameTypesName: Int,
+    val gameType: GameType,
     val totalTricks: Int = 0,
     val totalScore: Int = 0,
     val hasError: Boolean = false

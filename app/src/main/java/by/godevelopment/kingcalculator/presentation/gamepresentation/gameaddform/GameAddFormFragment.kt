@@ -40,7 +40,11 @@ class GameAddFormFragment : Fragment() {
     }
 
     private fun setupUi() {
-        val multiAdapter = MultiAdapter()
+        val multiAdapter = MultiAdapter(
+            onClickDec = viewModel::onClickDec,
+            onClickInc = viewModel::onClickInc,
+            onChangeEdit = viewModel::onChangeEdit
+        )
         binding.apply {
             tricksTable.adapter = multiAdapter
             tricksTable.layoutManager = LinearLayoutManager(requireContext())
@@ -48,11 +52,11 @@ class GameAddFormFragment : Fragment() {
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.uiState.collect { uiState ->
-                    Log.i(TAG, "GameAddFormFragment setupUi: $uiState")
+                    Log.i(TAG, "GameAddFormFragment setupUi: ${uiState.listMultiItems}")
                     if (!uiState.isFetchingData) {
                         binding.progress.visibility = View.GONE
                     } else binding.progress.visibility = View.VISIBLE
-                    binding.headerGameAddForm.text = uiState.gameTotalScore
+                    binding.headerGameAddForm.text = "Total Game Score = " + uiState.gameTotalScore
                     multiAdapter.multiList = uiState.listMultiItems
                     binding.buttonSaveResult.setOnClickListener {
                         viewModel.saveGameData()
@@ -68,7 +72,7 @@ class GameAddFormFragment : Fragment() {
                 Snackbar
                     .make(binding.root, it, Snackbar.LENGTH_INDEFINITE)
                     .setAction(getString(R.string.snackbar_btn_reload))
-                    { viewModel.fetchDataModel() }
+                    { viewModel.reloadDataModel() }
                     .show()
             }
         }

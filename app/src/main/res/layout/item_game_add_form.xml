@@ -75,6 +75,8 @@
         android:layout_marginVertical="@dimen/main_margin"
         android:layout_marginHorizontal="6dp"
         android:inputType="number"
+        android:imeOptions="actionDone"
+        android:minLines="1"
         android:textAppearance="@style/TextAppearance.Material3.BodyLarge"
         tools:text="8"
         />

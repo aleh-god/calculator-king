@@ -31,7 +31,7 @@ class GetMultiItemModelsUseCase @Inject constructor(
                                 .filter { it != GameType.DoNotTakeBFG && it != GameType.TakeBFG }
                                 .forEach {
                                     listItems.add(
-                                        BodyItemModel(rowId = countId++, gameTypesName = it.res)
+                                        BodyItemModel(rowId = countId++, gameType = it)
                                     )
                                 }
                             listItems.add(FooterItemModel(rowId = countId++))
@@ -50,7 +50,7 @@ class GetMultiItemModelsUseCase @Inject constructor(
                         )
                     )
                     listItems.add(
-                        BodyItemModel(rowId = countId++, gameTypesName = gameType.res)
+                        BodyItemModel(rowId = countId++, gameType = gameType)
                     )
                     listItems.add(FooterItemModel(rowId = countId++))
                 }

@@ -6,9 +6,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import by.godevelopment.kingcalculator.commons.TAG
 import by.godevelopment.kingcalculator.di.IoDispatcher
+import by.godevelopment.kingcalculator.domain.gamesdomain.models.BodyItemModel
 import by.godevelopment.kingcalculator.domain.gamesdomain.models.MultiItemModel
 import by.godevelopment.kingcalculator.domain.gamesdomain.usecases.GetMultiItemModelsUseCase
-import by.godevelopment.kingcalculator.domain.gamesdomain.usecases.GetPlayersByGameIdUseCase
 import by.godevelopment.kingcalculator.domain.gamesdomain.usecases.SaveGameUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
@@ -26,7 +26,7 @@ class GameAddFormViewModel @Inject constructor(
     private val saveGameUseCase: SaveGameUseCase,
 ) : ViewModel() {
 
-    val idGame = state.get<Long>("gameId")
+    private val idGame = state.get<Long>("gameId")
 
     private val _uiState: MutableStateFlow<UiState> = MutableStateFlow(UiState())
     val uiState: StateFlow<UiState> = _uiState.asStateFlow()
@@ -46,28 +46,73 @@ class GameAddFormViewModel @Inject constructor(
         fetchJob = viewModelScope.launch(ioDispatcher) {
             idGame?.let {
                 try {
-                    _uiState.value = UiState(
-                        isFetchingData = true,
-                        gameTotalScore = "Loading data..."
-                    )
+                    _uiState.value = UiState(isFetchingData = true)
                     _uiState.value = UiState(
                         isFetchingData = false,
-                        gameTotalScore = "Total Game Score = ",
                         listMultiItems = getMultiItemModels.invoke(idGame)
                     )
                 } catch (e: Exception) {
-                    _uiState.value = UiState(
-                        isFetchingData = false,
-                        gameTotalScore = "${e.message}",
-                        listMultiItems = getMultiItemModels.invoke(idGame)
-                    )
+                    _uiState.value = UiState(isFetchingData = false)
+                    viewModelScope.launch {
+                        _uiEvent.send(e.message.toString())
+                    }
                 }
             }
         }
     }
 
-    fun fetchDataModel() {
+    fun reloadDataModel() {
         load()
+    }
+
+    fun onClickDec(rowId: Int) {
+        Log.i(TAG, "onClickDec: $rowId")
+        val currentModel = _uiState.value.listMultiItems
+            .first { it.rowId == rowId } as BodyItemModel
+        if (currentModel.totalTricks == 0) return
+        val newCount = currentModel.totalTricks - 1
+        updateTricksStateById(rowId, newCount, currentModel)
+    }
+
+    fun onClickInc(rowId: Int) {
+        Log.i(TAG, "onClickInc: $rowId")
+        val currentModel = _uiState.value.listMultiItems
+            .first { it.rowId == rowId } as BodyItemModel
+        if (currentModel.totalTricks == currentModel.gameType.tricksCount) return
+        val newCount = currentModel.totalTricks + 1
+        updateTricksStateById(rowId, newCount, currentModel)
+    }
+
+    fun onChangeEdit(rowId: Int, count: Int) {
+        Log.i(TAG, "onChangeEdit: $rowId = $count")
+        val currentModel = _uiState.value.listMultiItems
+            .first { it.rowId == rowId } as BodyItemModel
+        val newCount = when {
+            currentModel.totalTricks < 0 -> 0
+            currentModel.totalTricks > currentModel.gameType.tricksCount -> currentModel.gameType.tricksCount
+            else -> count
+        }
+        updateTricksStateById(rowId, newCount, currentModel)
+    }
+
+    private fun updateTricksStateById(rowId: Int, newCount: Int, currentModel: BodyItemModel) {
+
+        val newTotalScore = currentModel.gameType.getTotalGameScore(newCount)
+        Log.i(TAG, "updateTricksStateById: rowId= $rowId\n currentModel = $currentModel\n newCount = $newCount \n newTotalScore = $newTotalScore")
+
+        _uiState.update {
+            val newList = it.listMultiItems.map { multiItemModel ->
+                if(multiItemModel.rowId == rowId) {
+                    currentModel.copy(
+                        totalTricks = newCount,
+                        totalScore = newTotalScore
+                    )
+                }
+                else multiItemModel
+            }
+            Log.i(TAG, "_uiState.update: ${newList.size}")
+            it.copy(listMultiItems = newList)
+        }
     }
 
     fun saveGameData() {
@@ -76,7 +121,7 @@ class GameAddFormViewModel @Inject constructor(
 
     data class UiState(
         val isFetchingData: Boolean = false,
-        val gameTotalScore:String = "",
+        val gameTotalScore: Int = 0,
         val listMultiItems: List<MultiItemModel> = listOf()
     )
 }

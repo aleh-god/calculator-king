@@ -80,6 +80,4 @@ object KingDataTest {
     fun getTypeNames(context: Context): List<String> = gameTypes.map {
         it.getDescription(context)
     }
-
-
 }
