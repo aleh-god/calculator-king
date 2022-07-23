@@ -103,7 +103,7 @@
     <string name="action_yes">Yes</string>
     <string name="action_dismiss">Dismiss</string>
     <string name="rv_header_text_divider">:\ </string>
-    <string name="rv_footer_text_total_score">Total player score = %1$s</string>
+    <string name="rv_footer_text_total_score">Total player score = %1$d</string>
     <string name="rv_body_text_tricks">Tricks: %1$d</string>
     <string name="rv_body_text_score">Score: %1$d</string>
     <string name="fragment_header">Total Game Score = %1$d</string>

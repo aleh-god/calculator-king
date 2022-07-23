@@ -15,7 +15,6 @@ import by.godevelopment.kingcalculator.R
 import by.godevelopment.kingcalculator.commons.BODY_ROW_TYPE
 import by.godevelopment.kingcalculator.commons.TAG
 import by.godevelopment.kingcalculator.databinding.FragmentGameAddFormBinding
-import by.godevelopment.kingcalculator.domain.gamesdomain.models.BodyItemModel
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -60,13 +59,8 @@ class GameAddFormFragment : Fragment() {
                     } else binding.progress.visibility = View.VISIBLE
 
                     val gameTotalScore = uiState.listMultiItems
-                        .filter {
-                            it.itemViewType == BODY_ROW_TYPE
-                        }
-                        .sumOf {
-                            it as BodyItemModel
-                            it.score
-                        }
+                        .filter { it.itemViewType == BODY_ROW_TYPE }
+                        .sumOf { it.score }
 
                     binding.headerGameAddForm.text =
                         getString(R.string.fragment_header, gameTotalScore)

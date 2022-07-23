@@ -38,6 +38,6 @@ class GameRepositoryImpl @Inject constructor(
     }
 
     override suspend fun getGameTypeByGameId(key: Long): GameType {
-        return GameType.TakeTricks
+        return GameType.DoNotTakeBFG
     }
 }

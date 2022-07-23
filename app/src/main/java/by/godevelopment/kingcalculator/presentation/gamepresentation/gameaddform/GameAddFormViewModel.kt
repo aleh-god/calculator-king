@@ -4,10 +4,11 @@ import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import by.godevelopment.kingcalculator.commons.BODY_ROW_TYPE
 import by.godevelopment.kingcalculator.commons.TAG
 import by.godevelopment.kingcalculator.di.IoDispatcher
-import by.godevelopment.kingcalculator.domain.gamesdomain.models.BodyItemModel
 import by.godevelopment.kingcalculator.domain.gamesdomain.models.MultiItemModel
+import by.godevelopment.kingcalculator.domain.gamesdomain.models.Players
 import by.godevelopment.kingcalculator.domain.gamesdomain.usecases.GetMultiItemModelsUseCase
 import by.godevelopment.kingcalculator.domain.gamesdomain.usecases.SaveGameUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -68,7 +69,7 @@ class GameAddFormViewModel @Inject constructor(
     fun onClickDec(rowId: Int) {
         Log.i(TAG, "onClickDec: $rowId")
         val currentModel = _uiState.value.listMultiItems
-            .first { it.rowId == rowId } as BodyItemModel
+            .first { it.rowId == rowId }
         if (currentModel.tricks == 0) return
         val newCount = currentModel.tricks - 1
         updateTricksStateById(rowId, newCount, currentModel)
@@ -77,7 +78,7 @@ class GameAddFormViewModel @Inject constructor(
     fun onClickInc(rowId: Int) {
         Log.i(TAG, "onClickInc: $rowId")
         val currentModel = _uiState.value.listMultiItems
-            .first { it.rowId == rowId } as BodyItemModel
+            .first { it.rowId == rowId }
         if (currentModel.tricks == currentModel.gameType.tricksCount) return
         val newCount = currentModel.tricks + 1
         updateTricksStateById(rowId, newCount, currentModel)
@@ -95,24 +96,51 @@ class GameAddFormViewModel @Inject constructor(
 //        updateTricksStateById(rowId, newCount, currentModel)
     }
 
-    private fun updateTricksStateById(rowId: Int, newCount: Int, currentModel: BodyItemModel) {
+    private fun updateTricksStateById(rowId: Int, newCount: Int, currentModel: MultiItemModel) {
 
-        val newTotalScore = currentModel.gameType.getTotalGameScore(newCount)
-        Log.i(TAG, "updateTricksStateById: rowId= $rowId\n currentModel = $currentModel\n newCount = $newCount \n newTotalScore = $newTotalScore")
+        val newScore = currentModel.gameType.getTotalGameScore(newCount)
+        Log.i(TAG, "updateTricksStateById:\n rowId= $rowId\n currentModel = $currentModel\n newCount = $newCount \n newTotalScore = $newScore")
 
-        _uiState.update {
-            val newList = it.listMultiItems
+        _uiState.update { state ->
+            var newList = state.listMultiItems
                 .map { multiItemModel ->
                 if(multiItemModel.rowId == rowId) {
                     currentModel.copy(
                         tricks = newCount,
-                        score = newTotalScore
+                        score = newScore
                     )
                 }
                 else multiItemModel
             }
-            Log.i(TAG, "_uiState.update: $newList")
-            it.copy(listMultiItems = newList)
+            Log.i(TAG, "updateTricksStateById: newList = \n $newList")
+            val scoreList = Players.values()
+                .toList()
+                .sortedBy { it.id }
+                .map {
+                    newList.sumOf { item ->
+                        if(item.itemViewType == BODY_ROW_TYPE && item.playerNumber == it) item.score
+                        else 0
+                    }
+                }
+            Log.i(TAG, "updateTricksStateById: scoreList = \n $scoreList")
+            newList = newList.map {
+                when(it.playerNumber) {
+                    Players.PlayerOne -> {
+                        it.copy(totalPlayerScore = scoreList[0])
+                    }
+                    Players.PlayerTwo -> {
+                        it.copy(totalPlayerScore = scoreList[1])
+                    }
+                    Players.PlayerThree -> {
+                        it.copy(totalPlayerScore = scoreList[2])
+                    }
+                    Players.PlayerFour -> {
+                        it.copy(totalPlayerScore = scoreList[3])
+                    }
+                }
+            }
+            Log.i(TAG, "_uiState.update: ${newList.map { it.totalPlayerScore }}")
+            state.copy(listMultiItems = newList)
         }
     }
 
