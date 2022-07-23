@@ -1,7 +1,9 @@
 package by.godevelopment.kingcalculator.presentation.gamepresentation.gameaddform.viewholdes
 
+import android.util.Log
 import androidx.recyclerview.widget.RecyclerView
 import by.godevelopment.kingcalculator.R
+import by.godevelopment.kingcalculator.commons.TAG
 import by.godevelopment.kingcalculator.databinding.FooterGameAddFormBinding
 import by.godevelopment.kingcalculator.domain.gamesdomain.models.FooterItemModel
 import by.godevelopment.kingcalculator.domain.gamesdomain.models.MultiItemModel
@@ -9,13 +11,18 @@ import by.godevelopment.kingcalculator.domain.gamesdomain.models.MultiItemModel
 class FooterViewHolder(
     private val binding: FooterGameAddFormBinding
 ) : RecyclerView.ViewHolder(binding.root), MultiViewHolder {
-    override fun bind(item: MultiItemModel) {
+    override fun bind(item: MultiItemModel, position: Int) {
         when(item) {
             is FooterItemModel -> {
-                val footerText = binding.root.context.getString(R.string.rv_footer_text_total_score)
-                binding.footerText.text = footerText + item.totalGameScore.toString()
+                Log.i(TAG, "FooterItemModel position $position bind: ${item.rowId}")
+                binding.footerText.text = binding.root.resources.getString(
+                    R.string.rv_footer_text_total_score,
+                    item.totalPlayerScore
+                )
             }
-            else -> {}
+            else -> {
+                Log.i(TAG, "FooterItemModel bind: else")
+            }
         }
     }
 }

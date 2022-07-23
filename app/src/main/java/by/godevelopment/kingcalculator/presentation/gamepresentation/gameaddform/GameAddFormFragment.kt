@@ -12,8 +12,10 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
 import by.godevelopment.kingcalculator.R
+import by.godevelopment.kingcalculator.commons.BODY_ROW_TYPE
 import by.godevelopment.kingcalculator.commons.TAG
 import by.godevelopment.kingcalculator.databinding.FragmentGameAddFormBinding
+import by.godevelopment.kingcalculator.domain.gamesdomain.models.BodyItemModel
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -43,7 +45,7 @@ class GameAddFormFragment : Fragment() {
         val multiAdapter = MultiAdapter(
             onClickDec = viewModel::onClickDec,
             onClickInc = viewModel::onClickInc,
-            onChangeEdit = viewModel::onChangeEdit
+            onClickEdit = viewModel::onClickEdit
         )
         binding.apply {
             tricksTable.adapter = multiAdapter
@@ -56,7 +58,18 @@ class GameAddFormFragment : Fragment() {
                     if (!uiState.isFetchingData) {
                         binding.progress.visibility = View.GONE
                     } else binding.progress.visibility = View.VISIBLE
-                    binding.headerGameAddForm.text = "Total Game Score = " + uiState.gameTotalScore
+
+                    val gameTotalScore = uiState.listMultiItems
+                        .filter {
+                            it.itemViewType == BODY_ROW_TYPE
+                        }
+                        .sumOf {
+                            it as BodyItemModel
+                            it.score
+                        }
+
+                    binding.headerGameAddForm.text =
+                        getString(R.string.fragment_header, gameTotalScore)
                     multiAdapter.multiList = uiState.listMultiItems
                     binding.buttonSaveResult.setOnClickListener {
                         viewModel.saveGameData()

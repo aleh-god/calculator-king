@@ -13,7 +13,7 @@ import by.godevelopment.kingcalculator.databinding.ItemGameAddFormBinding
 class ViewHolderFactory(
     private val onClickDec: (Int) -> Unit,
     private val onClickInc: (Int) -> Unit,
-    private val onChangeEdit: (Int, Int) -> Unit
+    private val onClickEdit: (Int) -> Unit
 ) {
 
     fun buildHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder =
@@ -36,7 +36,7 @@ class ViewHolderFactory(
                     ),
                     onClickDec = onClickDec,
                     onClickInc = onClickInc,
-                    onChangeEdit = onChangeEdit
+                    onClickEdit = onClickEdit
                 )
             }
             FOOTER_ROW_TYPE -> {

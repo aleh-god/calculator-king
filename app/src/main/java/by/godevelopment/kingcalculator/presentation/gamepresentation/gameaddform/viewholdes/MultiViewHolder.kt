@@ -4,5 +4,5 @@ import by.godevelopment.kingcalculator.domain.gamesdomain.models.MultiItemModel
 
 interface MultiViewHolder {
 
-    fun bind(item: MultiItemModel)
+    fun bind(item: MultiItemModel, position: Int)
 }

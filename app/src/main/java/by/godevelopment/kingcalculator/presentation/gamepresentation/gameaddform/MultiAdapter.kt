@@ -4,6 +4,9 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import by.godevelopment.kingcalculator.domain.gamesdomain.models.BodyItemModel
+import by.godevelopment.kingcalculator.domain.gamesdomain.models.FooterItemModel
+import by.godevelopment.kingcalculator.domain.gamesdomain.models.HeaderItemModel
 import by.godevelopment.kingcalculator.domain.gamesdomain.models.MultiItemModel
 import by.godevelopment.kingcalculator.presentation.gamepresentation.gameaddform.viewholdes.MultiViewHolder
 import by.godevelopment.kingcalculator.presentation.gamepresentation.gameaddform.viewholdes.ViewHolderFactory
@@ -11,25 +14,40 @@ import by.godevelopment.kingcalculator.presentation.gamepresentation.gameaddform
 class MultiAdapter(
     onClickDec: (Int) -> Unit,
     onClickInc: (Int) -> Unit,
-    onChangeEdit: (Int, Int) -> Unit
+    onClickEdit: (Int) -> Unit
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private val diffCallBack =
         object : DiffUtil.ItemCallback<MultiItemModel>() {
 
             override fun areItemsTheSame(oldItem: MultiItemModel, newItem: MultiItemModel): Boolean {
-                return oldItem == newItem
+                return oldItem.rowId == newItem.rowId
             }
             override fun areContentsTheSame(oldItem: MultiItemModel, newItem: MultiItemModel): Boolean {
-                return oldItem == newItem
+                return when(oldItem) {
+                    is HeaderItemModel -> {
+                        newItem as HeaderItemModel
+                        oldItem.player.name == newItem.player.name
+                    }
+                    is BodyItemModel -> {
+                        newItem as BodyItemModel
+                        oldItem == newItem
+                    }
+                    is FooterItemModel -> {
+                        newItem as FooterItemModel
+                        oldItem.totalPlayerScore == newItem.totalPlayerScore
+                    }
+                }
             }
 
             override fun getChangePayload(oldItem: MultiItemModel, newItem: MultiItemModel): Any? {
+                // TODO("pass tricks and score")
                 return super.getChangePayload(oldItem, newItem)
             }
         }
 
     private val differ = AsyncListDiffer(this, diffCallBack)
+
     var multiList: List<MultiItemModel>
         get() = differ.currentList
         set(value) { differ.submitList(value) }
@@ -37,7 +55,7 @@ class MultiAdapter(
     private val viewHolderFactory: ViewHolderFactory = ViewHolderFactory(
         onClickDec = onClickDec,
         onClickInc = onClickInc,
-        onChangeEdit = onChangeEdit
+        onClickEdit = onClickEdit
     )
 
     override fun getItemViewType(position: Int): Int = multiList[position].itemViewType
@@ -48,7 +66,7 @@ class MultiAdapter(
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         val item = multiList[position]
         val multiHolder = holder as MultiViewHolder
-        multiHolder.bind(item)
+        multiHolder.bind(item, position)
     }
 
     override fun getItemCount(): Int = multiList.size

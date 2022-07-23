@@ -15,26 +15,29 @@ sealed class MultiItemModel {
 
 data class HeaderItemModel(
     override val rowId: Int,
-    override val itemViewType: Int = HEADER_ROW_TYPE,
     val player: PlayerProfile,
     @StringRes
     val playerNumberRes: Int,
     @ColorRes
     val colorPlayer: Int = android.R.color.white
-) : MultiItemModel()
+) : MultiItemModel() {
+    override val itemViewType: Int = HEADER_ROW_TYPE
+}
 
 data class BodyItemModel(
     override val rowId: Int,
-    override val itemViewType: Int = BODY_ROW_TYPE,
     @StringRes
     val gameType: GameType,
-    val totalTricks: Int = 0,
-    val totalScore: Int = 0,
+    val tricks: Int = 0,
+    val score: Int = 0,
     val hasError: Boolean = false
-) : MultiItemModel()
+) : MultiItemModel() {
+    override val itemViewType: Int = BODY_ROW_TYPE
+}
 
 data class FooterItemModel(
     override val rowId: Int,
-    override val itemViewType: Int = FOOTER_ROW_TYPE,
-    val totalGameScore: Int = 0
-) : MultiItemModel()
+    val totalPlayerScore: Int = 0
+) : MultiItemModel() {
+    override val itemViewType: Int = FOOTER_ROW_TYPE
+}
