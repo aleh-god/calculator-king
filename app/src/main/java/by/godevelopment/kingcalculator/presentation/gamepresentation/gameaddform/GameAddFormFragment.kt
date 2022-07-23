@@ -6,13 +6,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
 import by.godevelopment.kingcalculator.R
-import by.godevelopment.kingcalculator.commons.BODY_ROW_TYPE
 import by.godevelopment.kingcalculator.commons.TAG
 import by.godevelopment.kingcalculator.databinding.FragmentGameAddFormBinding
 import com.google.android.material.snackbar.Snackbar
@@ -44,7 +44,7 @@ class GameAddFormFragment : Fragment() {
         val multiAdapter = MultiAdapter(
             onClickDec = viewModel::onClickDec,
             onClickInc = viewModel::onClickInc,
-            onClickEdit = viewModel::onClickEdit
+            onClickEdit = ::showInputDialog
         )
         binding.apply {
             tricksTable.adapter = multiAdapter
@@ -58,12 +58,8 @@ class GameAddFormFragment : Fragment() {
                         binding.progress.visibility = View.GONE
                     } else binding.progress.visibility = View.VISIBLE
 
-                    val gameTotalScore = uiState.listMultiItems
-                        .filter { it.itemViewType == BODY_ROW_TYPE }
-                        .sumOf { it.score }
-
                     binding.headerGameAddForm.text =
-                        getString(R.string.fragment_header, gameTotalScore)
+                        getString(R.string.fragment_header, uiState.gameTotalScore)
                     multiAdapter.multiList = uiState.listMultiItems
                     binding.buttonSaveResult.setOnClickListener {
                         viewModel.saveGameData()
@@ -83,5 +79,27 @@ class GameAddFormFragment : Fragment() {
                     .show()
             }
         }
+    }
+
+    private fun showInputDialog(rowId: Int) {
+        setupInputDialogListener(rowId)
+        val dialogFragment = InputValueDialogFragment.newFragmentInstance()
+        dialogFragment.show(parentFragmentManager, InputValueDialogFragment.TAG)
+    }
+
+    private fun setupInputDialogListener(rowId: Int) {
+        parentFragmentManager.setFragmentResultListener(
+            InputValueDialogFragment.REQUEST_KEY,
+            this,
+            FragmentResultListener { _, result ->
+                val result = result.getInt(InputValueDialogFragment.KEY_RESPONSE)
+                viewModel.onClickEdit(rowId, result)
+            }
+        )
+    }
+
+    override fun onDestroy() {
+        _binding = null
+        super.onDestroy()
     }
 }

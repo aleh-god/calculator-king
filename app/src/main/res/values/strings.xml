@@ -98,8 +98,12 @@
     <string name="hint_text_player_four_email">player four email</string>
 
     <string name="ui_text_contacts">\ contracts the game</string>
+
     <string name="alert_confirm_title">Confirm your the selected game</string>
     <string name="alert_confirm_message">Your the selected game is %1s</string>
+    <string name="input_tricks_title">Tricks count</string>
+    <string name="input_tricks_message">Input new value</string>
+
     <string name="action_yes">Yes</string>
     <string name="action_dismiss">Dismiss</string>
     <string name="rv_header_text_divider">:\ </string>

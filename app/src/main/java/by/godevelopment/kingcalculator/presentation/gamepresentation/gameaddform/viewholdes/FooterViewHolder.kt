@@ -6,7 +6,6 @@ import by.godevelopment.kingcalculator.R
 import by.godevelopment.kingcalculator.commons.TAG
 import by.godevelopment.kingcalculator.databinding.FooterGameAddFormBinding
 import by.godevelopment.kingcalculator.domain.gamesdomain.models.MultiItemModel
-import kotlin.math.log
 
 class FooterViewHolder(
     private val binding: FooterGameAddFormBinding

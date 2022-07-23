@@ -68,8 +68,7 @@ class GameAddFormViewModel @Inject constructor(
 
     fun onClickDec(rowId: Int) {
         Log.i(TAG, "onClickDec: $rowId")
-        val currentModel = _uiState.value.listMultiItems
-            .first { it.rowId == rowId }
+        val currentModel = _uiState.value.listMultiItems.first { it.rowId == rowId }
         if (currentModel.tricks == 0) return
         val newCount = currentModel.tricks - 1
         updateTricksStateById(rowId, newCount, currentModel)
@@ -77,23 +76,21 @@ class GameAddFormViewModel @Inject constructor(
 
     fun onClickInc(rowId: Int) {
         Log.i(TAG, "onClickInc: $rowId")
-        val currentModel = _uiState.value.listMultiItems
-            .first { it.rowId == rowId }
+        val currentModel = _uiState.value.listMultiItems.first { it.rowId == rowId }
         if (currentModel.tricks == currentModel.gameType.tricksCount) return
         val newCount = currentModel.tricks + 1
         updateTricksStateById(rowId, newCount, currentModel)
     }
 
-    fun onClickEdit(rowId: Int) {
+    fun onClickEdit(rowId: Int, newCount: Int) {
         Log.i(TAG, "onChangeEdit: $rowId")
-//        val currentModel = _uiState.value.listMultiItems
-//            .first { it.rowId == rowId } as BodyItemModel
-//        val newCount = when {
-//            currentModel.totalTricks < 0 -> 0
-//            currentModel.totalTricks > currentModel.gameType.tricksCount -> currentModel.gameType.tricksCount
-//            else -> count
-//        }
-//        updateTricksStateById(rowId, newCount, currentModel)
+        val currentModel = _uiState.value.listMultiItems.first { it.rowId == rowId }
+        val currentCount = when {
+            newCount < 0 -> 0
+            newCount > currentModel.gameType.tricksCount -> currentModel.gameType.tricksCount
+            else -> newCount
+        }
+        updateTricksStateById(rowId, currentCount, currentModel)
     }
 
     private fun updateTricksStateById(rowId: Int, newCount: Int, currentModel: MultiItemModel) {
@@ -104,14 +101,14 @@ class GameAddFormViewModel @Inject constructor(
         _uiState.update { state ->
             var newList = state.listMultiItems
                 .map { multiItemModel ->
-                if(multiItemModel.rowId == rowId) {
-                    currentModel.copy(
-                        tricks = newCount,
-                        score = newScore
-                    )
+                    if(multiItemModel.rowId == rowId) {
+                        currentModel.copy(
+                            tricks = newCount,
+                            score = newScore
+                        )
+                    }
+                    else multiItemModel
                 }
-                else multiItemModel
-            }
             Log.i(TAG, "updateTricksStateById: newList = \n $newList")
             val scoreList = Players.values()
                 .toList()
@@ -139,8 +136,17 @@ class GameAddFormViewModel @Inject constructor(
                     }
                 }
             }
-            Log.i(TAG, "_uiState.update: ${newList.map { it.totalPlayerScore }}")
-            state.copy(listMultiItems = newList)
+
+            val gameTotalScore = newList
+                .filter { it.itemViewType == BODY_ROW_TYPE }
+                .sumOf { it.score }
+
+            Log.i(TAG, "_uiState.update: $gameTotalScore = ${newList.map { it.totalPlayerScore }}")
+
+            state.copy(
+                listMultiItems = newList,
+                gameTotalScore = gameTotalScore
+            )
         }
     }
 

@@ -4,7 +4,6 @@ import by.godevelopment.kingcalculator.domain.commons.models.GameType
 import by.godevelopment.kingcalculator.domain.gamesdomain.repositories.GameRepository
 import javax.inject.Inject
 
-
 class GetGameTypeByGameIdUseCase @Inject constructor(
     private val gameRepository: GameRepository
 ) {
