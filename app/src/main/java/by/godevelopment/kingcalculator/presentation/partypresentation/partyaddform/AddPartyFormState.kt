@@ -2,19 +2,19 @@ package by.godevelopment.kingcalculator.presentation.partypresentation.partyaddf
 
 data class AddPartyFormState(
     val partyName: String = "",
-    val partyNameError: String? = null,
+    val partyNameError: Int? = null,
 
     val playerOneName: String = "",
-    val playerOneError: String? = null,
+    val playerOneError: Int? = null,
 
     val playerTwoName: String = "",
-    val playerTwoError: String? = null,
+    val playerTwoError: Int? = null,
 
     val playerThreeName: String = "",
-    val playerThreeError: String? = null,
+    val playerThreeError: Int? = null,
 
     val playerFourName: String = "",
-    val playerFourError: String? = null,
+    val playerFourError: Int? = null,
 
     val players: Map<String, Long> = emptyMap(),
     val showsProgress: Boolean = false

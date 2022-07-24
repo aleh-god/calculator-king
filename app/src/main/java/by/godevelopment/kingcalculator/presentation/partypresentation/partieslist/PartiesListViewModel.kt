@@ -5,12 +5,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import by.godevelopment.kingcalculator.R
 import by.godevelopment.kingcalculator.commons.TAG
-import by.godevelopment.kingcalculator.di.IoDispatcher
-import by.godevelopment.kingcalculator.domain.commons.helpers.StringHelper
 import by.godevelopment.kingcalculator.domain.partiesdomain.models.ItemPartyModel
 import by.godevelopment.kingcalculator.domain.partiesdomain.usecases.GetPartyModelItemsUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.*
@@ -19,15 +16,14 @@ import javax.inject.Inject
 
 @HiltViewModel
 class PartiesListViewModel @Inject constructor(
-    private val getPartyModelItemsUseCase: GetPartyModelItemsUseCase,
-    private val stringHelper: StringHelper
+    private val getPartyModelItemsUseCase: GetPartyModelItemsUseCase
 ) : ViewModel() {
 
     private val _uiState: MutableStateFlow<UiState> = MutableStateFlow(UiState())
     val uiState: StateFlow<UiState> = _uiState.asStateFlow()
 
-    private val _uiEvent  = Channel<String>()
-    val uiEvent: Flow<String> = _uiEvent.receiveAsFlow()
+    private val _uiEvent  = Channel<Int>()
+    val uiEvent: Flow<Int> = _uiEvent.receiveAsFlow()
 
     private var fetchJob: Job? = null
 
@@ -43,7 +39,7 @@ class PartiesListViewModel @Inject constructor(
                 .catch { exception ->
                     Log.i(TAG, "viewModelScope.catch ${exception.message}")
                     _uiState.update { it.copy(isFetchingData = false) }
-                    _uiEvent.send(stringHelper.getString(R.string.alert_error_loading))
+                    _uiEvent.send(R.string.alert_error_loading)
                 }
                 .collect { list ->
                     _uiState.update { it.copy(isFetchingData = false, dataList = list) }

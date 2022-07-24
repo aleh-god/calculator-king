@@ -2,8 +2,8 @@ package by.godevelopment.kingcalculator.presentation.playerpresentation.playerad
 
 data class AddFormState(
     val email: String = "",
-    val emailError: String? = null,
+    val emailError: Int? = null,
     val playerName: String = "",
-    val playerNameError: String? = null,
+    val playerNameError: Int? = null,
     val showsProgress: Boolean = false
 )

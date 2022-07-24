@@ -13,7 +13,6 @@ import by.godevelopment.kingcalculator.R
 import by.godevelopment.kingcalculator.databinding.FragmentPlayerAddFormBinding
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.collect
 
 @AndroidEntryPoint
 class PlayerAddFormFragment : Fragment() {
@@ -42,8 +41,11 @@ class PlayerAddFormFragment : Fragment() {
             lifecycleScope.launchWhenStarted {
                 viewModel.uiState.collect { uiState ->
                     showProgressUi(uiState.showsProgress)
-                    binding.playerName.error = uiState.playerNameError
-                    binding.playerEmail.error = uiState.emailError
+
+                    playerName.error = if (uiState.playerNameError != null) getString(uiState.playerNameError)
+                    else null
+                    playerEmail.error = if (uiState.emailError != null) getString(uiState.emailError)
+                    else null
                 }
             }
         }

@@ -4,6 +4,6 @@ import by.godevelopment.kingcalculator.domain.playersdomain.models.PlayerCardMod
 
 data class CardUiState(
     val playerCardModel: PlayerCardModel,
-    val playerNameError: String? = null,
+    val playerNameError: Int? = null,
     val showsProgress: Boolean = false
 )

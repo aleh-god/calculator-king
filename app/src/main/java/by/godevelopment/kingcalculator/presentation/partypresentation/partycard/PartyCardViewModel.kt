@@ -7,7 +7,6 @@ import androidx.lifecycle.viewModelScope
 import by.godevelopment.kingcalculator.R
 import by.godevelopment.kingcalculator.commons.TAG
 import by.godevelopment.kingcalculator.di.IoDispatcher
-import by.godevelopment.kingcalculator.domain.commons.helpers.StringHelper
 import by.godevelopment.kingcalculator.domain.partiesdomain.models.GamesTableItemModel
 import by.godevelopment.kingcalculator.domain.partiesdomain.models.PlayersInPartyModel
 import by.godevelopment.kingcalculator.domain.partiesdomain.usecases.GetContractorPlayerByPartyIdUseCase
@@ -26,7 +25,6 @@ class PartyCardViewModel @Inject constructor(
     private val getGamesByPartyIdUseCase: GetGamesByPartyIdUseCase,
     private val getContractorPlayerByPartyIdUseCase: GetContractorPlayerByPartyIdUseCase,
     private val getPlayersByPartyIdUseCase: GetPlayersByPartyIdUseCase,
-    private val stringHelper: StringHelper,
     @IoDispatcher private val ioDispatcher: CoroutineDispatcher,
     state: SavedStateHandle
 ) : ViewModel() {
@@ -36,8 +34,8 @@ class PartyCardViewModel @Inject constructor(
     private val _uiState: MutableStateFlow<UiState> = MutableStateFlow(UiState())
     val uiState: StateFlow<UiState> = _uiState.asStateFlow()
 
-    private val _uiEvent  = Channel<String>()
-    val uiEvent: Flow<String> = _uiEvent.receiveAsFlow()
+    private val _uiEvent  = Channel<Int>()
+    val uiEvent: Flow<Int> = _uiEvent.receiveAsFlow()
 
     private var suspendJob: Job? = null
 
@@ -54,7 +52,7 @@ class PartyCardViewModel @Inject constructor(
                 launch { fetchPlayers(idParty) }
                 launch { fetchDataList(idParty) }
             } else {
-                _uiEvent.send(stringHelper.getString(R.string.alert_error_loading))
+                _uiEvent.send(R.string.alert_error_loading)
             }
         }
     }
@@ -65,7 +63,7 @@ class PartyCardViewModel @Inject constructor(
             .catch { exception ->
                 Log.i(TAG, "PartyCardViewModel fetchDataList.catch ${exception.message}")
                 _uiState.update { it.copy(isFetchingData = false) }
-                _uiEvent.send(stringHelper.getString(R.string.alert_error_loading))
+                _uiEvent.send(R.string.alert_error_loading)
             }
             .collect { list ->
                 _uiState.update { it.copy(isFetchingData = false, dataList = list) }
@@ -77,7 +75,7 @@ class PartyCardViewModel @Inject constructor(
             _uiState.update { it.copy(playersInPartyModel = getPlayersByPartyIdUseCase(idParty)) }
         } catch (e: Exception) {
             Log.i(TAG, "PartyCardViewModel fetchPlayers.catch ${e.message}")
-            _uiEvent.send(stringHelper.getString(R.string.alert_error_loading))
+            _uiEvent.send(R.string.alert_error_loading)
         }
     }
 
@@ -88,7 +86,7 @@ class PartyCardViewModel @Inject constructor(
             }
         } catch (e: Exception) {
             Log.i(TAG, "PartyCardViewModel fetchContractorPlayer.catch ${e.message} ")
-            _uiEvent.send(stringHelper.getString(R.string.alert_error_loading))
+            _uiEvent.send(R.string.alert_error_loading)
         }
     }
 

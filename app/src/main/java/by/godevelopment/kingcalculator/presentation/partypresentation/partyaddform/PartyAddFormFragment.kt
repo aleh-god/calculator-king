@@ -44,12 +44,16 @@ class PartyAddFormFragment : Fragment() {
             viewModel.uiState.collect { uiState ->
                 showProgressUi(uiState.showsProgress)
                 binding.apply {
-                    partyName.error = uiState.partyNameError
-
-                    playerOneMenu.error = uiState.playerOneError
-                    playerTwoMenu.error = uiState.playerTwoError
-                    playerThreeMenu.error = uiState.playerThreeError
-                    playerFourMenu.error = uiState.playerFourError
+                    partyName.error = if (uiState.partyNameError != null) getString(uiState.partyNameError)
+                    else null
+                    playerOneMenu.error = if (uiState.playerOneError != null)  getString(uiState.playerOneError)
+                    else null
+                    playerTwoMenu.error = if (uiState.playerTwoError != null)  getString(uiState.playerTwoError)
+                    else null
+                    playerThreeMenu.error = if (uiState.playerThreeError != null)  getString(uiState.playerThreeError)
+                    else null
+                    playerFourMenu.error = if (uiState.playerFourError != null) getString(uiState.playerFourError)
+                    else null
 
                     ArrayAdapter(
                         requireContext(),

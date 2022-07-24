@@ -58,7 +58,6 @@ class PartyCardFragment : Fragment() {
         val gamesTableAdapter = PartyCardAdapter(onClick)
         binding.apply {
             gamesTable.adapter = gamesTableAdapter
-            // gamesTable.layoutManager = GridLayoutManager(requireContext(), 4)
             gamesTable.layoutManager = LinearLayoutManager(requireContext())
         }
         lifecycleScope.launch {

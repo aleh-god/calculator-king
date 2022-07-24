@@ -3,12 +3,10 @@ package by.godevelopment.kingcalculator.presentation.partypresentation.partycard
 import android.app.Dialog
 import android.content.DialogInterface
 import android.os.Bundle
-import android.util.Log
 import androidx.appcompat.app.AlertDialog
 import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
 import by.godevelopment.kingcalculator.R
-import by.godevelopment.kingcalculator.commons.EMPTY_STRING
 
 class ConfirmDialogFragment() : DialogFragment() {
 

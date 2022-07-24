@@ -1,13 +1,10 @@
 package by.godevelopment.kingcalculator.domain.playersdomain.usecases
 
 import by.godevelopment.kingcalculator.R
-import by.godevelopment.kingcalculator.domain.commons.helpers.StringHelper
 import by.godevelopment.kingcalculator.domain.commons.models.ValidationResult
 import javax.inject.Inject
 
-class ValidatePlayersChoiceUseCase @Inject constructor(
-    private val stringHelper: StringHelper
-){
+class ValidatePlayersChoiceUseCase @Inject constructor(){
 
     fun execute(playerNames: List<String>): ValidationResult {
         if (playerNames.any { it.isBlank() }) {
@@ -19,7 +16,7 @@ class ValidatePlayersChoiceUseCase @Inject constructor(
         if(uniqueNames.size < 4) {
             return ValidationResult(
                 successful = false,
-                errorMessage = stringHelper.getString(R.string.message_error_validate_email_different)
+                errorMessage = R.string.message_error_validate_email_different
             )
         }
         return ValidationResult(successful = true)

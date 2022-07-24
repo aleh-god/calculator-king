@@ -9,13 +9,10 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
-import androidx.navigation.fragment.navArgs
 import by.godevelopment.kingcalculator.R
 import by.godevelopment.kingcalculator.databinding.FragmentPlayerCardBinding
-import by.godevelopment.kingcalculator.presentation.playerpresentation.playeraddform.PlayerAddFormViewModel
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.collect
 
 @AndroidEntryPoint
 class PlayerCardFragment : Fragment() {
@@ -63,7 +60,8 @@ class PlayerCardFragment : Fragment() {
                             binding.playerNameEdit.setText(uiState.playerCardModel.name)
                         }
                     }
-                    binding.playerName.error = uiState.playerNameError
+                    playerName.error = if (uiState.playerNameError != null) getString(uiState.playerNameError)
+                    else null
                 }
             }
         }

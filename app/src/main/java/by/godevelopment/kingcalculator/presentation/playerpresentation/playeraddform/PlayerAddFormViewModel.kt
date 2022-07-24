@@ -4,7 +4,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import by.godevelopment.kingcalculator.R
 import by.godevelopment.kingcalculator.di.IoDispatcher
-import by.godevelopment.kingcalculator.domain.commons.helpers.StringHelper
 import by.godevelopment.kingcalculator.domain.playersdomain.models.PlayerCardModel
 import by.godevelopment.kingcalculator.domain.playersdomain.repositories.PlayerRepository
 import by.godevelopment.kingcalculator.domain.playersdomain.usecases.ValidateEmailUseCase
@@ -20,7 +19,6 @@ import javax.inject.Inject
 @HiltViewModel
 class PlayerAddFormViewModel @Inject constructor(
     private val playerRepository: PlayerRepository,
-    private val stringHelper: StringHelper,
     private val validateEmailUseCase: ValidateEmailUseCase,
     private val validatePlayerNameUseCase: ValidatePlayerNameUseCase,
     @IoDispatcher private val ioDispatcher: CoroutineDispatcher
@@ -60,11 +58,7 @@ class PlayerAddFormViewModel @Inject constructor(
                     savePlayerDataToRepository()
                 } else {
                     viewModelScope.launch {
-                        _uiEvent.send(
-                            UiEvent.ShowSnackbar(
-                                stringHelper.getString(R.string.message_error_player_info)
-                            )
-                        )
+                        _uiEvent.send(UiEvent.ShowSnackbar(R.string.message_error_player_info))
                     }
                 }
             }
@@ -89,13 +83,13 @@ class PlayerAddFormViewModel @Inject constructor(
             )
             )
             if (result) { _uiEvent.send(UiEvent.NavigateToList)
-            } else { _uiEvent.send(UiEvent.ShowSnackbar(stringHelper.getString(R.string.message_error_data_save))) }
+            } else { _uiEvent.send(UiEvent.ShowSnackbar(R.string.message_error_data_save)) }
             _uiState.update { it.copy(showsProgress = false) }
         }
     }
 
     sealed class UiEvent {
-        data class ShowSnackbar(val message: String) : UiEvent()
+        data class ShowSnackbar(val message: Int) : UiEvent()
         object NavigateToList : UiEvent()
     }
 }
