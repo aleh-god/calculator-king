@@ -3,6 +3,7 @@ package by.godevelopment.kingcalculator.domain.gamesdomain.repositories
 import by.godevelopment.kingcalculator.data.models.PlayersInGameModel
 import by.godevelopment.kingcalculator.domain.commons.models.GameType
 import by.godevelopment.kingcalculator.domain.gamesdomain.models.GameModel
+import by.godevelopment.kingcalculator.domain.gamesdomain.models.TricksNoteModel
 import kotlinx.coroutines.flow.Flow
 
 interface GameRepository {
@@ -11,4 +12,6 @@ interface GameRepository {
     suspend fun getPlayersByGameId(key: Long): PlayersInGameModel
 
     suspend fun getGameTypeByGameId(key: Long): GameType
+
+    suspend fun saveTricksNote(tricksNoteModel: TricksNoteModel): Boolean
 }

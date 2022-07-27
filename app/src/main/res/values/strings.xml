@@ -4,6 +4,7 @@
     <string name="alert_error_loading">Data not available</string>
     <string name="snackbar_btn_return">Return to table</string>
     <string name="snackbar_btn_reload">Reload table</string>
+    <string name="snackbar_btn_neutral_ok">OK</string>
     <string name="dialog_neutral_btn_text">OK</string>
     <string name="fab_content_desc">add new data</string>
 
@@ -81,6 +82,7 @@
     <string name="message_error_data_save">Data not saved</string>
     <string name="message_error_data_delete">Data not deleted</string>
     <string name="message_error_player_info">Player info invalidated</string>
+    <string name="message_error_input_values">Input data is invalidated</string>
     <string name="message_error_players_info_empty">Please fill in the fields with the names of the players</string>
     <string name="message_error_player_id">Player with this id not found</string>
     <string name="message_data_save">Data save successfully</string>
@@ -89,6 +91,8 @@
     <string name="message_error_validate_player_name_length">The player name needs to consist of at least 3 characters</string>
     <string name="message_error_validate_party_name_length">The party name needs to consist of at least 3 characters</string>
     <string name="message_error_validate_email_different">Players names must be different</string>
+
+    <string name="message_error_game_validate_not_equal_sum">Total score is not equal to game score</string>
 
     <string name="message_error_email_check">This email is already registered</string>
 
@@ -99,8 +103,8 @@
 
     <string name="ui_text_contacts">\ contracts the game</string>
 
-    <string name="alert_confirm_title">Confirm your the selected game</string>
-    <string name="alert_confirm_message">Your the selected game is %1s</string>
+    <string name="alert_confirm_title">Confirm your selected game</string>
+    <string name="alert_confirm_message">Your selected game is %1s</string>
     <string name="input_tricks_title">Tricks count</string>
     <string name="input_tricks_message">Input new value</string>
 

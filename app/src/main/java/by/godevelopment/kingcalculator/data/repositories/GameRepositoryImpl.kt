@@ -1,11 +1,14 @@
 package by.godevelopment.kingcalculator.data.repositories
 
+import android.util.Log
+import by.godevelopment.kingcalculator.commons.TAG
 import by.godevelopment.kingcalculator.data.datasource.GamesDataSource
 import by.godevelopment.kingcalculator.data.datasource.KingDataTest
 import by.godevelopment.kingcalculator.data.models.PlayersInGameModel
 import by.godevelopment.kingcalculator.domain.commons.models.GameType
 import by.godevelopment.kingcalculator.domain.gamesdomain.models.GameModel
 import by.godevelopment.kingcalculator.domain.gamesdomain.models.Players
+import by.godevelopment.kingcalculator.domain.gamesdomain.models.TricksNoteModel
 import by.godevelopment.kingcalculator.domain.gamesdomain.repositories.GameRepository
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
@@ -39,5 +42,11 @@ class GameRepositoryImpl @Inject constructor(
 
     override suspend fun getGameTypeByGameId(key: Long): GameType {
         return GameType.DoNotTakeBFG
+    }
+
+    override suspend fun saveTricksNote(tricksNoteModel: TricksNoteModel): Boolean {
+        Log.i(TAG, "saveTricksNote: $tricksNoteModel")
+        // TODO("Not yet implemented")
+        return true
     }
 }

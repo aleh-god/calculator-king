@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import by.godevelopment.kingcalculator.R
 import by.godevelopment.kingcalculator.commons.BODY_ROW_TYPE
 import by.godevelopment.kingcalculator.commons.TAG
 import by.godevelopment.kingcalculator.di.IoDispatcher
@@ -11,6 +12,7 @@ import by.godevelopment.kingcalculator.domain.gamesdomain.models.MultiItemModel
 import by.godevelopment.kingcalculator.domain.gamesdomain.models.Players
 import by.godevelopment.kingcalculator.domain.gamesdomain.usecases.GetMultiItemModelsUseCase
 import by.godevelopment.kingcalculator.domain.gamesdomain.usecases.SaveGameUseCase
+import by.godevelopment.kingcalculator.domain.gamesdomain.usecases.ValidatePlayersScoreUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Job
@@ -24,50 +26,53 @@ class GameAddFormViewModel @Inject constructor(
     state: SavedStateHandle,
     @IoDispatcher private val ioDispatcher: CoroutineDispatcher,
     private val getMultiItemModels: GetMultiItemModelsUseCase,
-    private val saveGameUseCase: SaveGameUseCase,
+    private val validatePlayersScoreUseCase: ValidatePlayersScoreUseCase,
+    private val saveGameUseCase: SaveGameUseCase
 ) : ViewModel() {
 
-    private val idGame = state.get<Long>("gameId")
+    private val gameId = state.get<Long>("gameId")
 
     private val _uiState: MutableStateFlow<UiState> = MutableStateFlow(UiState())
     val uiState: StateFlow<UiState> = _uiState.asStateFlow()
 
-    private val _uiEvent  = Channel<String>()
-    val uiEvent: Flow<String> = _uiEvent.receiveAsFlow()
+    private val _uiEvent  = Channel<GameAddFormUiEvent>()
+    val uiEvent: Flow<GameAddFormUiEvent> = _uiEvent.receiveAsFlow()
 
     private var fetchJob: Job? = null
 
     init {
-        load()
-        Log.i(TAG, "GameAddFormViewModel: = $idGame")
+        loadData()
+        Log.i(TAG, "GameAddFormViewModel: = $gameId")
     }
 
-    private fun load() {
+    private fun loadData() {
         fetchJob?.cancel()
         fetchJob = viewModelScope.launch(ioDispatcher) {
-            idGame?.let {
+            gameId?.let {
                 try {
                     _uiState.value = UiState(isFetchingData = true)
                     _uiState.value = UiState(
                         isFetchingData = false,
-                        listMultiItems = getMultiItemModels.invoke(idGame)
+                        listMultiItems = getMultiItemModels.invoke(gameId)
                     )
                 } catch (e: Exception) {
                     _uiState.value = UiState(isFetchingData = false)
-                    viewModelScope.launch {
-                        _uiEvent.send(e.message.toString())
-                    }
+                    Log.i(TAG, "loadGameData: ${e.message}")
+                    _uiEvent.send(
+                        ShowMessageUiEvent(
+                            message = R.string.message_error_data_load,
+                            onAction = ::reloadDataModel
+                        ))
                 }
             }
         }
     }
 
-    fun reloadDataModel() {
-        load()
+    private fun reloadDataModel() {
+        loadData()
     }
 
     fun onClickDec(rowId: Int) {
-        Log.i(TAG, "onClickDec: $rowId")
         val currentModel = _uiState.value.listMultiItems.first { it.rowId == rowId }
         if (currentModel.tricks == 0) return
         val newCount = currentModel.tricks - 1
@@ -75,7 +80,6 @@ class GameAddFormViewModel @Inject constructor(
     }
 
     fun onClickInc(rowId: Int) {
-        Log.i(TAG, "onClickInc: $rowId")
         val currentModel = _uiState.value.listMultiItems.first { it.rowId == rowId }
         if (currentModel.tricks == currentModel.gameType.tricksCount) return
         val newCount = currentModel.tricks + 1
@@ -83,7 +87,6 @@ class GameAddFormViewModel @Inject constructor(
     }
 
     fun onClickEdit(rowId: Int, newCount: Int) {
-        Log.i(TAG, "onChangeEdit: $rowId")
         val currentModel = _uiState.value.listMultiItems.first { it.rowId == rowId }
         val currentCount = when {
             newCount < 0 -> 0
@@ -94,22 +97,30 @@ class GameAddFormViewModel @Inject constructor(
     }
 
     private fun updateTricksStateById(rowId: Int, newCount: Int, currentModel: MultiItemModel) {
+        val currentGameType = currentModel.gameType
+        val newScore = currentGameType.getTotalGameScore(newCount)
 
-        val newScore = currentModel.gameType.getTotalGameScore(newCount)
-        Log.i(TAG, "updateTricksStateById:\n rowId= $rowId\n currentModel = $currentModel\n newCount = $newCount \n newTotalScore = $newScore")
 
         _uiState.update { state ->
             var newList = state.listMultiItems
                 .map { multiItemModel ->
-                    if(multiItemModel.rowId == rowId) {
-                        currentModel.copy(
-                            tricks = newCount,
-                            score = newScore
-                        )
+                    when {
+                        multiItemModel.gameType == currentGameType
+                                && multiItemModel.rowId == rowId -> {
+                            currentModel.copy(
+                                tricks = newCount,
+                                score = newScore,
+                                hasError = false
+                            )
+                        }
+                        multiItemModel.gameType == currentGameType
+                                && multiItemModel.rowId != rowId -> {
+                            multiItemModel.copy(hasError = false)
+                        }
+                        else -> multiItemModel
                     }
-                    else multiItemModel
                 }
-            Log.i(TAG, "updateTricksStateById: newList = \n $newList")
+
             val scoreList = Players.values()
                 .toList()
                 .sortedBy { it.id }
@@ -119,7 +130,7 @@ class GameAddFormViewModel @Inject constructor(
                         else 0
                     }
                 }
-            Log.i(TAG, "updateTricksStateById: scoreList = \n $scoreList")
+
             newList = newList.map {
                 when(it.playerNumber) {
                     Players.PlayerOne -> {
@@ -141,8 +152,6 @@ class GameAddFormViewModel @Inject constructor(
                 .filter { it.itemViewType == BODY_ROW_TYPE }
                 .sumOf { it.score }
 
-            Log.i(TAG, "_uiState.update: $gameTotalScore = ${newList.map { it.totalPlayerScore }}")
-
             state.copy(
                 listMultiItems = newList,
                 gameTotalScore = gameTotalScore
@@ -151,7 +160,44 @@ class GameAddFormViewModel @Inject constructor(
     }
 
     fun saveGameData() {
-        Log.i(TAG, "saveGameData: invoke")
+        viewModelScope.launch(ioDispatcher) {
+            _uiState.update { it.copy(isFetchingData = true) }
+            val result = validatePlayersScoreUseCase.invoke(_uiState.value.listMultiItems)
+            // TODO("Update state")
+//            Log.i(TAG, "saveGameData: result = $result")
+            if (result.successful) {
+                try {
+                    gameId?.let { id ->
+                        saveGameUseCase.invoke(
+                            gameId = id,
+                            items = _uiState.value.listMultiItems
+                        )
+                        _uiState.update { it.copy(isFetchingData = false) }
+                        _uiEvent.send(NavigateToPartyCardUiEvent)
+                    }
+                } catch (e: Exception) {
+                    Log.i(TAG, "saveGameData.catch: ${e.message}")
+                    _uiState.update { it.copy(isFetchingData = false) }
+                    _uiEvent.send(
+                        ShowMessageUiEvent(
+                            message = R.string.message_error_data_save,
+                            onAction = { }
+                        ))
+                }
+            } else {
+                _uiState.update {
+                    it.copy(
+                        isFetchingData = false,
+                        listMultiItems = result.errorList ?: it.listMultiItems
+                    )
+                }
+                _uiEvent.send(
+                    ShowMessageUiEvent(
+                        message = R.string.message_error_input_values,
+                        onAction = { }
+                    ))
+            }
+        }
     }
 
     data class UiState(

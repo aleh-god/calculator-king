@@ -12,55 +12,66 @@
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/game_name"
-        android:layout_width="wrap_content"
+        android:layout_width="0.dp"
         android:layout_height="wrap_content"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toStartOf="@id/game_tricks"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/divider"
+        app:layout_constraintBottom_toTopOf="@id/barrier"
         app:layout_constraintHorizontal_chainStyle="spread_inside"
         android:layout_marginStart="@dimen/big_margin"
         android:layout_marginEnd="@dimen/main_margin"
+        app:layout_constraintHorizontal_weight="3"
         tools:text="Do Not Take Tricks"
         android:textAppearance="@style/TextAppearance.Material3.BodyLarge"
         />
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/game_tricks"
-        android:layout_width="wrap_content"
+        android:layout_width="0.dp"
         android:layout_height="wrap_content"
         app:layout_constraintStart_toEndOf="@id/game_name"
         app:layout_constraintEnd_toStartOf="@id/game_score"
-        app:layout_constraintBaseline_toBaselineOf="@id/game_name"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/barrier"
         android:layout_marginHorizontal="@dimen/main_margin"
+        app:layout_constraintHorizontal_weight="2"
         tools:text="Tricks: 8"
         android:textAppearance="@style/TextAppearance.Material3.BodyLarge"
         />
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/game_score"
-        android:layout_width="wrap_content"
+        android:layout_width="0.dp"
         android:layout_height="wrap_content"
         app:layout_constraintStart_toEndOf="@id/game_tricks"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBaseline_toBaselineOf="@id/game_name"
+        app:layout_constraintBottom_toTopOf="@id/barrier"
+        app:layout_constraintTop_toTopOf="parent"
         android:layout_marginStart="@dimen/main_margin"
         android:layout_marginEnd="@dimen/big_margin"
+        app:layout_constraintHorizontal_weight="2"
         tools:text="Score: -240"
         android:textAppearance="@style/TextAppearance.Material3.BodyLarge"
+        />
+
+    <androidx.constraintlayout.widget.Barrier
+        android:id="@+id/barrier"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:barrierDirection="bottom"
+        app:constraint_referenced_ids="game_name,game_score, game_tricks"
         />
 
     <com.google.android.material.divider.MaterialDivider
         android:id="@+id/divider"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:dividerInsetStart="16dp"
-        app:dividerInsetEnd="16dp"
-        android:layout_marginTop="@dimen/small_margin"
-        android:layout_marginBottom="@dimen/big_margin"
+        app:dividerInsetStart="@dimen/big_margin"
+        app:dividerInsetEnd="@dimen/big_margin"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/game_name"
+        app:layout_constraintTop_toBottomOf="@+id/barrier"
         />
 
     <com.google.android.material.button.MaterialButton
@@ -73,6 +84,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintHorizontal_chainStyle="spread"
         android:layout_marginStart="@dimen/big_margin"
+        android:layout_marginTop="@dimen/big_margin"
         app:icon="@drawable/ic_remove_24"
         android:text="@string/button_dec"
         style="?attr/materialButtonOutlinedStyle"
@@ -87,6 +99,7 @@
         app:layout_constraintTop_toBottomOf="@id/divider"
         app:layout_constraintBottom_toBottomOf="parent"
         android:layout_marginHorizontal="6dp"
+        android:layout_marginTop="@dimen/big_margin"
         style="?attr/materialButtonOutlinedStyle"
         app:icon="@drawable/ic_baseline_keyboard_24"
         tools:text="8"
@@ -101,6 +114,7 @@
         app:layout_constraintTop_toBottomOf="@id/divider"
         app:layout_constraintBottom_toBottomOf="parent"
         android:layout_marginEnd="@dimen/big_margin"
+        android:layout_marginTop="@dimen/big_margin"
         app:icon="@drawable/ic_plus_24"
         android:text="@string/button_inc"
         style="?attr/materialButtonOutlinedStyle"

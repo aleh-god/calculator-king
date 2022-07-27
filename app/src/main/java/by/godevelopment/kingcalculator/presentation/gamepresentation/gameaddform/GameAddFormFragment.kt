@@ -1,19 +1,17 @@
 package by.godevelopment.kingcalculator.presentation.gamepresentation.gameaddform
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import by.godevelopment.kingcalculator.R
-import by.godevelopment.kingcalculator.commons.TAG
 import by.godevelopment.kingcalculator.databinding.FragmentGameAddFormBinding
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
@@ -53,7 +51,6 @@ class GameAddFormFragment : Fragment() {
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.uiState.collect { uiState ->
-                    Log.i(TAG, "GameAddFormFragment setupUi: ${uiState.listMultiItems}")
                     if (!uiState.isFetchingData) {
                         binding.progress.visibility = View.GONE
                     } else binding.progress.visibility = View.VISIBLE
@@ -71,12 +68,17 @@ class GameAddFormFragment : Fragment() {
 
     private fun setupEvent() {
         lifecycleScope.launchWhenStarted {
-            viewModel.uiEvent.collect {
-                Snackbar
-                    .make(binding.root, it, Snackbar.LENGTH_INDEFINITE)
-                    .setAction(getString(R.string.snackbar_btn_reload))
-                    { viewModel.reloadDataModel() }
-                    .show()
+            viewModel.uiEvent.collect { event ->
+                when(event) {
+                    is ShowMessageUiEvent -> {
+                        Snackbar
+                            .make(binding.root, event.message, Snackbar.LENGTH_LONG)
+                            .setAction(getString(R.string.snackbar_btn_neutral_ok))
+                            { event.onAction.invoke() }
+                            .show()
+                    }
+                    is NavigateToPartyCardUiEvent -> navigateToPartyCard()
+                }
             }
         }
     }
@@ -90,12 +92,15 @@ class GameAddFormFragment : Fragment() {
     private fun setupInputDialogListener(rowId: Int) {
         parentFragmentManager.setFragmentResultListener(
             InputValueDialogFragment.REQUEST_KEY,
-            this,
-            FragmentResultListener { _, result ->
-                val result = result.getInt(InputValueDialogFragment.KEY_RESPONSE)
-                viewModel.onClickEdit(rowId, result)
-            }
-        )
+            this
+        ) { _, bundle ->
+            val result = bundle.getInt(InputValueDialogFragment.KEY_RESPONSE)
+            viewModel.onClickEdit(rowId, result)
+        }
+    }
+
+    private fun navigateToPartyCard() {
+        findNavController().navigate(R.id.action_gameAddFormFragment_to_partyCardFragment)
     }
 
     override fun onDestroy() {
