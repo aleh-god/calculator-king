@@ -1,7 +1,6 @@
 <resources>
     <string name="app_name">King calculator</string>
 
-    <string name="alert_error_loading">Data not available</string>
     <string name="snackbar_btn_return">Return to table</string>
     <string name="snackbar_btn_reload">Reload table</string>
     <string name="snackbar_btn_neutral_ok">OK</string>
@@ -74,18 +73,19 @@
     <string name="form_helper_party_text">Enter party name</string>
     <string name="form_game_type_text">Game type</string>
 
+    <string name="message_data_load">Data load successfully</string>
+    <string name="message_data_save">Data save successfully</string>
+    <string name="message_error_bad_database">DataBase error! Please, drop data in settings.</string>
     <string name="message_error_valid_name">Please enter a valid name</string>
     <string name="message_error_valid_email">Please enter a valid email address</string>
     <string name="message_error_data_null">Data is unavailable</string>
-    <string name="message_error_data_load">Data not loaded</string>
-    <string name="message_data_load">Data load successfully</string>
-    <string name="message_error_data_save">Data not saved</string>
-    <string name="message_error_data_delete">Data not deleted</string>
+    <string name="message_error_data_load">Could not load data</string>
+    <string name="message_error_data_save">Could not save data</string>
+    <string name="message_error_data_delete">Could not delete data</string>
     <string name="message_error_player_info">Player info invalidated</string>
     <string name="message_error_input_values">Input data is invalidated</string>
     <string name="message_error_players_info_empty">Please fill in the fields with the names of the players</string>
     <string name="message_error_player_id">Player with this id not found</string>
-    <string name="message_data_save">Data save successfully</string>
     <string name="message_error_validate_email_blank">The email can\'t be blank</string>
     <string name="message_error_validate_email">That\'s not a valid email</string>
     <string name="message_error_validate_player_name_length">The player name needs to consist of at least 3 characters</string>

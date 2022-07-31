@@ -31,20 +31,24 @@ class PartiesListViewModel @Inject constructor(
         fetchDataModel()
     }
 
-    fun fetchDataModel() {
+    private fun fetchDataModel() {
         fetchJob?.cancel()
         fetchJob = viewModelScope.launch {
             getPartyModelItemsUseCase()
                 .onStart { _uiState.update { it.copy(isFetchingData = true) } }
                 .catch { exception ->
-                    Log.i(TAG, "viewModelScope.catch ${exception.message}")
+                    Log.i(TAG, "PartiesListViewModel viewModelScope.catch ${exception.message}")
                     _uiState.update { it.copy(isFetchingData = false) }
-                    _uiEvent.send(R.string.alert_error_loading)
+                    _uiEvent.send(R.string.message_error_data_load)
                 }
                 .collect { list ->
                     _uiState.update { it.copy(isFetchingData = false, dataList = list) }
                 }
         }
+    }
+
+    fun onAction() {
+        fetchDataModel()
     }
 
     data class UiState(

@@ -39,7 +39,7 @@ class PlayersListViewModel @Inject constructor(
                 .catch { exception ->
                     Log.i(TAG, "viewModelScope.catch ${exception.message}")
                     _uiState.update { it.copy(isFetchingData = false) }
-                    _uiEvent.send(R.string.alert_error_loading)
+                    _uiEvent.send(R.string.message_error_data_load)
                 }
                 .collect { list ->
                     _uiState.update { it.copy(isFetchingData = false, dataList = list) }
