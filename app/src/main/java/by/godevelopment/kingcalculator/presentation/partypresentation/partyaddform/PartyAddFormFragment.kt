@@ -8,13 +8,17 @@ import android.widget.ArrayAdapter
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.coroutineScope
+import androidx.lifecycle.flowWithLifecycle
 import androidx.navigation.fragment.findNavController
 import by.godevelopment.kingcalculator.R
 import by.godevelopment.kingcalculator.databinding.FragmentPartyAddFormBinding
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class PartyAddFormFragment : Fragment() {
@@ -33,42 +37,51 @@ class PartyAddFormFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentPartyAddFormBinding.inflate(inflater, container, false)
-        setupUi()
+        viewLifecycleOwner.lifecycle.also {
+            setupUi(it)
+            setupEvent(it)
+        }
         setupListeners()
-        setupEvents()
         return binding.root
     }
 
-    private fun setupUi() {
-        lifecycleScope.launchWhenStarted {
-            viewModel.uiState.collect { uiState ->
-                showProgressUi(uiState.showsProgress)
-                binding.apply {
-                    partyName.error = uiState.partyNameError
+    private fun setupUi(lifecycle: Lifecycle) {
+        lifecycle.coroutineScope.launch {
+            viewModel.uiState
+                .flowWithLifecycle(lifecycle)
+                .collect { uiState ->
+                    showProgressUi(uiState.showsProgress)
+                    binding.apply {
+                        partyName.error = if (uiState.partyNameError != null) getString(uiState.partyNameError)
+                        else null
+                        playerOneMenu.error = if (uiState.playerOneError != null)  getString(uiState.playerOneError)
+                        else null
+                        playerTwoMenu.error = if (uiState.playerTwoError != null)  getString(uiState.playerTwoError)
+                        else null
+                        playerThreeMenu.error = if (uiState.playerThreeError != null)  getString(uiState.playerThreeError)
+                        else null
+                        playerFourMenu.error = if (uiState.playerFourError != null) getString(uiState.playerFourError)
+                        else null
 
-                    playerOneMenu.error = uiState.playerOneError
-                    playerTwoMenu.error = uiState.playerTwoError
-                    playerThreeMenu.error = uiState.playerThreeError
-                    playerFourMenu.error = uiState.playerFourError
-
-                    ArrayAdapter(
-                        requireContext(),
-                        R.layout.menu_item,
-                        uiState.players.keys.toTypedArray()
-                    ).also {
-                        playerTwoInputMenu.setAdapter(it)
-                        playerOneInputMenu.setAdapter(it)
-                        playerThreeInputMenu.setAdapter(it)
-                        playerFourInputMenu.setAdapter(it)
+                        ArrayAdapter(
+                            requireContext(),
+                            R.layout.menu_item,
+                            uiState.players.keys.toTypedArray()
+                        ).also {
+                            playerTwoInputMenu.setAdapter(it)
+                            playerOneInputMenu.setAdapter(it)
+                            playerThreeInputMenu.setAdapter(it)
+                            playerFourInputMenu.setAdapter(it)
+                        }
                     }
                 }
-            }
         }
     }
 
-    private fun setupEvents() {
-        lifecycleScope.launchWhenStarted {
-            viewModel.uiEvent.collect { event ->
+    private fun setupEvent(lifecycle: Lifecycle) {
+        viewModel.uiEvent
+            .flowWithLifecycle(lifecycle)
+            .onEach { event ->
                 when(event) {
                     is PartyAddFormViewModel.UiEvent.ShowSnackbar -> {
                         Snackbar.make(binding.root, event.message, Snackbar.LENGTH_LONG).show()
@@ -78,7 +91,7 @@ class PartyAddFormFragment : Fragment() {
                     }
                 }
             }
-        }
+            .launchIn(lifecycle.coroutineScope)
     }
 
     private fun setupListeners() {

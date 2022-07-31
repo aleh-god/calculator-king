@@ -5,8 +5,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginHorizontal="6dp"
-    android:layout_marginTop="3dp"
+    android:layout_marginHorizontal="@dimen/small_margin"
+    android:layout_marginTop="@dimen/small_margin"
     >
 
     <View
@@ -26,9 +26,9 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:paddingVertical="@dimen/main_margin"
+        android:paddingVertical="@dimen/medium_padding"
         android:paddingHorizontal="16dp"
-        tools:text="Player one tricks"
+        tools:text="Player one: Donatello"
         android:textColor="?attr/colorOnSurface"
         android:textAppearance="@style/TextAppearance.Material3.BodyLarge"
         />

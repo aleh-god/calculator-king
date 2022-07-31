@@ -7,15 +7,17 @@ import android.view.ViewGroup
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.coroutineScope
+import androidx.lifecycle.flowWithLifecycle
 import androidx.navigation.fragment.findNavController
-import androidx.navigation.fragment.navArgs
 import by.godevelopment.kingcalculator.R
 import by.godevelopment.kingcalculator.databinding.FragmentPlayerCardBinding
-import by.godevelopment.kingcalculator.presentation.playerpresentation.playeraddform.PlayerAddFormViewModel
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class PlayerCardFragment : Fragment() {
@@ -33,9 +35,11 @@ class PlayerCardFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentPlayerCardBinding.inflate(inflater, container, false)
-        setupUi()
+        viewLifecycleOwner.lifecycle.also {
+            setupUi(it)
+            setupEvent(it)
+        }
         setupListeners()
-        setupEvents()
         return binding.root
     }
 
@@ -53,25 +57,29 @@ class PlayerCardFragment : Fragment() {
         }
     }
 
-    private fun setupUi() {
+    private fun setupUi(lifecycle: Lifecycle) {
         binding.apply {
-            lifecycleScope.launchWhenStarted {
-                viewModel.uiState.collect { uiState ->
-                    showProgressUi(uiState.showsProgress)
-                    binding.playerNameEdit.text.apply {
-                        if(this.isNullOrEmpty()) {
-                            binding.playerNameEdit.setText(uiState.playerCardModel.name)
+            lifecycle.coroutineScope.launch {
+                viewModel.uiState
+                    .flowWithLifecycle(lifecycle)
+                    .collect { uiState ->
+                        showProgress(uiState.showsProgress)
+                        playerNameEdit.text.apply {
+                            if(this.isNullOrEmpty())
+                                playerNameEdit.setText(uiState.playerCardModel.name)
                         }
+                        playerName.error =
+                            if (uiState.playerNameError != null) getString(uiState.playerNameError)
+                            else null
                     }
-                    binding.playerName.error = uiState.playerNameError
-                }
             }
         }
     }
 
-    private fun setupEvents() {
-        lifecycleScope.launchWhenStarted {
-            viewModel.uiEvent.collect { event ->
+    private fun setupEvent(lifecycle: Lifecycle) {
+        viewModel.uiEvent
+            .flowWithLifecycle(lifecycle)
+            .onEach { event ->
                 when(event) {
                     is PlayerCardViewModel.UiEvent.ShowSnackbar -> {
                         Snackbar.make(binding.root, event.message, Snackbar.LENGTH_LONG).show()
@@ -81,14 +89,14 @@ class PlayerCardFragment : Fragment() {
                     }
                 }
             }
-        }
+            .launchIn(lifecycle.coroutineScope)
     }
 
     private fun navigateToListUser() {
         findNavController().navigate(R.id.action_playerCardFragment_to_playersListFragment)
     }
 
-    private fun showProgressUi(key: Boolean) {
+    private fun showProgress(key: Boolean) {
         binding.apply {
             if (key) {
                 progress.visibility = View.VISIBLE

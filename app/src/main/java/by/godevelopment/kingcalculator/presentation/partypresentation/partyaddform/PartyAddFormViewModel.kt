@@ -5,7 +5,6 @@ import androidx.lifecycle.viewModelScope
 import by.godevelopment.kingcalculator.R
 import by.godevelopment.kingcalculator.data.entities.PartyNote
 import by.godevelopment.kingcalculator.di.IoDispatcher
-import by.godevelopment.kingcalculator.domain.commons.helpers.StringHelper
 import by.godevelopment.kingcalculator.domain.commons.models.ValidationResult
 import by.godevelopment.kingcalculator.domain.partiesdomain.repositories.PartyRepository
 import by.godevelopment.kingcalculator.domain.partiesdomain.usecases.ValidatePartyNameUseCase
@@ -21,7 +20,6 @@ import javax.inject.Inject
 @HiltViewModel
 class PartyAddFormViewModel @Inject constructor(
     private val partyRepository: PartyRepository,
-    private val stringHelper: StringHelper,
     private val validatePartyNameUseCase: ValidatePartyNameUseCase,
     private val validatePlayersChoiceUseCase: ValidatePlayersChoiceUseCase,
     @IoDispatcher private val ioDispatcher: CoroutineDispatcher
@@ -93,24 +91,18 @@ class PartyAddFormViewModel @Inject constructor(
                     partyRepository.createNewPartyAndReturnId(newParty).let {
                         if (it < 0) {
                             _uiEvent.send(
-                                UiEvent.ShowSnackbar(
-                                    stringHelper.getString(R.string.message_error_data_save)
-                                )
+                                UiEvent.ShowSnackbar(R.string.message_error_data_save)
                             )
                         } else { _uiEvent.send(UiEvent.NavigateToList(it)) }
                     }
                 } catch (e: Exception) {
                     _uiEvent.send(
-                        UiEvent.ShowSnackbar(
-                            stringHelper.getString(R.string.message_error_data_save)
-                        )
+                        UiEvent.ShowSnackbar(R.string.message_error_data_save)
                     )
                 }
             } else {
                 _uiEvent.send(
-                    UiEvent.ShowSnackbar(
-                        stringHelper.getString(R.string.message_error_players_info_empty)
-                    )
+                    UiEvent.ShowSnackbar(R.string.message_error_players_info_empty)
                 )
             }
             _uiState.update { it.copy(showsProgress = false) }
@@ -147,7 +139,7 @@ class PartyAddFormViewModel @Inject constructor(
     }
 
     sealed class UiEvent {
-        data class ShowSnackbar(val message: String) : UiEvent()
+        data class ShowSnackbar(val message: Int) : UiEvent()
         data class NavigateToList(val idParty: Long) : UiEvent()
     }
 }

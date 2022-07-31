@@ -1,9 +1,9 @@
 <resources>
     <string name="app_name">King calculator</string>
 
-    <string name="alert_error_loading">Data not available</string>
     <string name="snackbar_btn_return">Return to table</string>
     <string name="snackbar_btn_reload">Reload table</string>
+    <string name="snackbar_btn_neutral_ok">OK</string>
     <string name="dialog_neutral_btn_text">OK</string>
     <string name="fab_content_desc">add new data</string>
 
@@ -73,22 +73,26 @@
     <string name="form_helper_party_text">Enter party name</string>
     <string name="form_game_type_text">Game type</string>
 
+    <string name="message_data_load">Data load successfully</string>
+    <string name="message_data_save">Data save successfully</string>
+    <string name="message_error_bad_database">DataBase error! Please, drop data in settings.</string>
     <string name="message_error_valid_name">Please enter a valid name</string>
     <string name="message_error_valid_email">Please enter a valid email address</string>
     <string name="message_error_data_null">Data is unavailable</string>
-    <string name="message_error_data_load">Data not loaded</string>
-    <string name="message_data_load">Data load successfully</string>
-    <string name="message_error_data_save">Data not saved</string>
-    <string name="message_error_data_delete">Data not deleted</string>
+    <string name="message_error_data_load">Could not load data</string>
+    <string name="message_error_data_save">Could not save data</string>
+    <string name="message_error_data_delete">Could not delete data</string>
     <string name="message_error_player_info">Player info invalidated</string>
+    <string name="message_error_input_values">Input data is invalidated</string>
     <string name="message_error_players_info_empty">Please fill in the fields with the names of the players</string>
     <string name="message_error_player_id">Player with this id not found</string>
-    <string name="message_data_save">Data save successfully</string>
     <string name="message_error_validate_email_blank">The email can\'t be blank</string>
     <string name="message_error_validate_email">That\'s not a valid email</string>
     <string name="message_error_validate_player_name_length">The player name needs to consist of at least 3 characters</string>
     <string name="message_error_validate_party_name_length">The party name needs to consist of at least 3 characters</string>
     <string name="message_error_validate_email_different">Players names must be different</string>
+
+    <string name="message_error_game_validate_not_equal_sum">Total score is not equal to game score</string>
 
     <string name="message_error_email_check">This email is already registered</string>
 
@@ -98,10 +102,18 @@
     <string name="hint_text_player_four_email">player four email</string>
 
     <string name="ui_text_contacts">\ contracts the game</string>
-    <string name="alert_confirm_title">Confirm your the selected game</string>
-    <string name="alert_confirm_message">Your the selected game is %1s</string>
+
+    <string name="alert_confirm_title">Confirm your selected game</string>
+    <string name="alert_confirm_message">Your selected game is %1s</string>
+    <string name="input_tricks_title">Tricks count</string>
+    <string name="input_tricks_message">Input new value</string>
+
     <string name="action_yes">Yes</string>
     <string name="action_dismiss">Dismiss</string>
-    <string name="rv_footer_text_total_score">\"Total game score = \"</string>
+    <string name="rv_header_text_divider">:\ </string>
+    <string name="rv_footer_text_total_score">Total player score = %1$d</string>
+    <string name="rv_body_text_tricks">Tricks: %1$d</string>
+    <string name="rv_body_text_score">Score: %1$d</string>
+    <string name="fragment_header">Total Game Score = %1$d</string>
 
 </resources>

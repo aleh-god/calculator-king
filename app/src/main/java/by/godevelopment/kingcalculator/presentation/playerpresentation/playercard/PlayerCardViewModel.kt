@@ -7,7 +7,6 @@ import androidx.lifecycle.viewModelScope
 import by.godevelopment.kingcalculator.R
 import by.godevelopment.kingcalculator.commons.TAG
 import by.godevelopment.kingcalculator.di.IoDispatcher
-import by.godevelopment.kingcalculator.domain.commons.helpers.StringHelper
 import by.godevelopment.kingcalculator.domain.playersdomain.models.PlayerCardModel
 import by.godevelopment.kingcalculator.domain.playersdomain.repositories.PlayerRepository
 import by.godevelopment.kingcalculator.domain.playersdomain.usecases.ValidatePlayerNameUseCase
@@ -23,7 +22,6 @@ import javax.inject.Inject
 class PlayerCardViewModel @Inject constructor(
     state: SavedStateHandle,
     private val playerRepository: PlayerRepository,
-    private val stringHelper: StringHelper,
     private val validatePlayerNameUseCase: ValidatePlayerNameUseCase,
     @IoDispatcher private val ioDispatcher: CoroutineDispatcher
 ) : ViewModel() {
@@ -57,19 +55,11 @@ class PlayerCardViewModel @Inject constructor(
                 if (response != null) {
                     _uiState.update { it.copy(playerCardModel = response) }
                 } else {
-                    _uiEvent.send(
-                        UiEvent.ShowSnackbar(
-                            stringHelper.getString(R.string.message_error_player_id)
-                        )
-                    )
+                    _uiEvent.send(UiEvent.ShowSnackbar(R.string.message_error_player_id))
                 }
                 _uiState.update { it.copy(showsProgress = false) }
             } else {
-                _uiEvent.send(
-                    UiEvent.ShowSnackbar(
-                        stringHelper.getString(R.string.message_error_player_id)
-                    )
-                )
+                _uiEvent.send(UiEvent.ShowSnackbar(R.string.message_error_player_id))
             }
         }
     }
@@ -93,11 +83,7 @@ class PlayerCardViewModel @Inject constructor(
                     updatePlayerDataToRepository()
                 } else {
                     viewModelScope.launch {
-                        _uiEvent.send(
-                            UiEvent.ShowSnackbar(
-                                stringHelper.getString(R.string.message_error_player_info)
-                            )
-                        )
+                        _uiEvent.send(UiEvent.ShowSnackbar(R.string.message_error_player_info))
                     }
                 }
             }
@@ -115,9 +101,7 @@ class PlayerCardViewModel @Inject constructor(
             if (result) {
                 _uiEvent.send(UiEvent.NavigateToList)
             } else {
-                _uiEvent.send(
-                    UiEvent.ShowSnackbar(stringHelper.getString(R.string.message_error_data_delete))
-                )
+                _uiEvent.send(UiEvent.ShowSnackbar(R.string.message_error_data_delete))
             }
             _uiState.update { it.copy(showsProgress = false) }
         }
@@ -131,16 +115,14 @@ class PlayerCardViewModel @Inject constructor(
             if (result) {
                 _uiEvent.send(UiEvent.NavigateToList)
             } else {
-                _uiEvent.send(
-                    UiEvent.ShowSnackbar(stringHelper.getString(R.string.message_error_data_save))
-                )
+                _uiEvent.send(UiEvent.ShowSnackbar(R.string.message_error_data_save))
             }
             _uiState.update { it.copy(showsProgress = false) }
         }
     }
 
     sealed class UiEvent {
-        data class ShowSnackbar(val message: String) : UiEvent()
+        data class ShowSnackbar(val message: Int) : UiEvent()
         object NavigateToList : UiEvent()
     }
 }

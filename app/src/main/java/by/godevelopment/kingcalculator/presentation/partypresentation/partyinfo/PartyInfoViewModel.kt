@@ -18,7 +18,7 @@ class PartyInfoViewModel @Inject constructor(
     @IoDispatcher private val ioDispatcher: CoroutineDispatcher
 ) : ViewModel() {
 
-//    val idPlayer = state.get<Long>("partyId")
+    val partyId = state.get<Long>("partyId")
 
     private val _uiState: MutableStateFlow<UiState> = MutableStateFlow(UiState())
     val uiState: StateFlow<UiState> = _uiState.asStateFlow()
@@ -37,6 +37,10 @@ class PartyInfoViewModel @Inject constructor(
         fetchJob = viewModelScope.launch(ioDispatcher) {
 
         }
+    }
+
+    fun reload() {
+        load()
     }
 
     data class UiState(
