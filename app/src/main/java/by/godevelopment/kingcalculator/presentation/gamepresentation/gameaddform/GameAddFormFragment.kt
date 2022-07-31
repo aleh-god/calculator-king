@@ -7,14 +7,16 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
+import androidx.lifecycle.coroutineScope
+import androidx.lifecycle.flowWithLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import by.godevelopment.kingcalculator.R
 import by.godevelopment.kingcalculator.databinding.FragmentGameAddFormBinding
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
@@ -33,12 +35,14 @@ class GameAddFormFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentGameAddFormBinding.inflate(inflater, container, false)
-        setupUi()
-        setupEvent()
+        viewLifecycleOwner.lifecycle.also {
+            setupUi(it)
+            setupEvent(it)
+        }
         return binding.root
     }
 
-    private fun setupUi() {
+    private fun setupUi(lifecycle: Lifecycle) {
         val multiAdapter = MultiAdapter(
             onClickDec = viewModel::onClickDec,
             onClickInc = viewModel::onClickInc,
@@ -47,40 +51,37 @@ class GameAddFormFragment : Fragment() {
         binding.apply {
             tricksTable.adapter = multiAdapter
             tricksTable.layoutManager = LinearLayoutManager(requireContext())
-        }
-        lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.uiState.collect { uiState ->
-                    if (!uiState.isFetchingData) {
-                        binding.progress.visibility = View.GONE
-                    } else binding.progress.visibility = View.VISIBLE
-
-                    binding.headerGameAddForm.text =
-                        getString(R.string.fragment_header, uiState.gameTotalScore)
-                    multiAdapter.multiList = uiState.listMultiItems
-                    binding.buttonSaveResult.setOnClickListener {
-                        viewModel.saveGameData()
+            lifecycle.coroutineScope.launch {
+                viewModel.uiState
+                    .flowWithLifecycle(lifecycle)
+                    .collect { uiState ->
+                        if (!uiState.isFetchingData) progress.visibility = View.GONE
+                        else binding.progress.visibility = View.VISIBLE
+                        headerGameAddForm.text =
+                            getString(R.string.fragment_header, uiState.gameTotalScore)
+                        multiAdapter.multiList = uiState.listMultiItems
+                        buttonSaveResult.setOnClickListener { viewModel.saveGameData() }
                     }
-                }
             }
         }
     }
 
-    private fun setupEvent() {
-        lifecycleScope.launchWhenStarted {
-            viewModel.uiEvent.collect { event ->
-                when(event) {
-                    is ShowMessageUiEvent -> {
+    private fun setupEvent(lifecycle: Lifecycle) {
+        viewModel.uiEvent
+            .flowWithLifecycle(lifecycle)
+            .onEach { event ->
+                when (event) {
+                    is GameAddFormUiEvent.ShowMessageUiEvent -> {
                         Snackbar
                             .make(binding.root, event.message, Snackbar.LENGTH_LONG)
                             .setAction(getString(R.string.snackbar_btn_neutral_ok))
                             { event.onAction.invoke() }
                             .show()
                     }
-                    is NavigateToPartyCardUiEvent -> navigateToPartyCard()
+                    is GameAddFormUiEvent.NavigateToPartyCardUiEvent -> navigateToPartyCard()
                 }
             }
-        }
+            .launchIn(lifecycle.coroutineScope)
     }
 
     private fun showInputDialog(rowId: Int) {
