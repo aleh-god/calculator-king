@@ -42,9 +42,6 @@
         <action
             android:id="@+id/action_playersListFragment_to_playerAddFormFragment"
             app:destination="@id/playerAddFormFragment" />
-        <argument
-            android:name="idPlayer"
-            app:argType="long" />
     </fragment>
 
     <fragment
@@ -101,12 +98,12 @@
         <action
             android:id="@+id/action_partyCardFragment_to_partiesListFragment"
             app:destination="@id/partiesListFragment" />
-        <argument
-            android:name="partyId"
-            app:argType="long" />
         <action
             android:id="@+id/action_partyCardFragment_to_gameAddFormFragment"
             app:destination="@id/gameAddFormFragment" />
+        <argument
+            android:name="partyId"
+            app:argType="long" />
     </fragment>
 
     <fragment

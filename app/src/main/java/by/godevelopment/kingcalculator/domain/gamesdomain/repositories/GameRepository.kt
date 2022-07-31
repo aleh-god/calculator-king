@@ -1,17 +1,20 @@
 package by.godevelopment.kingcalculator.domain.gamesdomain.repositories
 
+import by.godevelopment.kingcalculator.data.entities.GameNote
 import by.godevelopment.kingcalculator.data.models.PlayersInGameModel
 import by.godevelopment.kingcalculator.domain.commons.models.GameType
-import by.godevelopment.kingcalculator.domain.gamesdomain.models.GameModel
+import by.godevelopment.kingcalculator.domain.commons.models.ResultDataBase
 import by.godevelopment.kingcalculator.domain.gamesdomain.models.TricksNoteModel
-import kotlinx.coroutines.flow.Flow
 
 interface GameRepository {
-    fun getGames(): Flow<GameModel>
 
-    suspend fun getPlayersByGameId(key: Long): PlayersInGameModel
+    suspend fun getPlayersByPartyId(partyId: Long): ResultDataBase<PlayersInGameModel>
 
-    suspend fun getGameTypeByGameId(key: Long): GameType
+    suspend fun createGameNote(gameType: GameType, partyId: Long): ResultDataBase<Long>
 
-    suspend fun saveTricksNote(tricksNoteModel: TricksNoteModel): Boolean
+    suspend fun createTricksNote(tricksNoteModel: TricksNoteModel): ResultDataBase<Long>
+
+    suspend fun getPartyIdByGameId(gameId: Long): ResultDataBase<Long>
+
+    suspend fun getGameNoteById(gameId: Long): ResultDataBase<GameNote>
 }

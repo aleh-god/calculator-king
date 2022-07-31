@@ -2,12 +2,13 @@ package by.godevelopment.kingcalculator.presentation.gamepresentation.gameaddfor
 
 import androidx.annotation.StringRes
 
-sealed interface GameAddFormUiEvent
+sealed interface GameAddFormUiEvent {
 
-data class ShowMessageUiEvent(
-    @StringRes
-    val message: Int,
-    val onAction: () -> Unit
-) :GameAddFormUiEvent
+    data class ShowMessageUiEvent(
+        @StringRes
+        val message: Int,
+        val onAction: () -> Unit
+    ) : GameAddFormUiEvent
 
-object NavigateToPartyCardUiEvent : GameAddFormUiEvent
+    data class NavigateToPartyCardUiEvent(val navArg: Long) : GameAddFormUiEvent
+}
