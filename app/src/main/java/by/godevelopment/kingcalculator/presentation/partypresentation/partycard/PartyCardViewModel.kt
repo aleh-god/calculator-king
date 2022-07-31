@@ -7,8 +7,11 @@ import androidx.lifecycle.viewModelScope
 import by.godevelopment.kingcalculator.R
 import by.godevelopment.kingcalculator.commons.TAG
 import by.godevelopment.kingcalculator.di.IoDispatcher
+import by.godevelopment.kingcalculator.domain.commons.models.GameType
+import by.godevelopment.kingcalculator.domain.commons.models.ResultDataBase
 import by.godevelopment.kingcalculator.domain.partiesdomain.models.GamesTableItemModel
 import by.godevelopment.kingcalculator.domain.partiesdomain.models.PlayersInPartyModel
+import by.godevelopment.kingcalculator.domain.partiesdomain.usecases.CreateGameNoteUseCase
 import by.godevelopment.kingcalculator.domain.partiesdomain.usecases.GetContractorPlayerByPartyIdUseCase
 import by.godevelopment.kingcalculator.domain.partiesdomain.usecases.GetGamesByPartyIdUseCase
 import by.godevelopment.kingcalculator.domain.partiesdomain.usecases.GetPlayersByPartyIdUseCase
@@ -25,68 +28,115 @@ class PartyCardViewModel @Inject constructor(
     private val getGamesByPartyIdUseCase: GetGamesByPartyIdUseCase,
     private val getContractorPlayerByPartyIdUseCase: GetContractorPlayerByPartyIdUseCase,
     private val getPlayersByPartyIdUseCase: GetPlayersByPartyIdUseCase,
+    private val createGameNoteUseCase: CreateGameNoteUseCase,
     @IoDispatcher private val ioDispatcher: CoroutineDispatcher,
     state: SavedStateHandle
 ) : ViewModel() {
 
-    private val idParty = state.get<Long>("partyId")
+    val partyId = state.get<Long>("partyId")
 
     private val _uiState: MutableStateFlow<UiState> = MutableStateFlow(UiState())
     val uiState: StateFlow<UiState> = _uiState.asStateFlow()
 
-    private val _uiEvent  = Channel<Int>()
-    val uiEvent: Flow<Int> = _uiEvent.receiveAsFlow()
+    private val _uiEvent  = Channel<PartyCardUiEvent>()
+    val uiEvent: Flow<PartyCardUiEvent> = _uiEvent.receiveAsFlow()
 
     private var suspendJob: Job? = null
 
     init {
-        Log.i(TAG, "PartyCardViewModel: $idParty")
+        Log.i(TAG, "PartyCardViewModel: $partyId")
         fetchDataModel()
     }
 
-    fun fetchDataModel() {
+    private fun fetchDataModel() {
+        suspendJob?.cancel()
+        try {
+            suspendJob = viewModelScope.launch(ioDispatcher) {
+                if (partyId != null) {
+                    _uiState.update { it.copy(isFetchingData = true) }
+                    // TODO("rework to async await")
+                    launch { fetchContractorPlayer(partyId) }
+                    launch { fetchPlayers(partyId) }
+                    launch { fetchGamesList(partyId) }
+                }
+                else {
+                    _uiState.update { it.copy(isFetchingData = false) }
+                    _uiEvent.send(
+                        PartyCardUiEvent.ShowMessage(
+                            message = R.string.message_error_data_load,
+                            onAction = ::reloadDataModel
+                        )
+                    )
+                }
+            }
+        }
+        catch (e: Exception) {
+            Log.i(TAG, "PartyCardViewModel fetchPlayers.catch ${e.message}")
+            viewModelScope.launch {
+                _uiState.update { it.copy(isFetchingData = false) }
+                _uiEvent.send(
+                    PartyCardUiEvent.ShowMessage(
+                        message = R.string.message_error_data_load,
+                        onAction = ::reloadDataModel
+                    )
+                )
+            }
+        }
+    }
+
+    private suspend fun fetchGamesList(partyId: Long) {
+        getGamesByPartyIdUseCase(partyId).collect { list ->
+            _uiState.update {
+                it.copy(
+                    isFetchingData = false,
+                    dataList = list
+                )
+            }
+        }
+    }
+
+    private suspend fun fetchPlayers(partyId: Long) {
+        _uiState.update { it.copy(playersInPartyModel = getPlayersByPartyIdUseCase(partyId)) }
+    }
+
+    private suspend fun fetchContractorPlayer(partyId: Long) {
+        _uiState.update { it.copy(contractorPlayer = getContractorPlayerByPartyIdUseCase(partyId)) }
+    }
+
+    private fun reloadDataModel() {
+        fetchDataModel()
+    }
+
+    fun createGameNote(gameType: GameType) {
+        Log.i(TAG, "createGameNote: gameType = $gameType partyId = $partyId")
         suspendJob?.cancel()
         suspendJob = viewModelScope.launch(ioDispatcher) {
-            if (idParty != null) {
-                launch { fetchContractorPlayer(idParty) }
-                launch { fetchPlayers(idParty) }
-                launch { fetchDataList(idParty) }
-            } else {
-                _uiEvent.send(R.string.alert_error_loading)
+            try {
+                _uiState.update { it.copy(isFetchingData = true) }
+                val gameResult = createGameNoteUseCase(
+                    gameType = gameType,
+                    partyId = partyId ?: throw NullPointerException()
+                )
+                when(gameResult) {
+                    is ResultDataBase.Error -> {
+                        _uiEvent.send(PartyCardUiEvent.ShowMessage(
+                            message = R.string.message_error_data_save,
+                            onAction = { }
+                        ))
+                    }
+                    is ResultDataBase.Success -> {
+                        _uiEvent.send(PartyCardUiEvent.NavigateToPartyCard(gameResult.value))
+                    }
+                }
+            } catch (e: Exception) {
+                Log.i(TAG, "PartyCardViewModel createGameNote.catch ${e.message} ")
+                _uiEvent.send(PartyCardUiEvent.ShowMessage(
+                    message = R.string.message_error_data_save,
+                    onAction = { }
+                )
+                )
             }
-        }
-    }
-
-    private suspend fun fetchDataList(idParty: Long) {
-        getGamesByPartyIdUseCase(idParty)
-            .onStart { _uiState.update { it.copy(isFetchingData = true) } }
-            .catch { exception ->
-                Log.i(TAG, "PartyCardViewModel fetchDataList.catch ${exception.message}")
-                _uiState.update { it.copy(isFetchingData = false) }
-                _uiEvent.send(R.string.alert_error_loading)
-            }
-            .collect { list ->
-                _uiState.update { it.copy(isFetchingData = false, dataList = list) }
-            }
-    }
-
-    private suspend fun fetchPlayers(idParty: Long) {
-        try {
-            _uiState.update { it.copy(playersInPartyModel = getPlayersByPartyIdUseCase(idParty)) }
-        } catch (e: Exception) {
-            Log.i(TAG, "PartyCardViewModel fetchPlayers.catch ${e.message}")
-            _uiEvent.send(R.string.alert_error_loading)
-        }
-    }
-
-    private suspend fun fetchContractorPlayer(idParty: Long) {
-        try {
-            _uiState.update {
-                it.copy(contractorPlayer = getContractorPlayerByPartyIdUseCase(idParty))
-            }
-        } catch (e: Exception) {
-            Log.i(TAG, "PartyCardViewModel fetchContractorPlayer.catch ${e.message} ")
-            _uiEvent.send(R.string.alert_error_loading)
+            finally { _uiState.update { it.copy(isFetchingData = false) } }
         }
     }
 

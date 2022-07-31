@@ -1,6 +1,5 @@
 package by.godevelopment.kingcalculator.presentation.partypresentation.partycard
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.AsyncListDiffer
@@ -8,13 +7,13 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import by.godevelopment.kingcalculator.R
 import by.godevelopment.kingcalculator.commons.EMPTY_STRING
-import by.godevelopment.kingcalculator.commons.TAG
 import by.godevelopment.kingcalculator.databinding.ItemGamesTableBinding
+import by.godevelopment.kingcalculator.domain.commons.models.GameType
 import by.godevelopment.kingcalculator.domain.partiesdomain.models.GamesTableItemModel
 import com.google.android.material.textview.MaterialTextView
 
 class PartyCardAdapter(
-    private val onClick: (String) -> Unit
+    private val onClick: (GameType) -> Unit
 ) : RecyclerView.Adapter<PartyCardAdapter.ViewHolder>() {
 
     private val diffCallback = object : DiffUtil.ItemCallback<GamesTableItemModel>() {
@@ -38,58 +37,49 @@ class PartyCardAdapter(
     inner class ViewHolder(private val binding: ItemGamesTableBinding) : RecyclerView.ViewHolder(binding.root) {
 
         fun bind(testItem: GamesTableItemModel) {
-            Log.i(TAG, "bind: ${testItem.isFinishedOneGame} - ${testItem.isFinishedTwoGame} - ${testItem.isFinishedThreeGame} - ${testItem.isFinishedFourGame}")
             binding.apply {
-                gameName.text = testItem.gameTypeName
+                gameName.text = root.resources.getString(testItem.gameType.res)
 
-                when (testItem.openedColumnNumber) {
-                    1 -> {
+                when (testItem.openedColumnIndex) {
+                    0 -> {
                         if (testItem.isFinishedOneGame) setCompleteFrame(gameCollumOne)
-                        else {
-                            setOpenFrame(gameCollumOne, testItem.gameTypeName)
-                            if (testItem.isFinishedTwoGame) setCompleteFrame(gameCollumTwo)
-                            else setCloseFrame(gameCollumTwo)
-                            if (testItem.isFinishedThreeGame) setCompleteFrame(gameCollumThree)
-                            else setCloseFrame(gameCollumThree)
-                            if (testItem.isFinishedFourGame) setCompleteFrame(gameCollumFour)
-                            else setCloseFrame(gameCollumFour)
-                        }
+                        else setOpenFrame(gameCollumOne, testItem.gameType)
+                        if (testItem.isFinishedTwoGame) setCompleteFrame(gameCollumTwo)
+                        else setCloseFrame(gameCollumTwo)
+                        if (testItem.isFinishedThreeGame) setCompleteFrame(gameCollumThree)
+                        else setCloseFrame(gameCollumThree)
+                        if (testItem.isFinishedFourGame) setCompleteFrame(gameCollumFour)
+                        else setCloseFrame(gameCollumFour)
+                    }
+                    1 -> {
+                        if (testItem.isFinishedTwoGame) setCompleteFrame(gameCollumTwo)
+                        else setOpenFrame(gameCollumTwo, testItem.gameType)
+                        if (testItem.isFinishedOneGame) setCompleteFrame(gameCollumOne)
+                        else setCloseFrame(gameCollumOne)
+                        if (testItem.isFinishedThreeGame) setCompleteFrame(gameCollumThree)
+                        else setCloseFrame(gameCollumThree)
+                        if (testItem.isFinishedFourGame) setCompleteFrame(gameCollumFour)
+                        else setCloseFrame(gameCollumFour)
                     }
                     2 -> {
-                        if (testItem.isFinishedTwoGame) { setCompleteFrame(gameCollumTwo) }
-                        else {
-                            setOpenFrame(gameCollumTwo, testItem.gameTypeName)
-                            if (testItem.isFinishedOneGame) setCompleteFrame(gameCollumOne)
-                            else setCloseFrame(gameCollumOne)
-                            if (testItem.isFinishedThreeGame) setCompleteFrame(gameCollumThree)
-                            else setCloseFrame(gameCollumThree)
-                            if (testItem.isFinishedFourGame) setCompleteFrame(gameCollumFour)
-                            else setCloseFrame(gameCollumFour)
-                        }
+                        if (testItem.isFinishedThreeGame) setCompleteFrame(gameCollumThree)
+                        else setOpenFrame(gameCollumThree, testItem.gameType)
+                        if (testItem.isFinishedOneGame) setCompleteFrame(gameCollumOne)
+                        else setCloseFrame(gameCollumOne)
+                        if (testItem.isFinishedTwoGame) setCompleteFrame(gameCollumTwo)
+                        else setCloseFrame(gameCollumTwo)
+                        if (testItem.isFinishedFourGame) setCompleteFrame(gameCollumFour)
+                        else setCloseFrame(gameCollumFour)
                     }
                     3 -> {
-                        if (testItem.isFinishedThreeGame) { setCompleteFrame(gameCollumThree) }
-                        else {
-                            setOpenFrame(gameCollumThree, testItem.gameTypeName)
-                            if (testItem.isFinishedOneGame) setCompleteFrame(gameCollumOne)
-                            else setCloseFrame(gameCollumOne)
-                            if (testItem.isFinishedTwoGame) setCompleteFrame(gameCollumTwo)
-                            else setCloseFrame(gameCollumTwo)
-                            if (testItem.isFinishedFourGame) setCompleteFrame(gameCollumFour)
-                            else setCloseFrame(gameCollumFour)
-                        }
-                    }
-                    4 -> {
-                        if (testItem.isFinishedFourGame) { setCompleteFrame(gameCollumFour) }
-                        else {
-                            setOpenFrame(gameCollumFour, testItem.gameTypeName)
-                            if (testItem.isFinishedOneGame) setCompleteFrame(gameCollumOne)
-                            else setCloseFrame(gameCollumOne)
-                            if (testItem.isFinishedTwoGame) setCompleteFrame(gameCollumTwo)
-                            else setCloseFrame(gameCollumTwo)
-                            if (testItem.isFinishedThreeGame) setCompleteFrame(gameCollumThree)
-                            else setCloseFrame(gameCollumThree)
-                        }
+                        if (testItem.isFinishedFourGame) setCompleteFrame(gameCollumFour)
+                        else setOpenFrame(gameCollumFour,testItem.gameType)
+                        if (testItem.isFinishedOneGame) setCompleteFrame(gameCollumOne)
+                        else setCloseFrame(gameCollumOne)
+                        if (testItem.isFinishedTwoGame) setCompleteFrame(gameCollumTwo)
+                        else setCloseFrame(gameCollumTwo)
+                        if (testItem.isFinishedThreeGame) setCompleteFrame(gameCollumThree)
+                        else setCloseFrame(gameCollumThree)
                     }
                 }
             }
@@ -100,10 +90,10 @@ class PartyCardAdapter(
             view.setBackgroundResource(R.drawable.frame_complete)
             view.setOnClickListener {  }
         }
-        private fun setOpenFrame(view: MaterialTextView, gameTypeName: String) {
+        private fun setOpenFrame(view: MaterialTextView, gameType: GameType) {
             view.setBackgroundResource(R.drawable.frame_open)
             view.text = EMPTY_STRING
-            view.setOnClickListener { onClick.invoke(gameTypeName) }
+            view.setOnClickListener { onClick.invoke(gameType) }
         }
         private fun setCloseFrame(view: MaterialTextView) {
             view.setBackgroundResource(R.drawable.frame_close)

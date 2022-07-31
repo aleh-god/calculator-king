@@ -9,7 +9,7 @@ class GetContractorPlayerByPartyIdUseCase @Inject constructor(
     private val partyRepository: PartyRepository,
     private val stringHelper: StringHelper
 ) {
-
+    // TODO("Rework UseCase)
     suspend operator fun invoke(partyId: Long): String {
         val playerName = partyRepository.getContractorPlayerByPartyId(partyId)
         return buildString {

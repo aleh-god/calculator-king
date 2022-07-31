@@ -5,7 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".presentation.partypresentation.partieslist.PartiesListFragment">
+    tools:context=".presentation.partypresentation.partieslist.PartiesListFragment"
+    >
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv"
@@ -28,6 +29,7 @@
         android:layout_margin="16dp"
         android:contentDescription="@string/fab_content_desc"
         app:srcCompat="@drawable/ic_plus_24"
+        style="@style/Widget.MaterialComponents.FloatingActionButton"
         />
 
     <ProgressBar
