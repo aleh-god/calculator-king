@@ -1,9 +1,6 @@
 package by.godevelopment.kingcalculator.data.database
 
-import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
-import androidx.room.Query
+import androidx.room.*
 import by.godevelopment.kingcalculator.data.entities.GameNote
 import kotlinx.coroutines.flow.Flow
 
@@ -11,7 +8,10 @@ import kotlinx.coroutines.flow.Flow
 interface GamesDao {
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    suspend fun insertPartyNote(partyNote: GameNote): Long
+    suspend fun insertPartyNote(gameNote: GameNote): Long
+
+    @Update
+    suspend fun updatePartyNote(gameNote: GameNote): Int
 
     @Query("SELECT * FROM games ORDER BY id DESC")
     fun getAllGameNotes(): Flow<List<GameNote>>
