@@ -1,25 +1,10 @@
 package by.godevelopment.kingcalculator.data.datasource
 
-import android.content.Context
-import androidx.annotation.ColorRes
-import androidx.annotation.DrawableRes
-import androidx.room.PrimaryKey
+import by.godevelopment.kingcalculator.commons.DELETED_STRING_VALUE
+import by.godevelopment.kingcalculator.data.entities.GameNote
 import by.godevelopment.kingcalculator.data.entities.PlayerProfile
-import by.godevelopment.kingcalculator.domain.commons.models.King
-import by.godevelopment.kingcalculator.domain.commons.models.TakeTricks
-import by.godevelopment.kingcalculator.domain.commons.models.TakeBoys
-import by.godevelopment.kingcalculator.domain.commons.models.TakeGirls
-import by.godevelopment.kingcalculator.domain.commons.models.TakeHearts
-import by.godevelopment.kingcalculator.domain.commons.models.TakeKing
-import by.godevelopment.kingcalculator.domain.commons.models.TakeLastTwo
-import by.godevelopment.kingcalculator.domain.commons.models.TakeBFG
-import by.godevelopment.kingcalculator.domain.commons.models.DoNotTakeTricks
-import by.godevelopment.kingcalculator.domain.commons.models.DoNotTakeBoys
-import by.godevelopment.kingcalculator.domain.commons.models.DoNotTakeGirls
-import by.godevelopment.kingcalculator.domain.commons.models.DoNotTakeHearts
-import by.godevelopment.kingcalculator.domain.commons.models.DoNotTakeKing
-import by.godevelopment.kingcalculator.domain.commons.models.DoNotTakeLastTwo
-import by.godevelopment.kingcalculator.domain.commons.models.DoNotTakeBFG
+import by.godevelopment.kingcalculator.domain.commons.models.*
+import java.util.*
 
 object KingDataTest {
 
@@ -44,6 +29,13 @@ object KingDataTest {
     val player_raph_name: String = "Raphael"
     val player_don_name: String = "Donatello"
     val player_mich_name: String = "Michelangelo"
+
+    val nullPlayerProfile = PlayerProfile(
+        name = DELETED_STRING_VALUE,
+        email = DELETED_STRING_VALUE,
+        avatar = 0,
+        color = 0
+    )
 
     val playerLeoProfile = PlayerProfile(
         id = 1,
@@ -77,7 +69,91 @@ object KingDataTest {
         avatar = 0
     )
 
-    fun getTypeNames(context: Context): List<String> = gameTypes.map {
-        it.getDescription(context)
+    val players = listOf<PlayerProfile>(
+        playerLeoProfile,
+        playerRaphProfile,
+        playerDonProfile,
+        playerMichProfile
+    )
+
+    private fun getRandomCalendar() = Calendar.getInstance().apply {
+        val randomValue = Random().nextInt(12)
+        set(
+            2021,
+            randomValue,
+            randomValue,
+            randomValue,
+            randomValue,
+            randomValue,
+        )
     }
+
+    val games  = listOf<GameNote>(
+        GameNote(
+            id = 0,
+            partyId = 1,
+            gameType = GameType.TakeTricks,
+            finishedAt = getRandomCalendar().timeInMillis
+        ),
+        GameNote(
+            id = 1,
+            partyId = 1,
+            gameType = GameType.TakeTricks,
+            finishedAt = getRandomCalendar().timeInMillis
+        ),
+        GameNote(
+            id = 2,
+            partyId = 1,
+            gameType = GameType.TakeTricks,
+            finishedAt = getRandomCalendar().timeInMillis
+        ),
+        GameNote(
+            id = 3,
+            partyId = 1,
+            gameType = GameType.TakeTricks,
+            finishedAt = getRandomCalendar().timeInMillis
+        ),
+        GameNote(
+            id = 4,
+            partyId = 1,
+            gameType = GameType.TakeBoys,
+            finishedAt = getRandomCalendar().timeInMillis
+        ),
+        GameNote(
+            id = 5,
+            partyId = 1,
+            gameType = GameType.TakeBoys,
+            finishedAt = getRandomCalendar().timeInMillis
+        ),
+        GameNote(
+            id = 6,
+            partyId = 1,
+            gameType = GameType.TakeGirls,
+            finishedAt = getRandomCalendar().timeInMillis
+        ),
+        GameNote(
+            id = 7,
+            partyId = 1,
+            gameType = GameType.TakeHearts,
+            finishedAt = getRandomCalendar().timeInMillis
+        ),
+        GameNote(
+            id = 8,
+            partyId = 1,
+            gameType = GameType.TakeHearts,
+            finishedAt = getRandomCalendar().timeInMillis
+        ),
+        GameNote(
+            id = 9,
+            partyId = 1,
+            gameType = GameType.TakeHearts,
+            finishedAt = getRandomCalendar().timeInMillis
+        ),
+        GameNote(
+            id = 10,
+            partyId = 1,
+            gameType = GameType.TakeKing,
+            finishedAt = getRandomCalendar().timeInMillis
+        )
+    )
 }
