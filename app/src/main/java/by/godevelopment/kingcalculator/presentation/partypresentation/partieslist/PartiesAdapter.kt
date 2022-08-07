@@ -35,14 +35,16 @@ class PartiesAdapter(
             binding.apply {
                 partyName.text = itemPartyModel.partyName
                 partyGamesCount.text = itemPartyModel.partyGamesCount
-                playerOneName.text = itemPartyModel.player_one_name
+                playerOneName.text = itemPartyModel.player_one.name
                 playerOneScore.text = itemPartyModel.player_one_score
-                playerTwoName.text = itemPartyModel.player_two_name
+                playerTwoName.text = itemPartyModel.player_two.name
                 playerTwoScore.text = itemPartyModel.player_two_score
-                playerThreeName.text = itemPartyModel.player_three_name
+                playerThreeName.text = itemPartyModel.player_three.name
                 playerThreeScore.text = itemPartyModel.player_three_score
-                playerFourName.text = itemPartyModel.player_four_name
+                playerFourName.text = itemPartyModel.player_four.name
                 playerFourScore.text = itemPartyModel.player_four_score
+                partyStartTime.text = itemPartyModel.partyStartDate
+                partyEndTime.text = itemPartyModel.partyLastDate
                 root.setOnClickListener {
                     onClick.invoke(itemPartyModel.id)
                 }

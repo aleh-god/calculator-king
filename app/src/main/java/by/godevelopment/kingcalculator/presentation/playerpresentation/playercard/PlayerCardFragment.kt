@@ -66,7 +66,7 @@ class PlayerCardFragment : Fragment() {
                         showProgress(uiState.showsProgress)
                         playerNameEdit.text.apply {
                             if(this.isNullOrEmpty())
-                                playerNameEdit.setText(uiState.playerCardModel.name)
+                                playerNameEdit.setText(uiState.playerModel.name)
                         }
                         playerName.error =
                             if (uiState.playerNameError != null) getString(uiState.playerNameError)

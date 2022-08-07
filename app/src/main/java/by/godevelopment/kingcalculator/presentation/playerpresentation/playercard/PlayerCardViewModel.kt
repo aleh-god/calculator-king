@@ -7,7 +7,7 @@ import androidx.lifecycle.viewModelScope
 import by.godevelopment.kingcalculator.R
 import by.godevelopment.kingcalculator.commons.TAG
 import by.godevelopment.kingcalculator.di.IoDispatcher
-import by.godevelopment.kingcalculator.domain.playersdomain.models.PlayerCardModel
+import by.godevelopment.kingcalculator.domain.playersdomain.models.PlayerModel
 import by.godevelopment.kingcalculator.domain.playersdomain.repositories.PlayerRepository
 import by.godevelopment.kingcalculator.domain.playersdomain.usecases.ValidatePlayerNameUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -28,7 +28,7 @@ class PlayerCardViewModel @Inject constructor(
 
     private val _uiState: MutableStateFlow<CardUiState> = MutableStateFlow(
         CardUiState(
-        PlayerCardModel(
+        PlayerModel(
          name = "",
          email = ""
         )
@@ -53,7 +53,7 @@ class PlayerCardViewModel @Inject constructor(
                 _uiState.update { it.copy(showsProgress = true) }
                 val response = playerRepository.getPlayerById(idPlayer)
                 if (response != null) {
-                    _uiState.update { it.copy(playerCardModel = response) }
+                    _uiState.update { it.copy(playerModel = response) }
                 } else {
                     _uiEvent.send(UiEvent.ShowSnackbar(R.string.message_error_player_id))
                 }
@@ -71,14 +71,14 @@ class PlayerCardViewModel @Inject constructor(
                     .execute(event.playerName)
                 _uiState.update { state ->
                     state.copy(
-                        playerCardModel = state.playerCardModel.copy(name = event.playerName),
+                        playerModel = state.playerModel.copy(name = event.playerName),
                         playerNameError = playerNameResult.errorMessage
                     )
                 }
             }
             is CardUserEvent.PressSaveButton -> {
                 val playerNameResult =
-                    validatePlayerNameUseCase.execute(_uiState.value.playerCardModel.name)
+                    validatePlayerNameUseCase.execute(_uiState.value.playerModel.name)
                 if(playerNameResult.successful) {
                     updatePlayerDataToRepository()
                 } else {
@@ -97,7 +97,7 @@ class PlayerCardViewModel @Inject constructor(
         suspendJob?.cancel()
         suspendJob = viewModelScope.launch(ioDispatcher) {
             _uiState.update { it.copy(showsProgress = true) }
-            val result = playerRepository.deletePlayerById(uiState.value.playerCardModel)
+            val result = playerRepository.deletePlayerById(uiState.value.playerModel)
             if (result) {
                 _uiEvent.send(UiEvent.NavigateToList)
             } else {
@@ -111,7 +111,7 @@ class PlayerCardViewModel @Inject constructor(
         suspendJob?.cancel()
         suspendJob = viewModelScope.launch(ioDispatcher) {
             _uiState.update { it.copy(showsProgress = true) }
-            val result = playerRepository.updatePlayerById(uiState.value.playerCardModel)
+            val result = playerRepository.updatePlayerById(uiState.value.playerModel)
             if (result) {
                 _uiEvent.send(UiEvent.NavigateToList)
             } else {
