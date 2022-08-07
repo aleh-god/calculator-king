@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import by.godevelopment.kingcalculator.R
 import by.godevelopment.kingcalculator.di.IoDispatcher
-import by.godevelopment.kingcalculator.domain.playersdomain.models.PlayerCardModel
+import by.godevelopment.kingcalculator.domain.playersdomain.models.PlayerModel
 import by.godevelopment.kingcalculator.domain.playersdomain.repositories.PlayerRepository
 import by.godevelopment.kingcalculator.domain.playersdomain.usecases.ValidateEmailUseCase
 import by.godevelopment.kingcalculator.domain.playersdomain.usecases.ValidatePlayerNameUseCase
@@ -77,7 +77,7 @@ class PlayerAddFormViewModel @Inject constructor(
         suspendJob = viewModelScope.launch(ioDispatcher) {
             _uiState.update { it.copy(showsProgress = true) }
             val result = playerRepository.saveNewPlayer(
-                PlayerCardModel(
+                PlayerModel(
                 name = uiState.value.playerName,
                 email = uiState.value.email
             )
