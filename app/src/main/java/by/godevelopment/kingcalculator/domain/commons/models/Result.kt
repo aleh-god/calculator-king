@@ -10,7 +10,12 @@ sealed interface ResultDataBase<T> {
     data class Error<T>(@StringRes val message: Int) : ResultDataBase<T>
 }
 
-suspend fun <T, K> wrapResultBy(key: K, block: suspend (K) -> T?): ResultDataBase<T> {
+suspend fun <T, K> wrapResultBy(
+    key: K,
+    @StringRes
+    message: Int = R.string.message_error_bad_database,
+    block: suspend (K) -> T?
+): ResultDataBase<T> {
     return try {
         val result = block.invoke(key)
         if (result != null) ResultDataBase.Success<T>(value = result)
@@ -18,7 +23,7 @@ suspend fun <T, K> wrapResultBy(key: K, block: suspend (K) -> T?): ResultDataBas
     }
     catch (e: Exception) {
         Log.i(TAG, "wrapResultBy: ${e.message}")
-        ResultDataBase.Error<T>(message = R.string.message_error_bad_database)
+        ResultDataBase.Error<T>(message = message)
     }
 }
 
