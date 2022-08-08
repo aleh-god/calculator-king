@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import by.godevelopment.kingcalculator.R
 import by.godevelopment.kingcalculator.commons.TAG
 import by.godevelopment.kingcalculator.di.IoDispatcher
+import by.godevelopment.kingcalculator.domain.commons.models.ResultDataBase
 import by.godevelopment.kingcalculator.domain.playersdomain.models.PlayerModel
 import by.godevelopment.kingcalculator.domain.playersdomain.repositories.PlayerRepository
 import by.godevelopment.kingcalculator.domain.playersdomain.usecases.ValidatePlayerNameUseCase
@@ -98,10 +99,9 @@ class PlayerCardViewModel @Inject constructor(
         suspendJob = viewModelScope.launch(ioDispatcher) {
             _uiState.update { it.copy(showsProgress = true) }
             val result = playerRepository.deletePlayerById(uiState.value.playerModel)
-            if (result) {
-                _uiEvent.send(UiEvent.NavigateToList)
-            } else {
-                _uiEvent.send(UiEvent.ShowSnackbar(R.string.message_error_data_delete))
+            when (result) {
+                is ResultDataBase.Error -> _uiEvent.send(UiEvent.ShowSnackbar(result.message))
+                is ResultDataBase.Success -> _uiEvent.send(UiEvent.NavigateToList)
             }
             _uiState.update { it.copy(showsProgress = false) }
         }
@@ -112,10 +112,9 @@ class PlayerCardViewModel @Inject constructor(
         suspendJob = viewModelScope.launch(ioDispatcher) {
             _uiState.update { it.copy(showsProgress = true) }
             val result = playerRepository.updatePlayerById(uiState.value.playerModel)
-            if (result) {
-                _uiEvent.send(UiEvent.NavigateToList)
-            } else {
-                _uiEvent.send(UiEvent.ShowSnackbar(R.string.message_error_data_save))
+            when (result) {
+                is ResultDataBase.Error -> _uiEvent.send(UiEvent.ShowSnackbar(result.message))
+                is ResultDataBase.Success -> _uiEvent.send(UiEvent.NavigateToList)
             }
             _uiState.update { it.copy(showsProgress = false) }
         }

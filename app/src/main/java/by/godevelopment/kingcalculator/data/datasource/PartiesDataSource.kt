@@ -8,6 +8,7 @@ import by.godevelopment.kingcalculator.data.database.PlayersDao
 import by.godevelopment.kingcalculator.data.entities.PartyNote
 import by.godevelopment.kingcalculator.data.entities.PlayerProfile
 import by.godevelopment.kingcalculator.domain.commons.models.ResultDataBase
+import by.godevelopment.kingcalculator.domain.commons.models.wrapResultBy
 import by.godevelopment.kingcalculator.domain.gamesdomain.models.Players
 import kotlinx.coroutines.flow.Flow
 import java.util.*
@@ -45,8 +46,8 @@ class PartiesDataSource @Inject constructor(
         else ResultDataBase.Error(message = R.string.message_error_bad_database)
     }
 
-    suspend fun insertPartyNote(party: PartyNote): Long {
-        return partiesDao.insertPartyNote(party)
+    suspend fun createPartyNote(party: PartyNote): ResultDataBase<Long> {
+        return wrapResultBy(party) { partiesDao.insertPartyNote(it) }
     }
 
     suspend fun updateTimeInPartyNoteByPartyId(partyId: Long): ResultDataBase<Int> {

@@ -2,11 +2,14 @@ package by.godevelopment.kingcalculator.data.repositories
 
 import android.util.Log
 import by.godevelopment.kingcalculator.commons.TAG
-import by.godevelopment.kingcalculator.data.datasource.*
+import by.godevelopment.kingcalculator.data.datasource.GamesDataSource
+import by.godevelopment.kingcalculator.data.datasource.PartiesDataSource
+import by.godevelopment.kingcalculator.data.datasource.TricksDataSource
 import by.godevelopment.kingcalculator.data.entities.GameNote
 import by.godevelopment.kingcalculator.data.entities.PlayerProfile
 import by.godevelopment.kingcalculator.domain.commons.models.GameType
 import by.godevelopment.kingcalculator.domain.commons.models.ResultDataBase
+import by.godevelopment.kingcalculator.domain.commons.models.mapResult
 import by.godevelopment.kingcalculator.domain.gamesdomain.models.Players
 import by.godevelopment.kingcalculator.domain.gamesdomain.models.TricksNoteModel
 import by.godevelopment.kingcalculator.domain.gamesdomain.repositories.GameRepository
@@ -44,14 +47,21 @@ class GameRepositoryImpl @Inject constructor(
         return gamesDataSource.getGameNoteById(gameId)
     }
 
-    override suspend fun updatePartyStateByGameId(gameId: Long): ResultDataBase<Int>  {
-        gamesDataSource.updateTimeInGameNoteByGameId(gameId)
-        val partyId = gamesDataSource.getPartyIdByGameId(gameId)
-        return when(partyId) {
-            is ResultDataBase.Error -> { ResultDataBase.Error(message = partyId.message) }
+    private suspend fun updateTimeInPartyNoteByPartyId(gameId: Long): ResultDataBase<Int> {
+        val partyIdResult = gamesDataSource.getPartyIdByGameId(gameId)
+        return when (partyIdResult) {
+            is ResultDataBase.Error -> ResultDataBase.Error(message = partyIdResult.message)
+            is ResultDataBase.Success -> { updateTimeInPartyNoteByPartyId(partyIdResult.value) }
+        }
+    }
+
+    override suspend fun updatePartyStateByGameId(gameId: Long): ResultDataBase<Int> {
+        val updateResult = gamesDataSource.updateTimeInGameNoteByGameId(gameId)
+        return when (updateResult) {
+            is ResultDataBase.Error -> ResultDataBase.Error(message = updateResult.message)
             is ResultDataBase.Success -> {
-                Log.i(TAG, "updatePartyStateByGameId: ResultDataBase.Success gameId = $gameId partyId.value = ${partyId.value}")
-                partiesDataSource.updateTimeInPartyNoteByPartyId(partyId.value)
+                Log.i(TAG, "updatePartyStateByGameId: ResultDataBase.Success gameId = $gameId updateResult.value = ${updateResult.value}")
+                updateTimeInPartyNoteByPartyId(gameId)
             }
         }
     }

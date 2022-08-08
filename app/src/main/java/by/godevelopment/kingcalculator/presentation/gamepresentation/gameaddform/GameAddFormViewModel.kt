@@ -21,7 +21,6 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
-import java.lang.IllegalStateException
 import javax.inject.Inject
 
 @HiltViewModel
@@ -54,9 +53,20 @@ class GameAddFormViewModel @Inject constructor(
         fetchJob = viewModelScope.launch(ioDispatcher) {
             try {
                 _uiState.update { it.copy(isFetchingData = true) }
-                val list = getMultiItemModels(gameId = gameId ?: throw NullPointerException())
-                Log.i(TAG, "GameAddFormViewModel.fetchDataModel: $gameId = $list")
-                _uiState.update { it.copy(listMultiItems = list) }
+                val listResult = getMultiItemModels(gameId = gameId ?: throw NullPointerException())
+                when(listResult) {
+                    is ResultDataBase.Error -> {
+                        _uiEvent.send(
+                            GameAddFormUiEvent.ShowMessageUiEvent(
+                                message = listResult.message,
+                                onAction = { }
+                            ))
+                    }
+                    is ResultDataBase.Success -> {
+                        Log.i(TAG, "GameAddFormViewModel.fetchDataModel: ResultDataBase.Success")
+                        _uiState.update { it.copy(listMultiItems = listResult.value) }
+                    }
+                }
             }
             catch (e: Exception) {
                 Log.i(TAG, "fetchDataModel.catch: ${e.message}")
@@ -163,22 +173,40 @@ class GameAddFormViewModel @Inject constructor(
     fun saveGameData() {
         viewModelScope.launch(ioDispatcher) {
             _uiState.update { it.copy(isFetchingData = true) }
-            val result = validatePlayersScoreUseCase.invoke(_uiState.value.listMultiItems)
+            val result = validatePlayersScoreUseCase(_uiState.value.listMultiItems)
             Log.i(TAG, "saveGameData: result = $result")
             if (result.successful) {
                 try {
-                    saveGameUseCase(
+                    val isSaved = saveGameUseCase(
                         gameId = gameId ?: throw NullPointerException(),
                         items = _uiState.value.listMultiItems
                     )
-                    when(val idResult = getPartyIdByGameIdUseCase(gameId)) {
+                    when (isSaved) {
                         is ResultDataBase.Error -> {
-                            throw IllegalStateException() // TODO("change exc to error")
+                            _uiEvent.send(
+                                GameAddFormUiEvent.ShowMessageUiEvent(
+                                    message = R.string.message_error_data_save,
+                                    onAction = { }
+                                ))
                         }
                         is ResultDataBase.Success -> {
-                            _uiEvent.send(
-                                GameAddFormUiEvent.NavigateToPartyCardUiEvent(idResult.value)
-                            )
+                            val partyIdResult = getPartyIdByGameIdUseCase(gameId)
+                            when(partyIdResult) {
+                                is ResultDataBase.Error -> {
+                                    _uiEvent.send(
+                                        GameAddFormUiEvent.ShowMessageUiEvent(
+                                            message = partyIdResult.message,
+                                            onAction = { }
+                                        ))
+                                }
+                                is ResultDataBase.Success -> {
+                                    _uiEvent.send(
+                                        GameAddFormUiEvent.NavigateToPartyCardUiEvent(
+                                            partyIdResult.value
+                                        )
+                                    )
+                                }
+                            }
                         }
                     }
                 }

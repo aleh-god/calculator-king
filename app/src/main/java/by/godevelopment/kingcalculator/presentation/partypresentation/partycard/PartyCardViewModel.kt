@@ -85,22 +85,53 @@ class PartyCardViewModel @Inject constructor(
     }
 
     private suspend fun fetchGamesList(partyId: Long) {
-        getGamesByPartyIdUseCase(partyId).collect { list ->
-            _uiState.update {
-                it.copy(
-                    isFetchingData = false,
-                    dataList = list
-                )
+        val result = getGamesByPartyIdUseCase(partyId)
+        when(result) {
+            is ResultDataBase.Error -> {
+                _uiEvent.send(PartyCardUiEvent.ShowMessage(
+                    message = result.message,
+                    onAction = { }
+                ))
+            }
+            is ResultDataBase.Success -> {
+                _uiState.update {
+                    it.copy(
+                        isFetchingData = false,
+                        dataList = result.value
+                    )
+                }
             }
         }
     }
 
     private suspend fun fetchPlayers(partyId: Long) {
-        _uiState.update { it.copy(playersInPartyModel = getPlayersByPartyIdUseCase(partyId)) }
+        val result = getPlayersByPartyIdUseCase(partyId)
+        when(result) {
+            is ResultDataBase.Error -> {
+                _uiEvent.send(PartyCardUiEvent.ShowMessage(
+                    message = result.message,
+                    onAction = { }
+                ))
+            }
+            is ResultDataBase.Success -> {
+                _uiState.update { it.copy(playersInPartyModel = result.value) }
+            }
+        }
     }
 
     private suspend fun fetchContractorPlayer(partyId: Long) {
-        _uiState.update { it.copy(contractorPlayer = getContractorPlayerByPartyIdUseCase(partyId)) }
+        val result = getContractorPlayerByPartyIdUseCase(partyId)
+        when(result) {
+            is ResultDataBase.Error -> {
+                _uiEvent.send(PartyCardUiEvent.ShowMessage(
+                    message = result.message,
+                    onAction = { }
+                ))
+            }
+            is ResultDataBase.Success -> {
+                _uiState.update { it.copy(contractorPlayer =result.value) }
+            }
+        }
     }
 
     private fun reloadDataModel() {
