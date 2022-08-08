@@ -1,6 +1,7 @@
 package by.godevelopment.kingcalculator.data.datasource
 
 import android.util.Log
+import by.godevelopment.kingcalculator.R
 import by.godevelopment.kingcalculator.commons.ROWS_NOT_INSERTED
 import by.godevelopment.kingcalculator.commons.ROWS_NOT_UPDATED
 import by.godevelopment.kingcalculator.commons.TAG
@@ -34,22 +35,37 @@ class PlayersDataSource @Inject constructor(
         return wrapResultBy(playerId) { playersDao.getPlayerProfileById(it)?.toPlayerModel() }
     }
 
-    suspend fun saveNewPlayer(params: PlayerModel): Boolean {
-        val result = playersDao.insertPlayerProfile(params.toPlayerProfile())
-        Log.i(TAG, "PlayerDataSource saveNewPlayer: $params -> $result")
-        return result != ROWS_NOT_INSERTED
+    suspend fun createPlayer(params: PlayerModel): ResultDataBase<Long> {
+        return try {
+            val result = playersDao.insertPlayerProfile(params.toPlayerProfile())
+            if (result != ROWS_NOT_INSERTED) { ResultDataBase.Success(value = result) }
+            else ResultDataBase.Error(message = R.string.message_error_data_save)
+        } catch (e: Exception) {
+            Log.i(TAG, "createPlayer: catch ${e.message}")
+            ResultDataBase.Error(message = R.string.message_error_data_save)
+        }
     }
 
-    suspend fun updatePlayerById(params: PlayerModel): Boolean {
-        val result = playersDao.updatePlayerProfile(params.toPlayerProfile())
-        Log.i(TAG, "PlayerDataSource updatePlayerId: $params -> $result")
-        return result != ROWS_NOT_UPDATED
+    suspend fun updatePlayerById(params: PlayerModel): ResultDataBase<Int> {
+        return try {
+            val result = playersDao.updatePlayerProfile(params.toPlayerProfile())
+            if (result != ROWS_NOT_UPDATED) { ResultDataBase.Success(value = result) }
+            else ResultDataBase.Error(message = R.string.message_error_data_save)
+        } catch (e: Exception) {
+            Log.i(TAG, "updatePlayerById: catch ${e.message}")
+            ResultDataBase.Error(message = R.string.message_error_data_save)
+        }
     }
 
-    suspend fun deletePlayerById(params: PlayerModel): Boolean {
-        val result = playersDao.deletePlayerProfile(params.toPlayerProfile())
-        Log.i(TAG, "PlayerDataSource deletePlayerById: $params -> $result")
-        return result != ROWS_NOT_UPDATED
+    suspend fun deletePlayerById(params: PlayerModel): ResultDataBase<Int> {
+        return try {
+            val result = playersDao.deletePlayerProfile(params.toPlayerProfile())
+            if (result != ROWS_NOT_UPDATED) { ResultDataBase.Success(value = result) }
+            else ResultDataBase.Error(message = R.string.message_error_data_save)
+        } catch (e: Exception) {
+            Log.i(TAG, "deletePlayerById: catch ${e.message}")
+            ResultDataBase.Error(message = R.string.message_error_data_save)
+        }
     }
 
     suspend fun getAllPlayersIdToNames(): Map<String, Long> {

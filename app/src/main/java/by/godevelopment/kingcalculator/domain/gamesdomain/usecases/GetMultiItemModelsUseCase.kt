@@ -8,7 +8,6 @@ import by.godevelopment.kingcalculator.commons.TAG
 import by.godevelopment.kingcalculator.domain.commons.models.GameType
 import by.godevelopment.kingcalculator.domain.commons.models.ResultDataBase
 import by.godevelopment.kingcalculator.domain.gamesdomain.models.MultiItemModel
-import java.lang.IllegalStateException
 import javax.inject.Inject
 
 class GetMultiItemModelsUseCase @Inject constructor(
@@ -16,27 +15,28 @@ class GetMultiItemModelsUseCase @Inject constructor(
     private val getPartyIdByGameIdUseCase: GetPartyIdByGameIdUseCase,
     private val getGameNoteByIdUseCase: GetGameNoteByIdUseCase
 ) {
-    suspend operator fun invoke(gameId: Long): List<MultiItemModel> {
+    suspend operator fun invoke(gameId: Long): ResultDataBase<List<MultiItemModel>> {
         Log.i(TAG, "GetMultiItemModelsUseCase gameId: $gameId")
-        when(val partyId = getPartyIdByGameIdUseCase(gameId)) {
-            is ResultDataBase.Error -> {
-                // TODO("change Exception to ResultDataBase.Error")
-                throw IllegalStateException()
-            }
+        return when(val partyId = getPartyIdByGameIdUseCase(gameId)) {
+            is ResultDataBase.Error -> { ResultDataBase.Error(message = partyId.message) }
             is ResultDataBase.Success -> {
-                when (val playersResult = getPlayersByPartyIdUseCase(partyId.value)) {
-                    is ResultDataBase.Error -> { throw IllegalStateException() }
+                val playersResult = getPlayersByPartyIdUseCase(partyId.value)
+                when (playersResult) {
+                    is ResultDataBase.Error -> { ResultDataBase.Error(message = playersResult.message) }
                     is ResultDataBase.Success -> {
 
                         val players = playersResult.value
-                            .playersMap
                             .toList()
                             .sortedBy { it.first.id }
 
-                        when(val gameNoteResult = getGameNoteByIdUseCase(gameId)) {
-                            is ResultDataBase.Error -> { throw IllegalStateException() }
+                        val gameNoteResult = getGameNoteByIdUseCase(gameId)
+                        when(gameNoteResult) {
+                            is ResultDataBase.Error -> { ResultDataBase.Error(message = gameNoteResult.message) }
                             is ResultDataBase.Success -> {
-                                return when(val gameType = gameNoteResult.value.gameType) {
+
+                                val gameType = gameNoteResult.value.gameType
+                                val multiItems = when(gameType) {
+
                                     GameType.TakeBFG -> {
                                         var countId = 0
                                         val listItems = mutableListOf<MultiItemModel>()
@@ -150,6 +150,7 @@ class GetMultiItemModelsUseCase @Inject constructor(
                                         listItems
                                     }
                                 }
+                                ResultDataBase.Success(value = multiItems)
                             }
                         }
                     }

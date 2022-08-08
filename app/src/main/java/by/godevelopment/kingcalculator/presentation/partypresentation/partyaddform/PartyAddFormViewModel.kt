@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import by.godevelopment.kingcalculator.R
 import by.godevelopment.kingcalculator.data.entities.PartyNote
 import by.godevelopment.kingcalculator.di.IoDispatcher
+import by.godevelopment.kingcalculator.domain.commons.models.ResultDataBase
 import by.godevelopment.kingcalculator.domain.commons.models.ValidationResult
 import by.godevelopment.kingcalculator.domain.partiesdomain.repositories.PartyRepository
 import by.godevelopment.kingcalculator.domain.partiesdomain.usecases.ValidatePartyNameUseCase
@@ -77,30 +78,30 @@ class PartyAddFormViewModel @Inject constructor(
         suspendJob = viewModelScope.launch(ioDispatcher) {
             _uiState.update { it.copy(showsProgress = true) }
             if(checkInputFieldsUiState()) {
-                try {
-                    val newParty = uiState.value.let {
-                        PartyNote(
-                            partyName = it.partyName,
-                            startedAt = System.currentTimeMillis(),
-                            playerOneId = it.players[it.playerOneName]!!,
-                            playerTwoId = it.players[it.playerTwoName]!!,
-                            playerThreeId = it.players[it.playerThreeName]!!,
-                            playerFourId = it.players[it.playerFourName]!!
-                        )
-                    }
-                    partyRepository.createNewPartyAndReturnId(newParty).let {
-                        if (it < 0) {
-                            _uiEvent.send(
-                                UiEvent.ShowSnackbar(R.string.message_error_data_save)
-                            )
-                        } else { _uiEvent.send(UiEvent.NavigateToList(it)) }
-                    }
-                } catch (e: Exception) {
-                    _uiEvent.send(
-                        UiEvent.ShowSnackbar(R.string.message_error_data_save)
+                val newParty = uiState.value.let {
+                    PartyNote(
+                        partyName = it.partyName,
+                        startedAt = System.currentTimeMillis(),
+                        playerOneId = it.players[it.playerOneName]!!,
+                        playerTwoId = it.players[it.playerTwoName]!!,
+                        playerThreeId = it.players[it.playerThreeName]!!,
+                        playerFourId = it.players[it.playerFourName]!!
                     )
                 }
-            } else {
+                val createResult = partyRepository.createNewPartyAndReturnId(newParty)
+                when(createResult) {
+                    is ResultDataBase.Error -> {
+                        _uiEvent.send(UiEvent.ShowSnackbar(R.string.message_error_data_save))
+                    }
+                    is ResultDataBase.Success -> {
+                        if (createResult.value < 0) {
+                            _uiEvent.send(UiEvent.ShowSnackbar(R.string.message_error_data_save))
+                        }
+                        else { _uiEvent.send(UiEvent.NavigateToList(createResult.value)) }
+                    }
+                }
+            }
+            else {
                 _uiEvent.send(
                     UiEvent.ShowSnackbar(R.string.message_error_players_info_empty)
                 )
