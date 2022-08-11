@@ -6,31 +6,31 @@ import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import by.godevelopment.kingcalculator.databinding.ItemPlayersListBinding
-import by.godevelopment.kingcalculator.domain.playersdomain.models.ItemPlayerModel
+import by.godevelopment.kingcalculator.domain.playersdomain.models.PlayerModel
 
 class PlayersAdapter(
     private val onClick: (Long) -> Unit
 ) : RecyclerView.Adapter<PlayersAdapter.ItemViewHolder>() {
 
-    private val diffCallback = object : DiffUtil.ItemCallback<ItemPlayerModel>() {
-        override fun areItemsTheSame(oldItem: ItemPlayerModel, newItem: ItemPlayerModel): Boolean {
+    private val diffCallback = object : DiffUtil.ItemCallback<PlayerModel>() {
+        override fun areItemsTheSame(oldItem: PlayerModel, newItem: PlayerModel): Boolean {
             return oldItem == newItem
         }
 
-        override fun areContentsTheSame(oldItem: ItemPlayerModel, newItem: ItemPlayerModel): Boolean {
+        override fun areContentsTheSame(oldItem: PlayerModel, newItem: PlayerModel): Boolean {
             return oldItem == newItem
         }
     }
 
     private val differ = AsyncListDiffer(this, diffCallback)
-    var itemList: List<ItemPlayerModel>
+    var itemList: List<PlayerModel>
         get() = differ.currentList
         set(value) {
             differ.submitList(value)
         }
 
     inner class ItemViewHolder(private val binding: ItemPlayersListBinding) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(itemPlayerModel: ItemPlayerModel) {
+        fun bind(itemPlayerModel: PlayerModel) {
             binding.apply {
                 playerName.text = itemPlayerModel.name
                 playerEmail.text = itemPlayerModel.email

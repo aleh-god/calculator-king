@@ -2,7 +2,6 @@ package by.godevelopment.kingcalculator.data.repositories
 
 import by.godevelopment.kingcalculator.data.datasource.PlayersDataSource
 import by.godevelopment.kingcalculator.domain.commons.models.ResultDataBase
-import by.godevelopment.kingcalculator.domain.playersdomain.models.ItemPlayerModel
 import by.godevelopment.kingcalculator.domain.playersdomain.models.PlayerModel
 import by.godevelopment.kingcalculator.domain.playersdomain.repositories.PlayerRepository
 import kotlinx.coroutines.flow.Flow
@@ -27,7 +26,7 @@ class PlayerRepositoryImpl @Inject constructor(
     override suspend fun getAllPlayersNames(): List<String> =
         playersDataSource.getAllPlayersNames()
 
-    override fun getAllPlayers(): Flow<List<ItemPlayerModel>> =
+    override fun getAllPlayers(): Flow<List<PlayerModel>> =
         playersDataSource.getAllPlayers()
 }
 

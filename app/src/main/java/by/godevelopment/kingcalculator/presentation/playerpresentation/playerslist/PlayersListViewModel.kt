@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import by.godevelopment.kingcalculator.R
 import by.godevelopment.kingcalculator.commons.TAG
-import by.godevelopment.kingcalculator.domain.playersdomain.models.ItemPlayerModel
+import by.godevelopment.kingcalculator.domain.playersdomain.models.PlayerModel
 import by.godevelopment.kingcalculator.domain.playersdomain.usecases.GetListPlayerModelUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
@@ -49,6 +49,6 @@ class PlayersListViewModel @Inject constructor(
 
     data class UiState(
         val isFetchingData: Boolean = false,
-        val dataList: List<ItemPlayerModel> = listOf()
+        val dataList: List<PlayerModel> = listOf()
     )
 }

@@ -4,10 +4,9 @@ import by.godevelopment.kingcalculator.commons.INT_NULL_VALUE
 import by.godevelopment.kingcalculator.data.entities.PlayerProfile
 import by.godevelopment.kingcalculator.data.entities.TricksNote
 import by.godevelopment.kingcalculator.domain.gamesdomain.models.TricksNoteModel
-import by.godevelopment.kingcalculator.domain.playersdomain.models.ItemPlayerModel
-import by.godevelopment.kingcalculator.domain.playersdomain.models.PlayerCardModel
+import by.godevelopment.kingcalculator.domain.playersdomain.models.PlayerModel
 
-fun PlayerCardModel.toPlayerProfile(): PlayerProfile =
+fun PlayerModel.toPlayerProfile(): PlayerProfile =
     PlayerProfile(
         id = this.id,
         email = this.email,
@@ -16,17 +15,8 @@ fun PlayerCardModel.toPlayerProfile(): PlayerProfile =
         avatar = this.avatar ?: INT_NULL_VALUE
     )
 
-fun PlayerProfile.toPlayerCardModel(): PlayerCardModel =
-    PlayerCardModel(
-        id = this.id,
-        email = this.email,
-        name = this.name,
-        avatar = this.avatar,
-        color = this.color
-    )
-
-fun PlayerProfile.toItemPlayerModel(): ItemPlayerModel =
-    ItemPlayerModel(
+fun PlayerProfile.toPlayerModel(): PlayerModel =
+    PlayerModel(
         id = this.id,
         email = this.email,
         name = this.name,
