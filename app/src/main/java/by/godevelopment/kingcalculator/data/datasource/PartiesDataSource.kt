@@ -18,6 +18,7 @@ class PartiesDataSource @Inject constructor(
     private val partiesDao: PartiesDao,
     private val playersDao: PlayersDao
 ) {
+    // TODO("Move this fun to repository")
     suspend fun getMapPlayersIdByPartyId(partyId: Long): ResultDataBase<Map<Players, PlayerProfile>> {
         partiesDao.getPartyNoteById(partyId)?.let { it ->
             val result = mapOf<Players, PlayerProfile?>(
@@ -60,4 +61,6 @@ class PartiesDataSource @Inject constructor(
         }
         return ResultDataBase.Error<Int>(message = R.string.message_error_data_save)
     }
+
+    suspend fun deleteAllPartyNotes(): Int = partiesDao.deleteAll()
 }

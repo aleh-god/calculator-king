@@ -43,6 +43,7 @@
     <string name="party_view">Party view</string>
     <string name="menu_settings">Settings</string>
     <string name="menu_players">Players list</string>
+    <string name="menu_delete_all">Delete all parties</string>
 
     <string name="descr_player_avatar">Player avatar</string>
 
@@ -78,6 +79,7 @@
     <string name="message_error_bad_database">DataBase error! Please, drop data in settings.</string>
     <string name="message_error_valid_name">Please enter a valid name</string>
     <string name="message_error_valid_email">Please enter a valid email address</string>
+    <string name="message_error_data_unknown">Error data unknown! Please, drop data in settings.</string>
     <string name="message_error_data_null">Data is unavailable</string>
     <string name="message_error_data_load">Could not load data</string>
     <string name="message_error_data_save">Could not save data</string>
@@ -91,6 +93,7 @@
     <string name="message_error_validate_player_name_length">The player name needs to consist of at least 3 characters</string>
     <string name="message_error_validate_party_name_length">The party name needs to consist of at least 3 characters</string>
     <string name="message_error_validate_email_different">Players names must be different</string>
+    <string name="message_delete_parties_result">Deleted %1$d database notes</string>
 
     <string name="message_error_game_validate_not_equal_sum">Total score is not equal to game score</string>
 
@@ -103,8 +106,10 @@
 
     <string name="ui_text_contacts">\ contracts the game</string>
 
-    <string name="alert_confirm_title">Confirm your selected game</string>
-    <string name="alert_confirm_message">Your selected game is %1s</string>
+    <string name="alert_confirm_delete_title">WARNING!</string>
+    <string name="alert_confirm_delete_message">Confirm delete all party notes</string>
+    <string name="alert_confirm_title">Confirm game type</string>
+    <string name="alert_confirm_message">Confirm selected game as %1s</string>
     <string name="input_tricks_title">Tricks count</string>
     <string name="input_tricks_message">Input new value</string>
 
@@ -115,5 +120,20 @@
     <string name="rv_body_text_tricks">Tricks: %1$d</string>
     <string name="rv_body_text_score">Score: %1$d</string>
     <string name="fragment_header">Total Game Score = %1$d</string>
+
+    <!-- Preference Titles -->
+    <string name="messages_header">Messages</string>
+    <string name="sync_header">Sync</string>
+
+    <!-- Messages Preferences -->
+    <string name="signature_title">Your signature</string>
+    <string name="reply_title">Default reply action</string>
+
+    <!-- Sync Preferences -->
+    <string name="sync_title">Sync email periodically</string>
+    <string name="attachment_title">Download incoming attachments</string>
+    <string name="attachment_summary_on">Automatically download attachments for incoming emails
+    </string>
+    <string name="attachment_summary_off">Only download attachments when manually requested</string>
 
 </resources>

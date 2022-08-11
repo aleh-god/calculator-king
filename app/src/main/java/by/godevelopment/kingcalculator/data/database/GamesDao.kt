@@ -7,6 +7,9 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface GamesDao {
 
+    @Query("DELETE FROM games")
+    suspend fun deleteAll(): Int
+
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertPartyNote(gameNote: GameNote): Long
 
@@ -15,6 +18,9 @@ interface GamesDao {
 
     @Query("SELECT * FROM games ORDER BY id DESC")
     fun getAllGameNotes(): Flow<List<GameNote>>
+
+    @Query("SELECT * from games WHERE partyId = :key")
+    fun getFlowGameNotesByPartyId(key: Long): Flow<List<GameNote>>
 
     @Query("SELECT * from games WHERE partyId = :key")
     suspend fun getGameNotesByPartyId(key: Long): List<GameNote>

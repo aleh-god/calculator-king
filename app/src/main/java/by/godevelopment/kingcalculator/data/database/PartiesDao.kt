@@ -7,6 +7,9 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface PartiesDao {
 
+    @Query("DELETE FROM parties")
+    suspend fun deleteAll(): Int
+
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertPartyNote(partyNote: PartyNote): Long
 
