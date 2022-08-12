@@ -15,14 +15,6 @@ class GamesDataSource @Inject constructor(
     private val gamesDao: GamesDao
 ) {
 
-    suspend fun calculateGamesCountByPartyIdRaw(partyId: Long): Int {
-        Log.i(TAG, "calculateGamesCountByPartyIdRaw: partyId = $partyId")
-        return gamesDao.getGameNotesByPartyId(partyId).size
-    }
-
-    suspend fun getGameNotesByPartyIdRaw(partyId: Long) =
-        gamesDao.getGameNotesByPartyId(partyId)
-
     suspend fun getPartyIdByGameId(gameId: Long): ResultDataBase<Long> {
         return wrapResultBy(gameId) { gamesDao.getGameNoteById(it)?.partyId }
     }
@@ -34,24 +26,16 @@ class GamesDataSource @Inject constructor(
     suspend fun createGameNote(gameType: GameType, partyId: Long): ResultDataBase<Long> {
         val gameId = gamesDao.insertPartyNote(
             GameNote(
-            partyId = partyId,
-            gameType = gameType)
+                partyId = partyId,
+                gameType = gameType)
         )
         return if (gameId != -1L) { ResultDataBase.Success(value = gameId) }
         else ResultDataBase.Error(message = R.string.message_error_bad_database)
     }
 
-    suspend fun calculateGamesCountByPartyId(partyId: Long): ResultDataBase<Int> {
-        return wrapResultBy(partyId) { gamesDao.getGameNotesByPartyId(it).size }
-    }
-
-    suspend fun getGameNotesByPartyId(partyId: Long): ResultDataBase<List<GameNote>> {
-        return wrapResultBy(partyId) { gamesDao.getGameNotesByPartyId(it) }
-    }
-
-    suspend fun getLastGameByPartyIdRaw(partyId: Long): GameNote? {
-        Log.i(TAG, "getLastGameByPartyIdRaw: partyId = $partyId")
-        return gamesDao.getGameNotesByPartyId(partyId).maxByOrNull { it.finishedAt }
+    suspend fun calculateGamesCountByPartyIdRaw(partyId: Long): Int {
+        Log.i(TAG, "calculateGamesCountByPartyIdRaw: partyId = $partyId")
+        return gamesDao.getGameNotesByPartyId(partyId).size
     }
 
     suspend fun updateTimeInGameNoteByGameId(gameId: Long): ResultDataBase<Int> {
@@ -65,4 +49,22 @@ class GamesDataSource @Inject constructor(
     }
 
     suspend fun deleteAllGameNotes() = gamesDao.deleteAll()
+
+    // PartyRepositoryImpl
+
+    suspend fun getGameNotesByPartyIdRaw(partyId: Long) =
+        gamesDao.getGameNotesByPartyId(partyId)
+
+    suspend fun calculateGamesCountByPartyId(partyId: Long): ResultDataBase<Int> {
+        return wrapResultBy(partyId) { gamesDao.getGameNotesByPartyId(it).size }
+    }
+
+    suspend fun getGameNotesByPartyId(partyId: Long): ResultDataBase<List<GameNote>> {
+        return wrapResultBy(partyId) { gamesDao.getGameNotesByPartyId(it) }
+    }
+
+    suspend fun getLastGameByPartyIdRaw(partyId: Long): GameNote? {
+        Log.i(TAG, "getLastGameByPartyIdRaw: partyId = $partyId")
+        return gamesDao.getGameNotesByPartyId(partyId).maxByOrNull { it.finishedAt }
+    }
 }

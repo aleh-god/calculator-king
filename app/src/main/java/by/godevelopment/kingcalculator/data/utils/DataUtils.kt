@@ -1,8 +1,10 @@
 package by.godevelopment.kingcalculator.data.utils
 
 import by.godevelopment.kingcalculator.commons.INT_NULL_VALUE
+import by.godevelopment.kingcalculator.data.entities.GameNote
 import by.godevelopment.kingcalculator.data.entities.PlayerProfile
 import by.godevelopment.kingcalculator.data.entities.TricksNote
+import by.godevelopment.kingcalculator.domain.gamesdomain.models.GameModel
 import by.godevelopment.kingcalculator.domain.gamesdomain.models.TricksNoteModel
 import by.godevelopment.kingcalculator.domain.playersdomain.models.PlayerModel
 
@@ -31,4 +33,12 @@ fun TricksNoteModel.toTricksNote(): TricksNote =
         playerId = playerId,
         gameType = gameType,
         tricksCount = tricksCount
+    )
+
+fun GameNote.toGameNote(): GameModel =
+    GameModel(
+        id = id,
+        partyId = partyId,
+        gameType = gameType,
+        finishedAt = finishedAt
     )

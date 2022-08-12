@@ -6,37 +6,29 @@ import by.godevelopment.kingcalculator.commons.ROWS_NOT_INSERTED
 import by.godevelopment.kingcalculator.commons.ROWS_NOT_UPDATED
 import by.godevelopment.kingcalculator.commons.TAG
 import by.godevelopment.kingcalculator.data.database.PlayersDao
-import by.godevelopment.kingcalculator.data.utils.toPlayerModel
-import by.godevelopment.kingcalculator.data.utils.toPlayerProfile
+import by.godevelopment.kingcalculator.data.entities.PlayerProfile
 import by.godevelopment.kingcalculator.domain.commons.models.ResultDataBase
 import by.godevelopment.kingcalculator.domain.commons.models.wrapResultBy
-import by.godevelopment.kingcalculator.domain.playersdomain.models.PlayerModel
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 class PlayersDataSource @Inject constructor(
     private val playersDao: PlayersDao
 ) {
-    fun getAllPlayers(): Flow<List<PlayerModel>> =
-        playersDao
-            .getAllPlayerProfiles()
-            .map { list ->
-                list.map { it.toPlayerModel() }
-            }
+    fun getAllPlayers(): Flow<List<PlayerProfile>> = playersDao.getAllPlayerProfiles()
 
-    suspend fun getPlayerModelByIdRaw(playerId: Long): PlayerModel? {
+    suspend fun getPlayerProfileByIdRaw(playerId: Long): PlayerProfile? {
         Log.i(TAG, "getPlayerModelByIdRaw: playerId = $playerId")
-        return playersDao.getPlayerProfileById(playerId)?.toPlayerModel()
+        return playersDao.getPlayerProfileById(playerId)
     }
 
-    suspend fun getPlayerModelById(playerId: Long): ResultDataBase<PlayerModel> {
-        return wrapResultBy(playerId) { playersDao.getPlayerProfileById(it)?.toPlayerModel() }
+    suspend fun getPlayerProfileById(playerId: Long): ResultDataBase<PlayerProfile> {
+        return wrapResultBy(playerId) { playersDao.getPlayerProfileById(it) }
     }
 
-    suspend fun createPlayer(params: PlayerModel): ResultDataBase<Long> {
+    suspend fun createPlayer(params: PlayerProfile): ResultDataBase<Long> {
         return try {
-            val result = playersDao.insertPlayerProfile(params.toPlayerProfile())
+            val result = playersDao.insertPlayerProfile(params)
             if (result != ROWS_NOT_INSERTED) { ResultDataBase.Success(value = result) }
             else ResultDataBase.Error(message = R.string.message_error_data_save)
         } catch (e: Exception) {
@@ -45,9 +37,9 @@ class PlayersDataSource @Inject constructor(
         }
     }
 
-    suspend fun updatePlayerById(params: PlayerModel): ResultDataBase<Int> {
+    suspend fun updatePlayerById(params: PlayerProfile): ResultDataBase<Int> {
         return try {
-            val result = playersDao.updatePlayerProfile(params.toPlayerProfile())
+            val result = playersDao.updatePlayerProfile(params)
             if (result != ROWS_NOT_UPDATED) { ResultDataBase.Success(value = result) }
             else ResultDataBase.Error(message = R.string.message_error_data_save)
         } catch (e: Exception) {
@@ -56,9 +48,9 @@ class PlayersDataSource @Inject constructor(
         }
     }
 
-    suspend fun deletePlayerById(params: PlayerModel): ResultDataBase<Int> {
+    suspend fun deletePlayerById(params: PlayerProfile): ResultDataBase<Int> {
         return try {
-            val result = playersDao.deletePlayerProfile(params.toPlayerProfile())
+            val result = playersDao.deletePlayerProfile(params)
             if (result != ROWS_NOT_UPDATED) { ResultDataBase.Success(value = result) }
             else ResultDataBase.Error(message = R.string.message_error_data_save)
         } catch (e: Exception) {
