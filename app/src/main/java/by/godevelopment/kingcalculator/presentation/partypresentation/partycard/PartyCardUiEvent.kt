@@ -10,5 +10,5 @@ sealed interface PartyCardUiEvent {
         val onAction: () -> Unit
     ) : PartyCardUiEvent
 
-    data class NavigateToPartyCard(val navArgs: Long) : PartyCardUiEvent
+    data class NavigateToGameAddForm(val navArgs: Long) : PartyCardUiEvent
 }

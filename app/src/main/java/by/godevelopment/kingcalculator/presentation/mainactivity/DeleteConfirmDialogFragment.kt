@@ -1,4 +1,4 @@
-package by.godevelopment.kingcalculator.presentation.partypresentation.partycard
+package by.godevelopment.kingcalculator.presentation.mainactivity
 
 import android.app.Dialog
 import android.content.DialogInterface
@@ -8,12 +8,9 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
 import by.godevelopment.kingcalculator.R
 
-class ConfirmDialogFragment() : DialogFragment() {
+class DeleteConfirmDialogFragment() : DialogFragment() {
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-
-        val gameTypeName =arguments?.getString(KEY_ARG)
-
 
         val listener = DialogInterface.OnClickListener { _, which ->
             parentFragmentManager.setFragmentResult(REQUEST_KEY, bundleOf(KEY_RESPONSE to which))
@@ -21,23 +18,16 @@ class ConfirmDialogFragment() : DialogFragment() {
         return AlertDialog.Builder(requireContext())
             .setCancelable(true)
             .setIcon(R.mipmap.ic_launcher_round)
-            .setTitle(R.string.alert_confirm_title)
-            .setMessage(getString(R.string.alert_confirm_message, gameTypeName))
+            .setTitle(R.string.alert_confirm_delete_title)
+            .setMessage(getString(R.string.alert_confirm_delete_message))
             .setPositiveButton(R.string.action_yes, listener)
             .setNegativeButton(R.string.action_dismiss, listener)
             .create()
     }
 
     companion object {
-        @JvmStatic val TAG = ConfirmDialogFragment::class.java.simpleName
+        @JvmStatic val TAG = DeleteConfirmDialogFragment::class.java.simpleName
         @JvmStatic val REQUEST_KEY = "$TAG:defaultRequestKey"
         @JvmStatic val KEY_RESPONSE = "RESPONSE"
-        @JvmStatic val KEY_ARG = "RESPONSE"
-
-        fun newFragmentInstance(gameTypeName: String): ConfirmDialogFragment {
-            val dialogFragment = ConfirmDialogFragment()
-            dialogFragment.arguments = bundleOf(KEY_ARG to gameTypeName)
-            return dialogFragment
-        }
     }
 }

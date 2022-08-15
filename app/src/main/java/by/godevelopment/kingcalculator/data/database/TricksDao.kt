@@ -19,8 +19,8 @@ interface TricksDao {
     @Query("SELECT * FROM tricks ORDER BY id DESC")
     fun getAllTricksNotes(): Flow<List<TricksNote>>
 
-    @Query("SELECT * FROM tricks ORDER BY id DESC")
-    suspend fun getSuspendAllTrickNotes(): List<TricksNote>
+    @Query("SELECT * from tricks WHERE playerId = :key")
+    suspend fun getTricksNotesByPlayerId(key: Long): List<TricksNote>
 
     @Query("SELECT * from tricks WHERE id = :key")
     suspend fun getTricksNoteById(key: Long): TricksNote?

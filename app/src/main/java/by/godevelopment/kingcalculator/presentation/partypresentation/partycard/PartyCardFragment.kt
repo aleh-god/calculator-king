@@ -46,8 +46,9 @@ class PartyCardFragment : Fragment() {
     ): View {
         _binding = FragmentPartyCardBinding.inflate(inflater, container, false)
         viewLifecycleOwner.lifecycle.also {
-            setupUi(it)
             setupEvent(it)
+            viewModel.checkUnfinishedGame()
+            setupUi(it)
         }
         setupConfirmDialogListener()
         return binding.root
@@ -85,7 +86,7 @@ class PartyCardFragment : Fragment() {
                         .setAction(getString(R.string.snackbar_btn_reload))
                         { event.onAction.invoke() }
                         .show()
-                    is PartyCardUiEvent.NavigateToPartyCard -> {
+                    is PartyCardUiEvent.NavigateToGameAddForm -> {
                         navigateToGameAddForm(event.navArgs)
                     }
                 }
@@ -102,14 +103,15 @@ class PartyCardFragment : Fragment() {
     private fun setupConfirmDialogListener() {
         parentFragmentManager.setFragmentResultListener(
             ConfirmDialogFragment.REQUEST_KEY,
-            this,
-            FragmentResultListener { _, result ->
-                when(result.getInt(ConfirmDialogFragment.KEY_RESPONSE)) {
-                    DialogInterface.BUTTON_POSITIVE -> { confirmAction() }
-                    DialogInterface.BUTTON_NEGATIVE -> {}
+            this
+        ) { _, result ->
+            when (result.getInt(ConfirmDialogFragment.KEY_RESPONSE)) {
+                DialogInterface.BUTTON_POSITIVE -> {
+                    confirmAction()
                 }
+                DialogInterface.BUTTON_NEGATIVE -> {}
             }
-        )
+        }
     }
 
     private fun confirmAction() {

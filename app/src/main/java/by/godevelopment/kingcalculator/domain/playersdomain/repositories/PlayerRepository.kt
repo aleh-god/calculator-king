@@ -1,8 +1,8 @@
 package by.godevelopment.kingcalculator.domain.playersdomain.repositories
 
 import by.godevelopment.kingcalculator.domain.commons.models.ResultDataBase
-import by.godevelopment.kingcalculator.domain.playersdomain.models.ItemPlayerModel
 import by.godevelopment.kingcalculator.domain.playersdomain.models.PlayerModel
+
 import kotlinx.coroutines.flow.Flow
 
 interface PlayerRepository {
@@ -17,5 +17,5 @@ interface PlayerRepository {
 
     suspend fun getAllPlayersNames(): List<String>
 
-    fun getAllPlayers(): Flow<List<ItemPlayerModel>>
+    fun getAllPlayers(): Flow<List<PlayerModel>>
 }

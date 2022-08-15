@@ -63,7 +63,6 @@ class GameAddFormViewModel @Inject constructor(
                             ))
                     }
                     is ResultDataBase.Success -> {
-                        Log.i(TAG, "GameAddFormViewModel.fetchDataModel: ResultDataBase.Success")
                         _uiState.update { it.copy(listMultiItems = listResult.value) }
                     }
                 }
@@ -174,7 +173,6 @@ class GameAddFormViewModel @Inject constructor(
         viewModelScope.launch(ioDispatcher) {
             _uiState.update { it.copy(isFetchingData = true) }
             val result = validatePlayersScoreUseCase(_uiState.value.listMultiItems)
-            Log.i(TAG, "saveGameData: result = $result")
             if (result.successful) {
                 try {
                     val isSaved = saveGameUseCase(

@@ -11,10 +11,7 @@ import by.godevelopment.kingcalculator.domain.commons.models.GameType
 import by.godevelopment.kingcalculator.domain.commons.models.ResultDataBase
 import by.godevelopment.kingcalculator.domain.partiesdomain.models.GamesTableItemModel
 import by.godevelopment.kingcalculator.domain.partiesdomain.models.PlayersInPartyModel
-import by.godevelopment.kingcalculator.domain.partiesdomain.usecases.CreateGameNoteUseCase
-import by.godevelopment.kingcalculator.domain.partiesdomain.usecases.GetContractorPlayerByPartyIdUseCase
-import by.godevelopment.kingcalculator.domain.partiesdomain.usecases.GetGamesByPartyIdUseCase
-import by.godevelopment.kingcalculator.domain.partiesdomain.usecases.GetPlayersByPartyIdUseCase
+import by.godevelopment.kingcalculator.domain.partiesdomain.usecases.*
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Job
@@ -25,6 +22,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class PartyCardViewModel @Inject constructor(
+    private val checkUnfinishedGameInPartyUseCase: CheckUnfinishedGameInPartyUseCase,
     private val getGamesByPartyIdUseCase: GetGamesByPartyIdUseCase,
     private val getContractorPlayerByPartyIdUseCase: GetContractorPlayerByPartyIdUseCase,
     private val getPlayersByPartyIdUseCase: GetPlayersByPartyIdUseCase,
@@ -45,7 +43,39 @@ class PartyCardViewModel @Inject constructor(
 
     init {
         Log.i(TAG, "PartyCardViewModel: $partyId")
-        fetchDataModel()
+//        checkUnfinishedGame(partyId)
+    }
+
+    fun checkUnfinishedGame() {
+        suspendJob?.cancel()
+        suspendJob = viewModelScope.launch(ioDispatcher) {
+            if (partyId != null)  {
+                val checkResult = checkUnfinishedGameInPartyUseCase(partyId)
+                when(checkResult) {
+                    is ResultDataBase.Error -> {
+                        _uiEvent.send(PartyCardUiEvent.ShowMessage(
+                            message = checkResult.message,
+                            onAction = { }
+                        ))
+                    }
+                    is ResultDataBase.Success -> {
+                        if (checkResult.value != null) {
+                            _uiEvent.send(PartyCardUiEvent.NavigateToGameAddForm(checkResult.value))
+                        }
+                        else {
+                            fetchDataModel()
+                        }
+                    }
+                }
+            }
+            else {
+                _uiEvent.send(PartyCardUiEvent.ShowMessage(
+                    message = R.string.message_error_data_load,
+                    onAction = { reloadDataModel() }
+                )
+                )
+            }
+        }
     }
 
     private fun fetchDataModel() {
@@ -135,6 +165,7 @@ class PartyCardViewModel @Inject constructor(
     }
 
     private fun reloadDataModel() {
+        // TODO("Count invoke and navigate to main menu")
         fetchDataModel()
     }
 
@@ -156,7 +187,7 @@ class PartyCardViewModel @Inject constructor(
                         ))
                     }
                     is ResultDataBase.Success -> {
-                        _uiEvent.send(PartyCardUiEvent.NavigateToPartyCard(gameResult.value))
+                        _uiEvent.send(PartyCardUiEvent.NavigateToGameAddForm(gameResult.value))
                     }
                 }
             } catch (e: Exception) {
