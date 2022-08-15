@@ -1,9 +1,7 @@
 package by.godevelopment.kingcalculator.domain.gamesdomain.usecases
 
-import android.util.Log
 import by.godevelopment.kingcalculator.R
 import by.godevelopment.kingcalculator.commons.BODY_ROW_TYPE
-import by.godevelopment.kingcalculator.commons.TAG
 import by.godevelopment.kingcalculator.domain.commons.models.ResultDataBase
 import by.godevelopment.kingcalculator.domain.gamesdomain.models.MultiItemModel
 import by.godevelopment.kingcalculator.domain.gamesdomain.models.TricksNoteModel
@@ -13,8 +11,8 @@ import javax.inject.Inject
 class SaveGameUseCase @Inject constructor(
     private val gameRepository: GameRepository
 ) {
+
     suspend operator fun invoke(gameId: Long, items: List<MultiItemModel>): ResultDataBase<Boolean> {
-        Log.i(TAG, "SaveGameUseCase invoke: $gameId = ${items.size}")
         return if (gameId > 0) {
             val notesResult = items
                 .filter { it.itemViewType == BODY_ROW_TYPE }
@@ -28,7 +26,6 @@ class SaveGameUseCase @Inject constructor(
                         )
                     )
                 }
-            Log.i(TAG, "SaveGameUseCase: notesResult = ${notesResult.size}")
             if (notesResult.any { it is ResultDataBase.Success }) {
                 return when (gameRepository.updatePartyStateByGameId(gameId)) {
                     is ResultDataBase.Error -> {
@@ -38,15 +35,17 @@ class SaveGameUseCase @Inject constructor(
                     is ResultDataBase.Success -> ResultDataBase.Success(true)
                 }
             } else {
-                undoBadDbTransaction(gameId)
-                ResultDataBase.Error(message = R.string.message_error_data_save)
+                val undoResult = undoBadDbTransaction(gameId)
+                when(undoResult) {
+                    is ResultDataBase.Error -> ResultDataBase.Error(message = undoResult.message)
+                    is ResultDataBase.Success -> ResultDataBase.Error(message = R.string.message_error_data_save)
+                }
             }
         }
         else ResultDataBase.Error(message = R.string.message_error_data_unknown)
     }
 
-    private fun undoBadDbTransaction(gameId: Long) {
-        Log.i(TAG, "undoBadDbTransaction: gameId = $gameId")
-         TODO("Delete TricksNote by game Id and navigate to PartyCard")
+    private suspend fun undoBadDbTransaction(gameId: Long): ResultDataBase<Int> {
+        return gameRepository.undoBadDbTransaction(gameId)
     }
 }

@@ -2,13 +2,13 @@ package by.godevelopment.kingcalculator.domain.gamesdomain.models
 
 import androidx.annotation.ColorRes
 import androidx.annotation.StringRes
-import by.godevelopment.kingcalculator.data.entities.PlayerProfile
 import by.godevelopment.kingcalculator.domain.commons.models.GameType
+import by.godevelopment.kingcalculator.domain.playersdomain.models.PlayerModel
 
 data class MultiItemModel(
     val rowId: Int,
     val itemViewType: Int,
-    val player: PlayerProfile,
+    val player: PlayerModel,
     @StringRes
     val playerNumber: Players,
     @ColorRes

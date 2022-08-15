@@ -1,10 +1,8 @@
 package by.godevelopment.kingcalculator.domain.gamesdomain.usecases
 
-import android.util.Log
 import by.godevelopment.kingcalculator.commons.BODY_ROW_TYPE
 import by.godevelopment.kingcalculator.commons.FOOTER_ROW_TYPE
 import by.godevelopment.kingcalculator.commons.HEADER_ROW_TYPE
-import by.godevelopment.kingcalculator.commons.TAG
 import by.godevelopment.kingcalculator.domain.commons.models.GameType
 import by.godevelopment.kingcalculator.domain.commons.models.ResultDataBase
 import by.godevelopment.kingcalculator.domain.gamesdomain.models.MultiItemModel
@@ -16,7 +14,6 @@ class GetMultiItemModelsUseCase @Inject constructor(
     private val getGameNoteByIdUseCase: GetGameNoteByIdUseCase
 ) {
     suspend operator fun invoke(gameId: Long): ResultDataBase<List<MultiItemModel>> {
-        Log.i(TAG, "GetMultiItemModelsUseCase gameId: $gameId")
         return when(val partyId = getPartyIdByGameIdUseCase(gameId)) {
             is ResultDataBase.Error -> { ResultDataBase.Error(message = partyId.message) }
             is ResultDataBase.Success -> {
@@ -40,12 +37,12 @@ class GetMultiItemModelsUseCase @Inject constructor(
                                     GameType.TakeBFG -> {
                                         var countId = 0
                                         val listItems = mutableListOf<MultiItemModel>()
-                                        players.forEach { (players, playerProfile) ->
+                                        players.forEach { (players, playerModel) ->
                                             listItems.add(
                                                 MultiItemModel(
                                                     rowId = countId++,
                                                     itemViewType = HEADER_ROW_TYPE,
-                                                    player = playerProfile,
+                                                    player = playerModel,
                                                     playerNumber = players,
                                                     gameType = gameType
                                                 )
@@ -58,7 +55,7 @@ class GetMultiItemModelsUseCase @Inject constructor(
                                                         MultiItemModel(
                                                             rowId = countId++,
                                                             itemViewType = BODY_ROW_TYPE,
-                                                            player = playerProfile,
+                                                            player = playerModel,
                                                             playerNumber = players,
                                                             gameType = it
                                                         )
@@ -68,7 +65,7 @@ class GetMultiItemModelsUseCase @Inject constructor(
                                                 MultiItemModel(
                                                     rowId = countId++,
                                                     itemViewType = FOOTER_ROW_TYPE,
-                                                    player = playerProfile,
+                                                    player = playerModel,
                                                     playerNumber = players,
                                                     gameType = gameType
                                                 )
@@ -79,12 +76,12 @@ class GetMultiItemModelsUseCase @Inject constructor(
                                     GameType.DoNotTakeBFG -> {
                                         var countId = 0
                                         val listItems = mutableListOf<MultiItemModel>()
-                                        players.forEach { (players, playerProfile) ->
+                                        players.forEach { (players, playerModel) ->
                                             listItems.add(
                                                 MultiItemModel(
                                                     rowId = countId++,
                                                     itemViewType = HEADER_ROW_TYPE,
-                                                    player = playerProfile,
+                                                    player = playerModel,
                                                     playerNumber = players,
                                                     gameType = gameType
                                                 )
@@ -97,7 +94,7 @@ class GetMultiItemModelsUseCase @Inject constructor(
                                                         MultiItemModel(
                                                             rowId = countId++,
                                                             itemViewType = BODY_ROW_TYPE,
-                                                            player = playerProfile,
+                                                            player = playerModel,
                                                             playerNumber = players,
                                                             gameType = it
                                                         )
@@ -107,7 +104,7 @@ class GetMultiItemModelsUseCase @Inject constructor(
                                                 MultiItemModel(
                                                     rowId = countId++,
                                                     itemViewType = FOOTER_ROW_TYPE,
-                                                    player = playerProfile,
+                                                    player = playerModel,
                                                     playerNumber = players,
                                                     gameType = gameType
                                                 )
@@ -118,12 +115,12 @@ class GetMultiItemModelsUseCase @Inject constructor(
                                     else -> {
                                         var countId = 0
                                         val listItems = mutableListOf<MultiItemModel>()
-                                        players.forEach { (players, playerProfile) ->
+                                        players.forEach { (players, playerModel) ->
                                             listItems.add(
                                                 MultiItemModel(
                                                     rowId = countId++,
                                                     itemViewType = HEADER_ROW_TYPE,
-                                                    player = playerProfile,
+                                                    player = playerModel,
                                                     playerNumber = players,
                                                     gameType = gameType
                                                 )
@@ -132,7 +129,7 @@ class GetMultiItemModelsUseCase @Inject constructor(
                                                 MultiItemModel(
                                                     rowId = countId++,
                                                     itemViewType = BODY_ROW_TYPE,
-                                                    player = playerProfile,
+                                                    player = playerModel,
                                                     playerNumber = players,
                                                     gameType = gameType
                                                 )
@@ -141,7 +138,7 @@ class GetMultiItemModelsUseCase @Inject constructor(
                                                 MultiItemModel(
                                                     rowId = countId++,
                                                     itemViewType = FOOTER_ROW_TYPE,
-                                                    player = playerProfile,
+                                                    player = playerModel,
                                                     playerNumber = players,
                                                     gameType = gameType
                                                 )

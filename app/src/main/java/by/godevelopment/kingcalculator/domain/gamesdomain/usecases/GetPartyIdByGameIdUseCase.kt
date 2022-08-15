@@ -7,7 +7,7 @@ import javax.inject.Inject
 class GetPartyIdByGameIdUseCase @Inject constructor(
     private val gameRepository: GameRepository
 ) {
-    suspend operator fun invoke(gameId: Long): ResultDataBase<Long> {
-        return gameRepository.getPartyIdByGameId(gameId)
-    }
+
+    suspend operator fun invoke(gameId: Long): ResultDataBase<Long> =
+        gameRepository.getPartyIdByGameId(gameId)
 }

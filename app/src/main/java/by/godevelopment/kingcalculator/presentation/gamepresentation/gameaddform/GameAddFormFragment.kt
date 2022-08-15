@@ -78,7 +78,7 @@ class GameAddFormFragment : Fragment() {
                             { event.onAction.invoke() }
                             .show()
                     }
-                    is GameAddFormUiEvent.NavigateToPartyCardUiEvent -> navigateToPartyCard()
+                    is GameAddFormUiEvent.NavigateToPartyCardUiEvent -> navigateToPartyCard(event.navArg)
                 }
             }
             .launchIn(lifecycle.coroutineScope)
@@ -100,8 +100,10 @@ class GameAddFormFragment : Fragment() {
         }
     }
 
-    private fun navigateToPartyCard() {
-        findNavController().navigate(R.id.action_gameAddFormFragment_to_partyCardFragment)
+    private fun navigateToPartyCard(navArg: Long) {
+        val action =
+            GameAddFormFragmentDirections.actionGameAddFormFragmentToPartyCardFragment(navArg)
+        findNavController().navigate(action)
     }
 
     override fun onDestroy() {
