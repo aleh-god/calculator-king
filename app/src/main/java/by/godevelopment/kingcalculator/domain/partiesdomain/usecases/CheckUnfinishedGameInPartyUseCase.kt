@@ -1,7 +1,7 @@
 package by.godevelopment.kingcalculator.domain.partiesdomain.usecases
 
 import by.godevelopment.kingcalculator.domain.commons.models.ResultDataBase
-import by.godevelopment.kingcalculator.domain.commons.models.mapResult
+import by.godevelopment.kingcalculator.domain.commons.utils.mapResult
 import by.godevelopment.kingcalculator.domain.partiesdomain.repositories.PartyRepository
 import javax.inject.Inject
 
