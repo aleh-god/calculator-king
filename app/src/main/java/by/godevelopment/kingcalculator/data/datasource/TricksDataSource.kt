@@ -18,4 +18,16 @@ class TricksDataSource @Inject constructor(
 
     suspend fun getTricksNoteByGameId(gameId: Long): List<TricksNote>
             = tricksDao.getTricksNotesByGameId(gameId)
+
+    suspend fun deleteTricksNotesByGameId(gameId: Long): ResultDataBase<Int> {
+        return try {
+            ResultDataBase.Success(
+                value = tricksDao.getTricksNotesByGameId(gameId).onEach {
+                    tricksDao.deleteTricksNote(it)
+                }.size
+            )
+        } catch (e: Exception) {
+            ResultDataBase.Error(message = R.string.message_error_bad_database)
+        }
+    }
 }

@@ -12,7 +12,7 @@ import by.godevelopment.kingcalculator.data.entities.TricksNote
 import by.godevelopment.kingcalculator.data.utils.toPlayerModel
 import by.godevelopment.kingcalculator.domain.commons.models.GameType
 import by.godevelopment.kingcalculator.domain.commons.models.ResultDataBase
-import by.godevelopment.kingcalculator.domain.commons.models.mapResult
+import by.godevelopment.kingcalculator.domain.commons.utils.mapResult
 import by.godevelopment.kingcalculator.domain.gamesdomain.models.GameModel
 import by.godevelopment.kingcalculator.domain.gamesdomain.models.Players
 import by.godevelopment.kingcalculator.domain.partiesdomain.models.PartyModel

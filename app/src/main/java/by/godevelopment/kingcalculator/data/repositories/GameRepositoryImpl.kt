@@ -1,19 +1,17 @@
 package by.godevelopment.kingcalculator.data.repositories
 
-import android.util.Log
 import by.godevelopment.kingcalculator.R
-import by.godevelopment.kingcalculator.commons.TAG
 import by.godevelopment.kingcalculator.data.datasource.GamesDataSource
 import by.godevelopment.kingcalculator.data.datasource.PartiesDataSource
 import by.godevelopment.kingcalculator.data.datasource.PlayersDataSource
 import by.godevelopment.kingcalculator.data.datasource.TricksDataSource
-import by.godevelopment.kingcalculator.data.entities.PlayerProfile
 import by.godevelopment.kingcalculator.data.utils.toGameNote
 import by.godevelopment.kingcalculator.data.utils.toPlayerModel
 import by.godevelopment.kingcalculator.data.utils.toTricksNote
 import by.godevelopment.kingcalculator.domain.commons.models.GameType
 import by.godevelopment.kingcalculator.domain.commons.models.ResultDataBase
-import by.godevelopment.kingcalculator.domain.commons.models.mapResult
+import by.godevelopment.kingcalculator.domain.commons.utils.flatMapResult
+import by.godevelopment.kingcalculator.domain.commons.utils.mapResult
 import by.godevelopment.kingcalculator.domain.gamesdomain.models.GameModel
 import by.godevelopment.kingcalculator.domain.gamesdomain.models.Players
 import by.godevelopment.kingcalculator.domain.gamesdomain.models.TricksNoteModel
@@ -44,51 +42,32 @@ class GameRepositoryImpl @Inject constructor(
                     }
                 )
             }
-            is ResultDataBase.Error -> ResultDataBase.Error(message = R.string.message_error_bad_database)
+            is ResultDataBase.Error -> ResultDataBase.Error(message = partyResult.message)
         }
     }
 
-    override suspend fun createGameNote(gameType: GameType, partyId: Long): ResultDataBase<Long> {
-        val gameId = gamesDataSource.createGameNote(gameType, partyId)
-        Log.i(TAG, "GameRepositoryImpl createGameNote: $gameType , $partyId = $gameId")
-        return gameId
-    }
+    override suspend fun createGameNote(gameType: GameType, partyId: Long): ResultDataBase<Long> =
+        gamesDataSource.createGameNote(gameType, partyId)
 
-    override suspend fun createTricksNote(tricksNoteModel: TricksNoteModel): ResultDataBase<Long> {
-        val noteId = tricksDataSource.createTricksNote(tricksNoteModel.toTricksNote())
-        Log.i(TAG, "GameRepositoryImpl createTricksNote: $tricksNoteModel = $noteId")
-        return noteId
-    }
+    override suspend fun createTricksNote(tricksNoteModel: TricksNoteModel): ResultDataBase<Long> =
+        tricksDataSource.createTricksNote(tricksNoteModel.toTricksNote())
 
-    override suspend fun getPartyIdByGameId(gameId: Long): ResultDataBase<Long> {
-        Log.i(TAG, "GameRepositoryImpl getPartyIdByGameId: $gameId")
-        return gamesDataSource.getPartyIdByGameId(gameId)
-    }
+    override suspend fun getPartyIdByGameId(gameId: Long): ResultDataBase<Long> =
+        gamesDataSource.getPartyIdByGameId(gameId)
 
-    override suspend fun getGameNoteById(gameId: Long): ResultDataBase<GameModel> {
-        Log.i(TAG, "GameRepositoryImpl getGameNoteById: $gameId")
-        return gamesDataSource.getGameNoteById(gameId).mapResult { it.toGameNote() }
-    }
+    override suspend fun getGameNoteById(gameId: Long): ResultDataBase<GameModel> =
+        gamesDataSource.getGameNoteById(gameId).mapResult { it.toGameNote() }
 
-    private suspend fun updateTimeInPartyNoteByPartyId(gameId: Long): ResultDataBase<Int> {
-        val partyIdResult = gamesDataSource.getPartyIdByGameId(gameId)
-        return when (partyIdResult) {
-            is ResultDataBase.Error -> ResultDataBase.Error(message = partyIdResult.message)
-            is ResultDataBase.Success -> {
-                Log.i(TAG, "updateTimeInPartyNoteByPartyId: partyIdResult = $partyIdResult")
-                partiesDataSource.updateTimeInPartyNoteByPartyId(partyIdResult.value)
-            }
+    private suspend fun updateTimeInPartyNoteByPartyId(gameId: Long): ResultDataBase<Int> =
+        gamesDataSource.getPartyIdByGameId(gameId).flatMapResult {
+            partiesDataSource.updateTimeInPartyNoteByPartyId(it)
         }
-    }
 
-    override suspend fun updatePartyStateByGameId(gameId: Long): ResultDataBase<Int> {
-        val updateResult = gamesDataSource.updateTimeInGameNoteByGameId(gameId)
-        return when (updateResult) {
-            is ResultDataBase.Error -> ResultDataBase.Error(message = updateResult.message)
-            is ResultDataBase.Success -> {
-                Log.i(TAG, "updatePartyStateByGameId: ResultDataBase.Success gameId = $gameId updateResult.value = ${updateResult.value}")
-                updateTimeInPartyNoteByPartyId(gameId)
-            }
+    override suspend fun updatePartyStateByGameId(gameId: Long): ResultDataBase<Int> =
+        gamesDataSource.updateTimeInGameNoteByGameId(gameId).flatMapResult {
+            updateTimeInPartyNoteByPartyId(gameId)
         }
-    }
+
+    override suspend fun undoBadDbTransaction(gameId: Long): ResultDataBase<Int>
+            = tricksDataSource.deleteTricksNotesByGameId(gameId)
 }

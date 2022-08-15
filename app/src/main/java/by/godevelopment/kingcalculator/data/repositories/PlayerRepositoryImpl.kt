@@ -4,7 +4,7 @@ import by.godevelopment.kingcalculator.data.datasource.PlayersDataSource
 import by.godevelopment.kingcalculator.data.utils.toPlayerModel
 import by.godevelopment.kingcalculator.data.utils.toPlayerProfile
 import by.godevelopment.kingcalculator.domain.commons.models.ResultDataBase
-import by.godevelopment.kingcalculator.domain.commons.models.mapResult
+import by.godevelopment.kingcalculator.domain.commons.utils.mapResult
 import by.godevelopment.kingcalculator.domain.playersdomain.models.PlayerModel
 import by.godevelopment.kingcalculator.domain.playersdomain.repositories.PlayerRepository
 import kotlinx.coroutines.flow.Flow

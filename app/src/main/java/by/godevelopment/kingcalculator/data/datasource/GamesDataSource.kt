@@ -1,13 +1,11 @@
 package by.godevelopment.kingcalculator.data.datasource
 
-import android.util.Log
 import by.godevelopment.kingcalculator.R
-import by.godevelopment.kingcalculator.commons.TAG
 import by.godevelopment.kingcalculator.data.database.GamesDao
 import by.godevelopment.kingcalculator.data.entities.GameNote
 import by.godevelopment.kingcalculator.domain.commons.models.GameType
 import by.godevelopment.kingcalculator.domain.commons.models.ResultDataBase
-import by.godevelopment.kingcalculator.domain.commons.models.wrapResultBy
+import by.godevelopment.kingcalculator.domain.commons.utils.wrapResultBy
 import java.util.*
 import javax.inject.Inject
 
@@ -33,10 +31,8 @@ class GamesDataSource @Inject constructor(
         else ResultDataBase.Error(message = R.string.message_error_bad_database)
     }
 
-    suspend fun calculateGamesCountByPartyIdRaw(partyId: Long): Int {
-        Log.i(TAG, "calculateGamesCountByPartyIdRaw: partyId = $partyId")
-        return gamesDao.getGameNotesByPartyId(partyId).size
-    }
+    suspend fun calculateGamesCountByPartyIdRaw(partyId: Long): Int =
+        gamesDao.getGameNotesByPartyId(partyId).size
 
     suspend fun updateTimeInGameNoteByGameId(gameId: Long): ResultDataBase<Int> {
         gamesDao.getGameNoteById(gameId)?.let {
@@ -63,8 +59,6 @@ class GamesDataSource @Inject constructor(
         return wrapResultBy(partyId) { gamesDao.getGameNotesByPartyId(it) }
     }
 
-    suspend fun getLastGameByPartyIdRaw(partyId: Long): GameNote? {
-        Log.i(TAG, "getLastGameByPartyIdRaw: partyId = $partyId")
-        return gamesDao.getGameNotesByPartyId(partyId).maxByOrNull { it.finishedAt }
-    }
+    suspend fun getLastGameByPartyIdRaw(partyId: Long): GameNote? =
+        gamesDao.getGameNotesByPartyId(partyId).maxByOrNull { it.finishedAt }
 }

@@ -6,7 +6,7 @@ import by.godevelopment.kingcalculator.commons.TAG
 import by.godevelopment.kingcalculator.data.database.PartiesDao
 import by.godevelopment.kingcalculator.data.entities.PartyNote
 import by.godevelopment.kingcalculator.domain.commons.models.ResultDataBase
-import by.godevelopment.kingcalculator.domain.commons.models.wrapResultBy
+import by.godevelopment.kingcalculator.domain.commons.utils.wrapResultBy
 import kotlinx.coroutines.flow.Flow
 import java.util.*
 import javax.inject.Inject
