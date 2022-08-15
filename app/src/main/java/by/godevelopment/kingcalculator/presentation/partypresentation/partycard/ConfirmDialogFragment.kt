@@ -40,5 +40,4 @@ class ConfirmDialogFragment() : DialogFragment() {
             return dialogFragment
         }
     }
-
 }

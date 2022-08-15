@@ -18,7 +18,7 @@ interface PartyRepository {
 
     suspend fun getAllPlayersIdToNames(): Map<String, Long>
 
-    suspend fun getPlayersByPartyId(partyId: Long): ResultDataBase<Map<Players, PlayerProfile>>
+    suspend fun getPlayersByPartyId(partyId: Long): ResultDataBase<Map<Players, PlayerModel>>
 
     suspend fun getContractorPlayerByPartyId(partyId: Long): ResultDataBase<PlayerModel>
 
