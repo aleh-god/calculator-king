@@ -43,7 +43,6 @@ class PartyCardViewModel @Inject constructor(
 
     init {
         Log.i(TAG, "PartyCardViewModel: $partyId")
-//        checkUnfinishedGame(partyId)
     }
 
     fun checkUnfinishedGame() {
@@ -155,7 +154,7 @@ class PartyCardViewModel @Inject constructor(
             is ResultDataBase.Error -> {
                 _uiEvent.send(PartyCardUiEvent.ShowMessage(
                     message = result.message,
-                    onAction = { }
+                    onAction = ::reloadDataModel
                 ))
             }
             is ResultDataBase.Success -> {

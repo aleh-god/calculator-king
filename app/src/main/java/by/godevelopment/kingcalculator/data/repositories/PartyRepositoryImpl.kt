@@ -13,9 +13,10 @@ import by.godevelopment.kingcalculator.data.utils.toPlayerModel
 import by.godevelopment.kingcalculator.domain.commons.models.GameType
 import by.godevelopment.kingcalculator.domain.commons.models.ResultDataBase
 import by.godevelopment.kingcalculator.domain.commons.utils.mapResult
+import by.godevelopment.kingcalculator.domain.commons.utils.wrapResult
 import by.godevelopment.kingcalculator.domain.gamesdomain.models.GameModel
 import by.godevelopment.kingcalculator.domain.gamesdomain.models.Players
-import by.godevelopment.kingcalculator.domain.partiesdomain.models.PartyModel
+import by.godevelopment.kingcalculator.domain.partiesdomain.models.RawItemPartyModel
 import by.godevelopment.kingcalculator.domain.partiesdomain.repositories.PartyRepository
 import by.godevelopment.kingcalculator.domain.playersdomain.models.PlayerModel
 import by.godevelopment.kingcalculator.presentation.mainactivity.MainActivityRepository
@@ -30,12 +31,12 @@ class PartyRepositoryImpl @Inject constructor(
     private val playersDataSource: PlayersDataSource
 ) : PartyRepository, MainActivityRepository {
 
-    override fun getAllParties(): Flow<List<PartyModel>> {
+    override fun getAllParties(): Flow<List<RawItemPartyModel>> {
         Log.i(TAG, "getAllParties: run")
         val result= partiesDataSource.getAllPartyNotes().map { list ->
             Log.i(TAG, "PartyRepositoryImpl getAllParties: ${list.size}")
             list.map {
-                PartyModel(
+                RawItemPartyModel(
                     id = it.id,
                     partyName = it.partyName,
                     startedAt = it.startedAt,
@@ -160,9 +161,10 @@ class PartyRepositoryImpl @Inject constructor(
         return gameId
     }
 
-    override suspend fun deleteAllPartyNotes(): Int {
-        val deletedParties = partiesDataSource.deleteAllPartyNotes()
-        val deletedGames = gamesDataSource.deleteAllGameNotes()
-        return deletedGames + deletedParties
-    }
+    override suspend fun deleteAllPartyNotes(): ResultDataBase<Int> =
+        wrapResult {
+            val deletedParties = partiesDataSource.deleteAllPartyNotes()
+            val deletedGames = gamesDataSource.deleteAllGameNotes()
+            deletedGames + deletedParties
+        }
 }

@@ -5,11 +5,14 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import by.godevelopment.kingcalculator.R
 import by.godevelopment.kingcalculator.databinding.ItemPartiesListBinding
 import by.godevelopment.kingcalculator.domain.partiesdomain.models.ItemPartyModel
 
 class PartiesAdapter(
-    private val onClick: (Long) -> Unit
+    private val onItemClick: (Long) -> Unit,
+    private val onStatClick: (Long) -> Unit,
+    private val onDelClick: (Long) -> Unit,
 ) : RecyclerView.Adapter<PartiesAdapter.ItemViewHolder>() {
 
     private val diffCallback = object : DiffUtil.ItemCallback<ItemPartyModel>() {
@@ -34,7 +37,10 @@ class PartiesAdapter(
         fun bind(itemPartyModel: ItemPartyModel) {
             binding.apply {
                 partyName.text = itemPartyModel.partyName
-                partyGamesCount.text = itemPartyModel.partyGamesCount
+                partyGamesCount.text = buildString {
+                    append(itemPartyModel.partyGamesCount)
+                    append(root.resources.getString(R.string.ui_text_total_games))
+                }
                 playerOneName.text = itemPartyModel.player_one.name
                 playerOneScore.text = itemPartyModel.player_one_score
                 playerTwoName.text = itemPartyModel.player_two.name
@@ -46,7 +52,13 @@ class PartiesAdapter(
                 partyStartTime.text = itemPartyModel.partyStartDate
                 partyEndTime.text = itemPartyModel.partyLastDate
                 root.setOnClickListener {
-                    onClick.invoke(itemPartyModel.id)
+                    onItemClick(itemPartyModel.id)
+                }
+                partyStat.setOnClickListener {
+                    onStatClick(itemPartyModel.id)
+                }
+                partyDel.setOnClickListener {
+                    onDelClick(itemPartyModel.id)
                 }
             }
         }

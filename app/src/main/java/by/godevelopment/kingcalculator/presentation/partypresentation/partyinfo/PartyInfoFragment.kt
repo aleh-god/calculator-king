@@ -12,10 +12,12 @@ import androidx.lifecycle.flowWithLifecycle
 import by.godevelopment.kingcalculator.R
 import by.godevelopment.kingcalculator.databinding.FragmentPartyInfoBinding
 import com.google.android.material.snackbar.Snackbar
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 
+@AndroidEntryPoint
 class PartyInfoFragment : Fragment() {
 
     companion object {
@@ -46,7 +48,7 @@ class PartyInfoFragment : Fragment() {
                     .collect { uiState ->
                         if (!uiState.isFetchingData) progress.visibility = View.GONE
                         else binding.progress.visibility = View.VISIBLE
-                        message.text = "partyId = ${viewModel.partyId}"
+                        partyName.text = "partyId = ${viewModel.partyId}"
                     }
             }
         }
