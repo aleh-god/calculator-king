@@ -3,7 +3,7 @@ package by.godevelopment.kingcalculator.domain.partiesdomain.models
 import by.godevelopment.kingcalculator.data.entities.TricksNote
 import by.godevelopment.kingcalculator.domain.playersdomain.models.PlayerModel
 
-data class PartyModel(
+data class RawItemPartyModel(
     val id: Long = 0,
     val partyName: String,
     val startedAt: Long,
