@@ -23,5 +23,5 @@ interface PartiesDao {
     suspend fun getPartyNoteById(key: Long): PartyNote?
 
     @Query("SELECT * from parties WHERE playerOneId = :key OR playerTwoId = :key OR playerThreeId = :key OR playerFourId = :key")
-    fun getAllPartyNotesByPlayerId(key: Long): Flow<List<PartyNote>>
+    fun getAllPartiesListByPlayerId(key: Long): List<PartyNote>
 }

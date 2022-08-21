@@ -27,4 +27,7 @@ interface TricksDao {
 
     @Query("SELECT * from tricks WHERE gameId = :key")
     suspend fun getTricksNotesByGameId(key: Long): List<TricksNote>
+
+    @Query("DELETE FROM tricks")
+    suspend fun deleteAll(): Int
 }
