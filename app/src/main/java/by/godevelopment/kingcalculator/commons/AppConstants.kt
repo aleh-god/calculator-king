@@ -4,7 +4,6 @@ const val TAG = "kingcalculator#"
 const val DB_NAME = "king_database.db"
 const val DELETED_STRING_VALUE = "Anonymous"
 const val DATE_FORMAT_TEMPLATE = "hh:mm, MMM dd, yyyy"
-const val INT_NULL_VALUE = 0
 const val EMPTY_STRING = ""
 const val ROWS_NOT_INSERTED = -1L
 const val ROWS_NOT_UPDATED = -1

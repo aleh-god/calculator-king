@@ -26,7 +26,6 @@ enum class GameType (
     DoNotTakeLastTwo(16, -20,2, R.string.game_type_ntl),
     DoNotTakeBFG(17, -240,31, R.string.game_type_ntfg);
 
-
     fun getTotalGameScore(countTricks: Int): Int {
         return countTricks * this.trickScores
     }

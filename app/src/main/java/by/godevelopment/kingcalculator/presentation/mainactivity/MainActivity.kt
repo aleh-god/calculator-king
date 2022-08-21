@@ -15,6 +15,7 @@ import androidx.navigation.ui.setupWithNavController
 import by.godevelopment.kingcalculator.R
 import by.godevelopment.kingcalculator.commons.TAG
 import by.godevelopment.kingcalculator.databinding.ActivityMainBinding
+import by.godevelopment.kingcalculator.domain.commons.models.ResultDataBase
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -78,14 +79,16 @@ class MainActivity : AppCompatActivity() {
         }
         R.id.menu_settings -> {
             Log.i(TAG, "onOptionsItemSelected: R.id.menu_settings")
-            // TODO("implement menu settings")
-//            val fragment = SettingsFragment.newInstance {
-//                Log.i(TAG, "SettingsFragment.newInstance: ")
-//            }
-//            supportFragmentManager
-//                .beginTransaction()
-//                .replace(R.id.nav_host_fragment, fragment)
-//                .commit()
+            /*
+             TODO("implement menu settings")
+            val fragment = SettingsFragment.newInstance {
+                Log.i(TAG, "SettingsFragment.newInstance: ")
+            }
+            supportFragmentManager
+                .beginTransaction()
+                .replace(R.id.nav_host_fragment, fragment)
+                .commit()
+             */
             true
         }
         else -> { super.onOptionsItemSelected(item) }
@@ -115,7 +118,12 @@ class MainActivity : AppCompatActivity() {
     private fun deleteAllPartyNotes() {
         lifecycle.coroutineScope.launch {
             val deleteResult = mainActivityRepository.deleteAllPartyNotes()
-            showMessage(getString(R.string.message_delete_parties_result, deleteResult))
+            when(deleteResult) {
+                is ResultDataBase.Error -> showMessage(getString(deleteResult.message))
+                is ResultDataBase.Success -> showMessage(
+                    getString(R.string.message_delete_parties_result, deleteResult.value)
+                )
+            }
         }
     }
 
