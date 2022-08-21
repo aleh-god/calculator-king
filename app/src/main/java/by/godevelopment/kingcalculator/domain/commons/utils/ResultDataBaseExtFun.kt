@@ -6,6 +6,22 @@ import by.godevelopment.kingcalculator.R
 import by.godevelopment.kingcalculator.commons.TAG
 import by.godevelopment.kingcalculator.domain.commons.models.ResultDataBase
 
+suspend fun <T> wrapResult(
+    @StringRes
+    message: Int = R.string.message_error_bad_database,
+    block: suspend () -> T?
+): ResultDataBase<T> {
+    return try {
+        val result = block.invoke()
+        if (result != null) ResultDataBase.Success<T>(value = result)
+        else ResultDataBase.Error<T>(message = R.string.message_error_bad_database)
+    }
+    catch (e: Exception) {
+        Log.i(TAG, "wrapResultBy: ${e.message}")
+        ResultDataBase.Error<T>(message = message)
+    }
+}
+
 suspend fun <T, K> wrapResultBy(
     key: K,
     @StringRes
