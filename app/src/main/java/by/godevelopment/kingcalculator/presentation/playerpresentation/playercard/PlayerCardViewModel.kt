@@ -10,6 +10,7 @@ import by.godevelopment.kingcalculator.di.IoDispatcher
 import by.godevelopment.kingcalculator.domain.commons.models.ResultDataBase
 import by.godevelopment.kingcalculator.domain.playersdomain.models.PlayerModel
 import by.godevelopment.kingcalculator.domain.playersdomain.repositories.PlayerRepository
+import by.godevelopment.kingcalculator.domain.playersdomain.usecases.GetActivePlayerByIdUseCase
 import by.godevelopment.kingcalculator.domain.playersdomain.usecases.ValidatePlayerNameUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
@@ -22,18 +23,20 @@ import javax.inject.Inject
 @HiltViewModel
 class PlayerCardViewModel @Inject constructor(
     state: SavedStateHandle,
-    private val playerRepository: PlayerRepository,
+    private val getActivePlayerByIdUseCase: GetActivePlayerByIdUseCase,
     private val validatePlayerNameUseCase: ValidatePlayerNameUseCase,
+    private val playerRepository: PlayerRepository, // TODO("Split interface")
     @IoDispatcher private val ioDispatcher: CoroutineDispatcher
 ) : ViewModel() {
 
     private val _uiState: MutableStateFlow<CardUiState> = MutableStateFlow(
         CardUiState(
-        PlayerModel(
-         name = "",
-         email = ""
+            PlayerModel(
+                name = "",
+                email = "",
+                isActive = false
+            )
         )
-    )
     )
     val uiState: StateFlow<CardUiState> = _uiState.asStateFlow()
 
@@ -52,11 +55,14 @@ class PlayerCardViewModel @Inject constructor(
         viewModelScope.launch(ioDispatcher) {
             if (idPlayer != null) {
                 _uiState.update { it.copy(showsProgress = true) }
-                val response = playerRepository.getPlayerById(idPlayer)
-                if (response != null) {
-                    _uiState.update { it.copy(playerModel = response) }
-                } else {
-                    _uiEvent.send(UiEvent.ShowSnackbar(R.string.message_error_player_id))
+                val playerResult = getActivePlayerByIdUseCase(idPlayer)
+                when(playerResult) {
+                    is ResultDataBase.Error -> _uiEvent.send(
+                        UiEvent.ShowSnackbar(playerResult.message)
+                    )
+                    is ResultDataBase.Success -> _uiState.update {
+                        it.copy(playerModel = playerResult.value)
+                    }
                 }
                 _uiState.update { it.copy(showsProgress = false) }
             } else {
@@ -98,7 +104,7 @@ class PlayerCardViewModel @Inject constructor(
         suspendJob?.cancel()
         suspendJob = viewModelScope.launch(ioDispatcher) {
             _uiState.update { it.copy(showsProgress = true) }
-            val result = playerRepository.deletePlayerById(uiState.value.playerModel)
+            val result = playerRepository.disablePlayerById(uiState.value.playerModel)
             when (result) {
                 is ResultDataBase.Error -> _uiEvent.send(UiEvent.ShowSnackbar(result.message))
                 is ResultDataBase.Success -> _uiEvent.send(UiEvent.NavigateToList)

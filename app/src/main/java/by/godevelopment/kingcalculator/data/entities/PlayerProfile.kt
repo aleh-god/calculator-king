@@ -12,8 +12,9 @@ data class PlayerProfile(
     val id: Long = 0,
     val email: String,
     val name: String,
+    val isActive: Boolean = true,
     @ColorRes
-    val color: Int,
+    val avatar: Int? = null,
     @DrawableRes
-    val avatar: Int
+    val color: Int? = null
 )

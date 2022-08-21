@@ -6,8 +6,19 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.coroutineScope
+import androidx.lifecycle.flowWithLifecycle
+import androidx.recyclerview.widget.LinearLayoutManager
+import by.godevelopment.kingcalculator.R
 import by.godevelopment.kingcalculator.databinding.FragmentPlayerInfoBinding
+import com.google.android.material.snackbar.Snackbar
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 
+@AndroidEntryPoint
 class PlayerInfoFragment : Fragment() {
 
     companion object {
@@ -23,13 +34,39 @@ class PlayerInfoFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentPlayerInfoBinding.inflate(inflater, container, false)
-        setupUi()
+        viewLifecycleOwner.lifecycle.also {
+            setupUi(it)
+            setupEvent(it)
+        }
         return binding.root
     }
 
-    private fun setupUi() {
-        val helloMessage = "Player: ${viewModel.idPlayer}"
-        binding.message.text = helloMessage
+    private fun setupUi(lifecycle: Lifecycle) {
+        binding.apply {
+            infoList.layoutManager = LinearLayoutManager(requireContext())
+            lifecycle.coroutineScope.launch {
+                viewModel.uiState
+                    .flowWithLifecycle(lifecycle)
+                    .collect { uiState ->
+                        if (!uiState.isFetchingData) progress.visibility = View.GONE
+                        else progress.visibility = View.VISIBLE
+                        infoList.adapter = InfoAdapter(uiState.dataList)
+                    }
+            }
+        }
+    }
+
+    private fun setupEvent(lifecycle: Lifecycle) {
+        viewModel.uiEvent
+            .flowWithLifecycle(lifecycle)
+            .onEach { event ->
+                Snackbar
+                    .make(binding.root, event, Snackbar.LENGTH_INDEFINITE)
+                    .setAction(getString(R.string.snackbar_btn_reload))
+                    { viewModel.reloadDataList() }
+                    .show()
+            }
+            .launchIn(lifecycle.coroutineScope)
     }
 
     override fun onDestroy() {
