@@ -1,6 +1,7 @@
 package by.godevelopment.kingcalculator.data.datasource
 
 import by.godevelopment.kingcalculator.R
+import by.godevelopment.kingcalculator.commons.ROWS_NOT_INSERTED
 import by.godevelopment.kingcalculator.data.database.GamesDao
 import by.godevelopment.kingcalculator.data.entities.GameNote
 import by.godevelopment.kingcalculator.domain.commons.models.GameType
@@ -13,13 +14,11 @@ class GamesDataSource @Inject constructor(
     private val gamesDao: GamesDao
 ) {
 
-    suspend fun getPartyIdByGameId(gameId: Long): ResultDataBase<Long> {
-        return wrapResultBy(gameId) { gamesDao.getGameNoteById(it)?.partyId }
-    }
+    suspend fun getPartyIdByGameId(gameId: Long): ResultDataBase<Long> =
+        wrapResultBy(gameId) { gamesDao.getGameNoteById(it)?.partyId }
 
-    suspend fun getGameNoteById(gameId: Long): ResultDataBase<GameNote> {
-        return wrapResultBy(gameId) { gamesDao.getGameNoteById(it) }
-    }
+    suspend fun getGameNoteById(gameId: Long): ResultDataBase<GameNote> =
+        wrapResultBy(gameId) { gamesDao.getGameNoteById(it) }
 
     suspend fun createGameNote(gameType: GameType, partyId: Long): ResultDataBase<Long> {
         val gameId = gamesDao.insertPartyNote(
@@ -27,7 +26,7 @@ class GamesDataSource @Inject constructor(
                 partyId = partyId,
                 gameType = gameType)
         )
-        return if (gameId != -1L) { ResultDataBase.Success(value = gameId) }
+        return if (gameId != ROWS_NOT_INSERTED) { ResultDataBase.Success(value = gameId) }
         else ResultDataBase.Error(message = R.string.message_error_bad_database)
     }
 
@@ -46,18 +45,14 @@ class GamesDataSource @Inject constructor(
 
     suspend fun deleteAllGameNotes() = gamesDao.deleteAll()
 
-    // PartyRepositoryImpl
-
     suspend fun getGameNotesByPartyIdRaw(partyId: Long) =
         gamesDao.getGameNotesByPartyId(partyId)
 
-    suspend fun calculateGamesCountByPartyId(partyId: Long): ResultDataBase<Int> {
-        return wrapResultBy(partyId) { gamesDao.getGameNotesByPartyId(it).size }
-    }
+    suspend fun calculateGamesCountByPartyId(partyId: Long): ResultDataBase<Int> =
+        wrapResultBy(partyId) { gamesDao.getGameNotesByPartyId(it).size }
 
-    suspend fun getGameNotesByPartyId(partyId: Long): ResultDataBase<List<GameNote>> {
-        return wrapResultBy(partyId) { gamesDao.getGameNotesByPartyId(it) }
-    }
+    suspend fun getGameNotesByPartyId(partyId: Long): ResultDataBase<List<GameNote>> =
+        wrapResultBy(partyId) { gamesDao.getGameNotesByPartyId(it) }
 
     suspend fun getLastGameByPartyIdRaw(partyId: Long): GameNote? =
         gamesDao.getGameNotesByPartyId(partyId).maxByOrNull { it.finishedAt }

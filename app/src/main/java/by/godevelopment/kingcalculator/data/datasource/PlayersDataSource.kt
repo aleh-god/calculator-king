@@ -8,6 +8,7 @@ import by.godevelopment.kingcalculator.commons.TAG
 import by.godevelopment.kingcalculator.data.database.PlayersDao
 import by.godevelopment.kingcalculator.data.entities.PlayerProfile
 import by.godevelopment.kingcalculator.domain.commons.models.ResultDataBase
+import by.godevelopment.kingcalculator.domain.commons.utils.wrapResult
 import by.godevelopment.kingcalculator.domain.commons.utils.wrapResultBy
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
@@ -17,14 +18,11 @@ class PlayersDataSource @Inject constructor(
 ) {
     fun getAllPlayers(): Flow<List<PlayerProfile>> = playersDao.getAllPlayerProfiles()
 
-    suspend fun getPlayerProfileByIdRaw(playerId: Long): PlayerProfile? {
-        Log.i(TAG, "getPlayerModelByIdRaw: playerId = $playerId")
-        return playersDao.getPlayerProfileById(playerId)
-    }
+    suspend fun getPlayerProfileByIdRaw(playerId: Long): PlayerProfile? =
+        playersDao.getPlayerProfileById(playerId)
 
-    suspend fun getPlayerProfileById(playerId: Long): ResultDataBase<PlayerProfile> {
-        return wrapResultBy(playerId) { playersDao.getPlayerProfileById(it) }
-    }
+    suspend fun getPlayerProfileById(playerId: Long): ResultDataBase<PlayerProfile> =
+        wrapResultBy(playerId) { playersDao.getPlayerProfileById(it) }
 
     suspend fun createPlayer(params: PlayerProfile): ResultDataBase<Long> {
         return try {
@@ -48,10 +46,10 @@ class PlayersDataSource @Inject constructor(
         }
     }
 
-    suspend fun deletePlayerById(params: PlayerProfile): ResultDataBase<Int> {
+    suspend fun disablePlayerById(params: PlayerProfile): ResultDataBase<Int> {
         return try {
-            val result = playersDao.deletePlayerProfile(params)
-            if (result != ROWS_NOT_UPDATED) { ResultDataBase.Success(value = result) }
+            val disableResult = playersDao.updatePlayerProfile(params.copy(isActive = false))
+            if (disableResult != ROWS_NOT_UPDATED) { ResultDataBase.Success(value = disableResult) }
             else ResultDataBase.Error(message = R.string.message_error_data_save)
         } catch (e: Exception) {
             Log.i(TAG, "deletePlayerById: catch ${e.message}")
@@ -59,15 +57,12 @@ class PlayersDataSource @Inject constructor(
         }
     }
 
-    suspend fun getAllPlayersIdToNames(): Map<String, Long> {
-        val result = playersDao.getSuspendAllPlayerProfiles()
-        Log.i(TAG, "PlayerDataSource getAllPlayersEmailToNames: ${result.size}")
-        return result.associate { it.name to it.id }
-    }
+    suspend fun getAllPlayersIdToNames(): Map<String, Long> =
+        playersDao.getSuspendAllPlayerProfiles().associate { it.name to it.id }
 
-    suspend fun getAllPlayersNames(): List<String> {
-        val result = playersDao.getSuspendAllPlayerProfiles()
-        Log.i(TAG, "PlayerDataSource getAllPlayersNames: ${result.size}")
-        return result.map { it.name }
-    }
+    suspend fun getAllPlayersNames(): List<String> =
+        playersDao.getSuspendAllPlayerProfiles().map { it.name }
+
+    suspend fun deleteAllPlayers(): ResultDataBase<Int> =
+        wrapResult { playersDao.deleteAll() }
 }
