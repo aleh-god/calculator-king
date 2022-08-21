@@ -7,6 +7,7 @@ data class PlayerModel(
     val id: Long = 0,
     val name: String,
     val email: String,
+    val isActive: Boolean,
     @ColorRes
     val avatar: Int? = null,
     @DrawableRes

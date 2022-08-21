@@ -39,10 +39,10 @@
     </style>
 
     <style name="ThemeOverlay.CurrencyAppSample" parent="">
-    <!-- Secondary brand color. -->
-    <item name="colorSecondary">@color/secondaryBrandGold</item>
-    <item name="colorSecondaryVariant">@color/secondaryDarkBrandGold</item>
-    <item name="colorOnSecondary">@color/secondaryTextBrand</item>
+        <!-- Secondary brand color. -->
+        <item name="colorSecondary">@color/secondaryBrandGold</item>
+        <item name="colorSecondaryVariant">@color/secondaryDarkBrandGold</item>
+        <item name="colorOnSecondary">@color/secondaryTextBrand</item>
     </style>
 
 </resources>

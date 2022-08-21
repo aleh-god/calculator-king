@@ -5,7 +5,7 @@ import by.godevelopment.kingcalculator.data.datasource.GamesDataSource
 import by.godevelopment.kingcalculator.data.datasource.PartiesDataSource
 import by.godevelopment.kingcalculator.data.datasource.PlayersDataSource
 import by.godevelopment.kingcalculator.data.datasource.TricksDataSource
-import by.godevelopment.kingcalculator.data.utils.toGameNote
+import by.godevelopment.kingcalculator.data.utils.toGameModel
 import by.godevelopment.kingcalculator.data.utils.toPlayerModel
 import by.godevelopment.kingcalculator.data.utils.toTricksNote
 import by.godevelopment.kingcalculator.domain.commons.models.GameType
@@ -56,7 +56,7 @@ class GameRepositoryImpl @Inject constructor(
         gamesDataSource.getPartyIdByGameId(gameId)
 
     override suspend fun getGameNoteById(gameId: Long): ResultDataBase<GameModel> =
-        gamesDataSource.getGameNoteById(gameId).mapResult { it.toGameNote() }
+        gamesDataSource.getGameNoteById(gameId).mapResult { it.toGameModel() }
 
     private suspend fun updateTimeInPartyNoteByPartyId(gameId: Long): ResultDataBase<Int> =
         gamesDataSource.getPartyIdByGameId(gameId).flatMapResult {

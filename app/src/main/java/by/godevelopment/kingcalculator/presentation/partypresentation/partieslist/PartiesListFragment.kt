@@ -30,10 +30,6 @@ class PartiesListFragment : Fragment() {
     private var _binding: FragmentPartiesListBinding? = null
     private val binding get() = _binding!!
 
-    private val onClick: (Long) -> Unit = { key ->
-        navigateToPartyCard(key)
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -48,7 +44,11 @@ class PartiesListFragment : Fragment() {
     }
 
     private fun setupUi(lifecycle: Lifecycle) {
-        val rvAdapter = PartiesAdapter(onClick)
+        val rvAdapter = PartiesAdapter(
+            onItemClick = ::navigateToPartyCard,
+            onStatClick = ::navigateToPartyInfo,
+            onDelClick = ::deleteParty
+        )
         binding.apply {
             rv.adapter = rvAdapter
             rv.layoutManager = LinearLayoutManager(requireContext())
@@ -69,7 +69,7 @@ class PartiesListFragment : Fragment() {
             .flowWithLifecycle(lifecycle)
             .onEach { event ->
                 Snackbar
-                    .make(binding.root, event, Snackbar.LENGTH_INDEFINITE)
+                    .make(binding.root, event, Snackbar.LENGTH_LONG)
                     .setAction(getString(R.string.snackbar_btn_reload))
                     { viewModel.onAction() }
                     .show()
@@ -84,9 +84,20 @@ class PartiesListFragment : Fragment() {
         }
     }
 
-    private fun navigateToPartyCard(idParty: Long) {
+    private fun deleteParty(partyId: Long) {
+        viewModel.deleteParty(partyId)
+    }
+
+    private fun navigateToPartyCard(partyId: Long) {
+        // TODO("validate all players as Active")
         val direction = PartiesListFragmentDirections
-            .actionPartiesListFragmentToPartyCardFragment(idParty)
+            .actionPartiesListFragmentToPartyCardFragment(partyId)
+        findNavController().navigate(direction)
+    }
+
+    private fun navigateToPartyInfo(partyId: Long) {
+        val direction = PartiesListFragmentDirections
+            .actionPartiesListFragmentToPartyInfoFragment(partyId)
         findNavController().navigate(direction)
     }
 

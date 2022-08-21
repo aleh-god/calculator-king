@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginHorizontal="@dimen/medium_margin"
+    app:strokeWidth="1dp"
+    app:strokeColor="@color/stroke_color"
+    app:cardElevation="0dp"
+    app:cardCornerRadius="0dp"
+    >
+
+<androidx.constraintlayout.widget.ConstraintLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    >
+
+    <TextView
+        android:id="@+id/info_type"
+        android:layout_width="0dp"
+        android:layout_height="56dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/info_value"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginHorizontal="16dp"
+        tools:text="Games played:"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
+        android:textSize="16sp"
+        android:textColor="?android:attr/textColorSecondary"
+        android:textAlignment="textStart"
+        app:layout_constraintHorizontal_weight="3"
+        />
+
+    <TextView
+        android:id="@+id/info_value"
+        android:layout_width="0dp"
+        android:layout_height="56dp"
+        app:layout_constraintStart_toEndOf="@id/info_type"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginHorizontal="16dp"
+        tools:text="126"
+        android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
+        android:textSize="16sp"
+        android:textColor="?android:attr/textColorSecondary"
+        android:textAlignment="viewEnd"
+        app:layout_constraintHorizontal_weight="1"
+        />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+    </com.google.android.material.card.MaterialCardView>

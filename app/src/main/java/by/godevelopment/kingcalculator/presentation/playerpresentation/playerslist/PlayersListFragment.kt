@@ -30,8 +30,6 @@ class PlayersListFragment : Fragment() {
     private var _binding: FragmentPlayersListBinding? = null
     private val binding get() = _binding!!
 
-    private val onClick: (Long) -> Unit = { key -> navigateToPlayerCard(key) }
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -52,7 +50,10 @@ class PlayersListFragment : Fragment() {
     }
 
     private fun setupUi(lifecycle: Lifecycle) {
-        val rvAdapter = PlayersAdapter(onClick)
+        val rvAdapter = PlayersAdapter(
+            onClickItem = ::navigateToPlayerCard,
+            onClickImage = ::navigateToPlayerInfo
+        )
         binding.apply {
             rv.adapter = rvAdapter
             rv.layoutManager = LinearLayoutManager(requireContext())
@@ -81,9 +82,15 @@ class PlayersListFragment : Fragment() {
             .launchIn(lifecycle.coroutineScope)
     }
 
-    private fun navigateToPlayerCard(idPlayer: Long) {
+    private fun navigateToPlayerCard(playerId: Long) {
         val direction = PlayersListFragmentDirections
-            .actionPlayersListFragmentToPlayerCardFragment(idPlayer)
+            .actionPlayersListFragmentToPlayerCardFragment(playerId)
+        findNavController().navigate(direction)
+    }
+
+    private fun navigateToPlayerInfo(playerId: Long) {
+        val direction = PlayersListFragmentDirections
+            .actionPlayersListFragmentToPlayerInfoFragment(playerId)
         findNavController().navigate(direction)
     }
 

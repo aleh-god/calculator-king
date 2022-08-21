@@ -37,7 +37,7 @@ class PartiesListViewModel @Inject constructor(
             getPartyModelItemsUseCase()
                 .onStart { _uiState.update { it.copy(isFetchingData = true) } }
                 .catch { exception ->
-                    Log.i(TAG, "PartiesListViewModel viewModelScope.catch ${exception.message}")
+                    Log.i(TAG, "PartiesListViewModel viewModelScope.catch ${exception.message}") // TODO("viewModelScope.catch null for back to list")
                     _uiState.update { it.copy(isFetchingData = false) }
                     _uiEvent.send(R.string.message_error_data_load)
                 }
@@ -45,6 +45,11 @@ class PartiesListViewModel @Inject constructor(
                     _uiState.update { it.copy(isFetchingData = false, dataList = list) }
                 }
         }
+    }
+
+    fun deleteParty(partyId: Long) {
+//        TODO("Impl deleteParty")
+        Log.i(TAG, "deleteParty: $partyId")
     }
 
     fun onAction() {

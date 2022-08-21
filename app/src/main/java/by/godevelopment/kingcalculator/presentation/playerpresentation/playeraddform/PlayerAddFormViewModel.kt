@@ -80,7 +80,8 @@ class PlayerAddFormViewModel @Inject constructor(
             val result = playerRepository.createPlayer(
                 PlayerModel(
                     name = uiState.value.playerName,
-                    email = uiState.value.email
+                    email = uiState.value.email,
+                    isActive = true
                 )
             )
             when (result) {

@@ -31,4 +31,7 @@ interface PlayersDao {
     @Query("DELETE FROM players WHERE email = :key")
     suspend fun deletePlayerProfileByEmail(key: String): Int
 
+    @Query("DELETE FROM players")
+    suspend fun deleteAll(): Int
+
 }

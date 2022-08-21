@@ -5,18 +5,118 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".presentation.partypresentation.partyinfo.PartyInfoFragment">
+    tools:context=".presentation.playerpresentation.playerinfo.PlayerInfoFragment"
+    >
 
     <TextView
-        android:id="@+id/message"
+        android:id="@+id/party_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+        android:layout_margin="16dp"
+        tools:text="Party: Jesus VS Michelangelo"
+        android:textAppearance="@style/TextAppearance.MaterialComponents.Headline5"
+        />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/player_name"
+        android:layout_width="0dp"
+        android:layout_height="56dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/game_collum_one"
+        app:layout_constraintTop_toBottomOf="@id/party_name"
+        app:layout_constraintBottom_toTopOf="@id/info_list"
+        android:layout_marginStart="@dimen/big_margin"
+        tools:text="Player / Game type"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
+        android:textSize="16sp"
+        android:textColor="?android:attr/textColorSecondary"
+        android:textAlignment="textStart"
+        app:layout_constraintHorizontal_weight="1"
+        android:background="@drawable/frame_count"
+        />
+
+    <TextView
+        android:id="@+id/game_collum_one"
+        android:layout_width="56dp"
+        android:layout_height="56dp"
+        app:layout_constraintStart_toEndOf="@id/player_name"
+        app:layout_constraintEnd_toStartOf="@id/game_collum_two"
+        app:layout_constraintTop_toBottomOf="@id/party_name"
+        app:layout_constraintBottom_toTopOf="@id/info_list"
+        tools:text="Mic"
+        android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
+        android:textSize="14sp"
+        android:textColor="?android:attr/textColorSecondary"
+        android:textAlignment="center"
+        app:layout_constraintHorizontal_weight="1"
+        android:background="@drawable/frame_count"
+        />
+
+    <TextView
+        android:id="@+id/game_collum_two"
+        android:layout_width="56dp"
+        android:layout_height="56dp"
+        app:layout_constraintStart_toEndOf="@id/game_collum_one"
+        app:layout_constraintEnd_toStartOf="@id/game_collum_three"
+        app:layout_constraintTop_toBottomOf="@id/party_name"
+        app:layout_constraintBottom_toTopOf="@id/info_list"
+        tools:text="Dino"
+        android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
+        android:textSize="14sp"
+        android:textColor="?android:attr/textColorSecondary"
+        android:textAlignment="center"
+        app:layout_constraintHorizontal_weight="1"
+        android:background="@drawable/frame_count"
+        />
+
+    <TextView
+        android:id="@+id/game_collum_three"
+        android:layout_width="56dp"
+        android:layout_height="56dp"
+        app:layout_constraintStart_toEndOf="@id/game_collum_two"
+        app:layout_constraintEnd_toStartOf="@id/game_collum_four"
+        app:layout_constraintTop_toBottomOf="@id/party_name"
+        app:layout_constraintBottom_toTopOf="@id/info_list"
+        tools:text="Raph"
+        android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
+        android:textSize="14sp"
+        android:textColor="?android:attr/textColorSecondary"
+        android:textAlignment="center"
+        app:layout_constraintHorizontal_weight="1"
+        android:background="@drawable/frame_count"
+        />
+
+    <TextView
+        android:id="@+id/game_collum_four"
+        android:layout_width="56dp"
+        android:layout_height="56dp"
+        app:layout_constraintStart_toEndOf="@id/game_collum_three"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/party_name"
+        app:layout_constraintBottom_toTopOf="@id/info_list"
+        android:layout_marginEnd="@dimen/big_margin"
+        tools:text="Jonn"
+        android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
+        android:textSize="14sp"
+        android:textColor="?android:attr/textColorSecondary"
+        android:textAlignment="center"
+        app:layout_constraintHorizontal_weight="1"
+        android:background="@drawable/frame_count"
+        />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/info_list"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/player_name"
         app:layout_constraintBottom_toBottomOf="parent"
-        tools:text="Party Info Fragment"
-        style="@style/TextAppearance.Material3.HeadlineLarge"
+        tools:listitem="@layout/item_party_info_list"
         />
 
     <ProgressBar

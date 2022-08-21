@@ -9,7 +9,8 @@ import by.godevelopment.kingcalculator.databinding.ItemPlayersListBinding
 import by.godevelopment.kingcalculator.domain.playersdomain.models.PlayerModel
 
 class PlayersAdapter(
-    private val onClick: (Long) -> Unit
+    private val onClickItem: (Long) -> Unit,
+    private val onClickImage: (Long) -> Unit,
 ) : RecyclerView.Adapter<PlayersAdapter.ItemViewHolder>() {
 
     private val diffCallback = object : DiffUtil.ItemCallback<PlayerModel>() {
@@ -35,7 +36,10 @@ class PlayersAdapter(
                 playerName.text = itemPlayerModel.name
                 playerEmail.text = itemPlayerModel.email
                 root.setOnClickListener {
-                    onClick.invoke(itemPlayerModel.id)
+                    onClickItem.invoke(itemPlayerModel.id)
+                }
+                playerStat.setOnClickListener {
+                    onClickImage.invoke(itemPlayerModel.id)
                 }
             }
         }

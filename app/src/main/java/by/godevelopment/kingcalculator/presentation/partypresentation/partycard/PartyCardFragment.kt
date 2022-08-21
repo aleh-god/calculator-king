@@ -66,7 +66,10 @@ class PartyCardFragment : Fragment() {
                         if (!uiState.isFetchingData) progress.visibility = View.GONE
                         else progress.visibility = View.VISIBLE
                         gamesTableAdapter.items = uiState.dataList
-                        playerNameHeader.text = uiState.contractorPlayer
+                        playerNameHeader.text = buildString {
+                            append(uiState.contractorPlayer)
+                            append(getString(R.string.ui_text_contacts))
+                        }
                         playerOneName.text = uiState.playersInPartyModel.playerOne
                         playerTwoName.text = uiState.playersInPartyModel.playerTwo
                         playerThreeName.text = uiState.playersInPartyModel.playerThree
