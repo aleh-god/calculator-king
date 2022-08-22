@@ -110,6 +110,7 @@
 
     <string name="ui_text_contacts">\ contracts the game</string>
     <string name="ui_text_total_games">\ in 56</string>
+    <string name="ui_text_header_party_info">Game type \\ Player</string>
 
     <string name="alert_confirm_delete_title">WARNING!</string>
     <string name="alert_confirm_delete_message">Confirm delete all party notes</string>

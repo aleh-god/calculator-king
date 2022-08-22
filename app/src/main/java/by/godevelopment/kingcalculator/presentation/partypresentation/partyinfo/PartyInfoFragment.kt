@@ -9,6 +9,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.coroutineScope
 import androidx.lifecycle.flowWithLifecycle
+import androidx.recyclerview.widget.LinearLayoutManager
 import by.godevelopment.kingcalculator.R
 import by.godevelopment.kingcalculator.databinding.FragmentPartyInfoBinding
 import com.google.android.material.snackbar.Snackbar
@@ -42,13 +43,20 @@ class PartyInfoFragment : Fragment() {
 
     private fun setupUi(lifecycle: Lifecycle) {
         binding.apply {
+            infoList.layoutManager = LinearLayoutManager(requireContext())
             lifecycle.coroutineScope.launch {
                 viewModel.uiState
                     .flowWithLifecycle(lifecycle)
                     .collect { uiState ->
                         if (!uiState.isFetchingData) progress.visibility = View.GONE
                         else binding.progress.visibility = View.VISIBLE
-                        partyName.text = "partyId = ${viewModel.partyId}"
+                        partyName.text = uiState.partyName
+                        gameCollumOne.text = uiState.playersInPartyModel.playerOne
+                        gameCollumTwo.text = uiState.playersInPartyModel.playerTwo
+                        gameCollumThree.text = uiState.playersInPartyModel.playerThree
+                        gameCollumFour.text = uiState.playersInPartyModel.playerFour
+
+                        infoList.adapter = PartyInfoAdapter(uiState.dataList)
                     }
             }
         }
@@ -58,7 +66,7 @@ class PartyInfoFragment : Fragment() {
         viewModel.uiEvent
             .flowWithLifecycle(lifecycle)
             .onEach { event ->
-                when (event) {
+                when (event) { // TODO("rework this")
                     else -> Snackbar
                         .make(binding.root, event, Snackbar.LENGTH_LONG)
                         .setAction(getString(R.string.snackbar_btn_neutral_ok))
