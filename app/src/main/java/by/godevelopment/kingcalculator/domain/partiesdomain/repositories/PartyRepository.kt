@@ -30,4 +30,6 @@ interface PartyRepository {
     suspend fun createGameNote(partyId: Long, gameType: GameType) : ResultDataBase<Long>
 
     suspend fun getPartyModelById(partyId: Long): ResultDataBase<PartyModel>
+
+    suspend fun deletePartyById(partyId: Long): ResultDataBase<Int>
 }

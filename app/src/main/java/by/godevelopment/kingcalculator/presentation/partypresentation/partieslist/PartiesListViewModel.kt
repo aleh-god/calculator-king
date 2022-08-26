@@ -5,9 +5,13 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import by.godevelopment.kingcalculator.R
 import by.godevelopment.kingcalculator.commons.TAG
+import by.godevelopment.kingcalculator.di.IoDispatcher
+import by.godevelopment.kingcalculator.domain.commons.models.ResultDataBase
 import by.godevelopment.kingcalculator.domain.partiesdomain.models.ItemPartyModel
+import by.godevelopment.kingcalculator.domain.partiesdomain.usecases.DeletePartyUseCase
 import by.godevelopment.kingcalculator.domain.partiesdomain.usecases.GetPartyModelItemsUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.*
@@ -16,7 +20,9 @@ import javax.inject.Inject
 
 @HiltViewModel
 class PartiesListViewModel @Inject constructor(
-    private val getPartyModelItemsUseCase: GetPartyModelItemsUseCase
+    private val getPartyModelItemsUseCase: GetPartyModelItemsUseCase,
+    private val deletePartyUseCase: DeletePartyUseCase,
+    @IoDispatcher private val ioDispatcher: CoroutineDispatcher
 ) : ViewModel() {
 
     private val _uiState: MutableStateFlow<UiState> = MutableStateFlow(UiState())
@@ -37,7 +43,7 @@ class PartiesListViewModel @Inject constructor(
             getPartyModelItemsUseCase()
                 .onStart { _uiState.update { it.copy(isFetchingData = true) } }
                 .catch { exception ->
-                    Log.i(TAG, "PartiesListViewModel viewModelScope.catch ${exception.message}") // TODO("viewModelScope.catch null for back to list")
+                    Log.i(TAG, "PartiesListViewModel viewModelScope.catch ${exception.message}")
                     _uiState.update { it.copy(isFetchingData = false) }
                     _uiEvent.send(R.string.message_error_data_load)
                 }
@@ -48,8 +54,17 @@ class PartiesListViewModel @Inject constructor(
     }
 
     fun deleteParty(partyId: Long) {
-//        TODO("Impl deleteParty")
-        Log.i(TAG, "deleteParty: $partyId")
+        viewModelScope.launch(ioDispatcher) {
+            _uiState.update { it.copy(isFetchingData = true) }
+            val deleteResult = deletePartyUseCase(partyId)
+            when(deleteResult) {
+                is ResultDataBase.Error -> _uiEvent.send(deleteResult.message)
+                is ResultDataBase.Success -> {
+                    _uiEvent.send(R.string.message_delete_party_result)
+                }
+            }
+            _uiState.update { it.copy(isFetchingData = false) }
+        }
     }
 
     fun onAction() {

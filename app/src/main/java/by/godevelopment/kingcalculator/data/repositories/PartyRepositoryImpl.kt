@@ -153,6 +153,9 @@ class PartyRepositoryImpl @Inject constructor(
     override suspend fun getPartyModelById(partyId: Long): ResultDataBase<PartyModel> =
         partiesDataSource.getPartyNoteById(partyId).mapResult { it.toPartyModel() }
 
+    override suspend fun deletePartyById(partyId: Long): ResultDataBase<Int> =
+        partiesDataSource.deletePartyNotesById(partyId)
+
     override suspend fun deleteAllPartyNotes(): ResultDataBase<Int> =
         wrapResult {
             val deletedParties = partiesDataSource.deleteAllPartyNotes()

@@ -33,6 +33,9 @@ class PartiesDataSource @Inject constructor(
 
     suspend fun deleteAllPartyNotes(): Int = partiesDao.deleteAll()
 
+    suspend fun deletePartyNotesById(partyId: Long): ResultDataBase<Int> =
+        wrapResultBy(partyId) { partiesDao.deletePartyNotesById(it) }
+
     suspend fun getPartyNoteByPlayerId(playerId: Long): ResultDataBase<List<PartyNote>> =
         wrapResultBy(playerId) { partiesDao.getAllPartiesListByPlayerId(it) }
 }
