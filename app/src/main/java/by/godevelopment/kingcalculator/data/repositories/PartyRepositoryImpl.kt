@@ -40,15 +40,15 @@ class PartyRepositoryImpl @Inject constructor(
                     id = it.id,
                     partyName = it.partyName,
                     startedAt = it.startedAt,
-                    partyLastTime = gamesDataSource.getLastGameByPartyIdRaw(it.id)?.finishedAt!!,
+                    partyLastTime = it.partyLastTime,
                     partyGamesCount = gamesDataSource.calculateGamesCountByPartyIdRaw(it.id),
-                    player_one = playersDataSource.getPlayerProfileByIdRaw(it.playerOneId)?.toPlayerModel()!!,
+                    player_one = playersDataSource.getActivePlayerProfileByIdRaw(it.playerOneId)?.toPlayerModel(),
                     player_one_tricks = getPlayerTricksByPartyIdRaw(it.id, it.playerOneId),
-                    player_two = playersDataSource.getPlayerProfileByIdRaw(it.playerTwoId)?.toPlayerModel()!!,
+                    player_two = playersDataSource.getActivePlayerProfileByIdRaw(it.playerTwoId)?.toPlayerModel(),
                     player_two_tricks = getPlayerTricksByPartyIdRaw(it.id, it.playerTwoId),
-                    player_three = playersDataSource.getPlayerProfileByIdRaw(it.playerThreeId)?.toPlayerModel()!!,
+                    player_three = playersDataSource.getActivePlayerProfileByIdRaw(it.playerThreeId)?.toPlayerModel(),
                     player_three_tricks = getPlayerTricksByPartyIdRaw(it.id, it.playerThreeId),
-                    player_four = playersDataSource.getPlayerProfileByIdRaw(it.playerFourId)?.toPlayerModel()!!,
+                    player_four = playersDataSource.getActivePlayerProfileByIdRaw(it.playerFourId)?.toPlayerModel(),
                     player_four_tricks = getPlayerTricksByPartyIdRaw(it.id, it.playerFourId),
                 )
             }
@@ -115,7 +115,7 @@ class PartyRepositoryImpl @Inject constructor(
                             1 -> party.playerTwoId
                             2 -> party.playerThreeId
                             3 -> party.playerFourId
-                            else -> throw IllegalStateException()
+                            else -> return ResultDataBase.Error(message = R.string.message_error_data_load)
                         }
                         return playersDataSource.getPlayerProfileById(playerId)
                             .mapResult { it.toPlayerModel() }

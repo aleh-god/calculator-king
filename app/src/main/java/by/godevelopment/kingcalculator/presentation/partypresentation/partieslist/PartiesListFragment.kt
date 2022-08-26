@@ -68,11 +68,13 @@ class PartiesListFragment : Fragment() {
         viewModel.uiEvent
             .flowWithLifecycle(lifecycle)
             .onEach { event ->
-                Snackbar
+                val sn = Snackbar
                     .make(binding.root, event, Snackbar.LENGTH_LONG)
                     .setAction(getString(R.string.snackbar_btn_reload))
                     { viewModel.onAction() }
-                    .show()
+
+                sn.show()
+                sn.dismiss()
             }
             .launchIn(lifecycle.coroutineScope)
     }

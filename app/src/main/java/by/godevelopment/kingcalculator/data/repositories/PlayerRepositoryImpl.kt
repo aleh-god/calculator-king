@@ -36,8 +36,18 @@ class PlayerRepositoryImpl @Inject constructor(
     override suspend fun updatePlayerById(params: PlayerModel): ResultDataBase<Int> =
         playersDataSource.updatePlayerById(params.toPlayerProfile())
 
-    override suspend fun disablePlayerById(params: PlayerModel): ResultDataBase<Int> =
-        playersDataSource.disablePlayerById(params.toPlayerProfile())
+    override suspend fun disablePlayerById(params: PlayerModel): ResultDataBase<Int> {
+        val parties = partiesDataSource.getPartyNoteByPlayerId(params.id)
+        when(parties) {
+            is ResultDataBase.Error -> Unit
+            is ResultDataBase.Success -> {
+                parties.value.forEach {
+                    partiesDataSource.updateTimeInPartyNoteByPartyId(it.id)
+                }
+            }
+        }
+        return playersDataSource.disablePlayerById(params.toPlayerProfile())
+    }
 
     suspend fun deleteAllPlayers(): ResultDataBase<Int> = playersDataSource.deleteAllPlayers()
 

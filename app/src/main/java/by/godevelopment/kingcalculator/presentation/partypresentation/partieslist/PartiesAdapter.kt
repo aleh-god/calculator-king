@@ -49,8 +49,8 @@ class PartiesAdapter(
                 playerThreeScore.text = itemPartyModel.player_three_score
                 playerFourName.text = itemPartyModel.player_four.name
                 playerFourScore.text = itemPartyModel.player_four_score
-                partyStartTime.text = itemPartyModel.partyStartDate
-                partyEndTime.text = itemPartyModel.partyLastDate
+                partyStartTime.text = itemPartyModel.partyStartTime
+                partyEndTime.text = itemPartyModel.partyLastTime
                 root.setOnClickListener {
                     onItemClick(itemPartyModel.id)
                 }

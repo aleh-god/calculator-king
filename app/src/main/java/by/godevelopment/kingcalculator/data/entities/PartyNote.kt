@@ -10,7 +10,7 @@ data class PartyNote(
     val id: Long = 0,
     val partyName: String,
     val startedAt: Long,
-    val partyEndTime: Long? = null,
+    val partyLastTime: Long,
     val playerOneId: Long,
     val playerTwoId: Long,
     val playerThreeId: Long,

@@ -11,6 +11,7 @@ import by.godevelopment.kingcalculator.domain.commons.models.ResultDataBase
 import by.godevelopment.kingcalculator.domain.commons.utils.wrapResult
 import by.godevelopment.kingcalculator.domain.commons.utils.wrapResultBy
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 class PlayersDataSource @Inject constructor(
@@ -20,6 +21,9 @@ class PlayersDataSource @Inject constructor(
 
     suspend fun getPlayerProfileByIdRaw(playerId: Long): PlayerProfile? =
         playersDao.getPlayerProfileById(playerId)
+
+    suspend fun getActivePlayerProfileByIdRaw(playerId: Long): PlayerProfile? =
+        playersDao.getPlayerProfileById(playerId)?.takeIf { it.isActive }
 
     suspend fun getPlayerProfileById(playerId: Long): ResultDataBase<PlayerProfile> =
         wrapResultBy(playerId) { playersDao.getPlayerProfileById(it) }

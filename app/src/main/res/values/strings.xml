@@ -6,6 +6,9 @@
     <string name="players_three">Player Three</string>
     <string name="players_four">Player Four</string>
 
+    <string name="player_null">Deleted</string>
+    <string name="party_did_not_start">Party didn\'t start</string>
+
     <string name="game_type_tt">Take Tricks</string>
     <string name="game_type_tb">Take Boys</string>
     <string name="game_type_tg">Take Girls</string>
