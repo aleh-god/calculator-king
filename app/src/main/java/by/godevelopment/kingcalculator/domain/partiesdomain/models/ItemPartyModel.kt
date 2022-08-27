@@ -5,8 +5,8 @@ import by.godevelopment.kingcalculator.domain.playersdomain.models.PlayerModel
 data class ItemPartyModel(
     val id: Long = 0,
     val partyName: String,
-    val partyStartDate: String,
-    val partyLastDate: String,
+    val partyStartTime: String,
+    val partyLastTime: String,
     val isComplete: Boolean,
     val player_one: PlayerModel,
     val player_two: PlayerModel,

@@ -6,6 +6,9 @@
     <string name="players_three">Player Three</string>
     <string name="players_four">Player Four</string>
 
+    <string name="player_null">Deleted</string>
+    <string name="party_did_not_start">Party didn\'t start</string>
+
     <string name="game_type_tt">Take Tricks</string>
     <string name="game_type_tb">Take Boys</string>
     <string name="game_type_tg">Take Girls</string>
@@ -99,6 +102,9 @@
     <string name="message_error_validate_player_name_length">The player name needs to consist of at least 3 characters</string>
     <string name="message_error_validate_party_name_length">The party name needs to consist of at least 3 characters</string>
     <string name="message_error_validate_email_different">Players names must be different</string>
+    <string name="message_error_validate_payers_count">Not enough players</string>
+    <string name="message_error_validate_players_is_active">Somebody players is deleted</string>
+    <string name="message_delete_party_result">Deleted database note</string>
     <string name="message_delete_parties_result">Deleted %1$d database notes</string>
     <string name="message_error_game_validate_not_equal_sum">Total score is not equal to game score</string>
     <string name="message_error_email_check">This email is already registered</string>
@@ -110,6 +116,7 @@
 
     <string name="ui_text_contacts">\ contracts the game</string>
     <string name="ui_text_total_games">\ in 56</string>
+    <string name="ui_text_header_party_info">Game type \\ Player</string>
 
     <string name="alert_confirm_delete_title">WARNING!</string>
     <string name="alert_confirm_delete_message">Confirm delete all party notes</string>

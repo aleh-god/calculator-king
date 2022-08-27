@@ -1,23 +1,25 @@
 package by.godevelopment.kingcalculator.data.repositories
 
-import android.util.Log
 import by.godevelopment.kingcalculator.R
-import by.godevelopment.kingcalculator.commons.TAG
 import by.godevelopment.kingcalculator.data.datasource.GamesDataSource
 import by.godevelopment.kingcalculator.data.datasource.PartiesDataSource
 import by.godevelopment.kingcalculator.data.datasource.PlayersDataSource
 import by.godevelopment.kingcalculator.data.datasource.TricksDataSource
 import by.godevelopment.kingcalculator.data.entities.PartyNote
 import by.godevelopment.kingcalculator.data.entities.TricksNote
+import by.godevelopment.kingcalculator.data.utils.toPartyModel
 import by.godevelopment.kingcalculator.data.utils.toPlayerModel
+import by.godevelopment.kingcalculator.data.utils.toTricksNoteModel
 import by.godevelopment.kingcalculator.domain.commons.models.GameType
 import by.godevelopment.kingcalculator.domain.commons.models.ResultDataBase
 import by.godevelopment.kingcalculator.domain.commons.utils.mapResult
 import by.godevelopment.kingcalculator.domain.commons.utils.wrapResult
 import by.godevelopment.kingcalculator.domain.gamesdomain.models.GameModel
 import by.godevelopment.kingcalculator.domain.gamesdomain.models.Players
+import by.godevelopment.kingcalculator.domain.gamesdomain.models.TricksNoteModel
 import by.godevelopment.kingcalculator.domain.partiesdomain.models.RawItemPartyModel
 import by.godevelopment.kingcalculator.domain.partiesdomain.repositories.PartyRepository
+import by.godevelopment.kingcalculator.domain.playersdomain.models.PartyModel
 import by.godevelopment.kingcalculator.domain.playersdomain.models.PlayerModel
 import by.godevelopment.kingcalculator.presentation.mainactivity.MainActivityRepository
 import kotlinx.coroutines.flow.Flow
@@ -32,23 +34,21 @@ class PartyRepositoryImpl @Inject constructor(
 ) : PartyRepository, MainActivityRepository {
 
     override fun getAllParties(): Flow<List<RawItemPartyModel>> {
-        Log.i(TAG, "getAllParties: run")
         val result= partiesDataSource.getAllPartyNotes().map { list ->
-            Log.i(TAG, "PartyRepositoryImpl getAllParties: ${list.size}")
             list.map {
                 RawItemPartyModel(
                     id = it.id,
                     partyName = it.partyName,
                     startedAt = it.startedAt,
-                    partyLastTime = gamesDataSource.getLastGameByPartyIdRaw(it.id)?.finishedAt!!,
+                    partyLastTime = it.partyLastTime,
                     partyGamesCount = gamesDataSource.calculateGamesCountByPartyIdRaw(it.id),
-                    player_one = playersDataSource.getPlayerProfileByIdRaw(it.playerOneId)?.toPlayerModel()!!,
+                    player_one = playersDataSource.getActivePlayerProfileByIdRaw(it.playerOneId)?.toPlayerModel(),
                     player_one_tricks = getPlayerTricksByPartyIdRaw(it.id, it.playerOneId),
-                    player_two = playersDataSource.getPlayerProfileByIdRaw(it.playerTwoId)?.toPlayerModel()!!,
+                    player_two = playersDataSource.getActivePlayerProfileByIdRaw(it.playerTwoId)?.toPlayerModel(),
                     player_two_tricks = getPlayerTricksByPartyIdRaw(it.id, it.playerTwoId),
-                    player_three = playersDataSource.getPlayerProfileByIdRaw(it.playerThreeId)?.toPlayerModel()!!,
+                    player_three = playersDataSource.getActivePlayerProfileByIdRaw(it.playerThreeId)?.toPlayerModel(),
                     player_three_tricks = getPlayerTricksByPartyIdRaw(it.id, it.playerThreeId),
-                    player_four = playersDataSource.getPlayerProfileByIdRaw(it.playerFourId)?.toPlayerModel()!!,
+                    player_four = playersDataSource.getActivePlayerProfileByIdRaw(it.playerFourId)?.toPlayerModel(),
                     player_four_tricks = getPlayerTricksByPartyIdRaw(it.id, it.playerFourId),
                 )
             }
@@ -65,41 +65,28 @@ class PartyRepositoryImpl @Inject constructor(
                 tricksDataSource.getTricksNoteByGameId(gameId).filter { it.playerId == playerId }
             )
         }
-        Log.i(TAG, "getPlayerTricksByPartyId: gameIdList = ${gamesIdList.size} tricksResult = ${tricksResult.size}")
         return tricksResult
-    }
-
-    private suspend fun getPlayerTricksByPartyId(partyId: Long, playerId: Long): ResultDataBase<List<TricksNote>> {
-        val listResult = gamesDataSource.getGameNotesByPartyId(partyId)
-        return when (listResult) {
-            is ResultDataBase.Error -> ResultDataBase.Error(message = listResult.message)
-            is ResultDataBase.Success -> {
-                val gamesIdList = listResult.value.map { it.id }
-                val tricksResult = mutableListOf<TricksNote>()
-                gamesIdList.forEach {
-                    tricksResult.addAll(tricksDataSource.getTricksNoteByGameId(it))
-                }
-                Log.i(TAG, "getPlayerTricksByPartyId: gameIdList = ${gamesIdList.size} tricksResult = ${tricksResult.size}")
-                ResultDataBase.Success(value = tricksResult.filter { it.playerId == playerId })
-            }
-        }
     }
 
     override suspend fun createNewPartyAndReturnId(party: PartyNote): ResultDataBase<Long> =
         partiesDataSource.createPartyNote(party)
 
     override suspend fun getAllPlayersIdToNames(): Map<String, Long> =
-        playersDataSource.getAllPlayersIdToNames()
+        playersDataSource.getAllActivePlayersIdToNames()
 
     override suspend fun getPlayersByPartyId(partyId: Long): ResultDataBase<Map<Players, PlayerModel>> {
         val partyResult = partiesDataSource.getPartyNoteById(partyId)
         return when(partyResult) {
             is ResultDataBase.Success -> {
                 ResultDataBase.Success(value = mapOf<Players, PlayerModel?>(
-                    Players.PlayerOne to playersDataSource.getPlayerProfileByIdRaw(partyResult.value.playerOneId)?.toPlayerModel(),
-                    Players.PlayerTwo to playersDataSource.getPlayerProfileByIdRaw(partyResult.value.playerTwoId)?.toPlayerModel(),
-                    Players.PlayerThree to playersDataSource.getPlayerProfileByIdRaw(partyResult.value.playerThreeId)?.toPlayerModel(),
-                    Players.PlayerFour to playersDataSource.getPlayerProfileByIdRaw(partyResult.value.playerFourId)?.toPlayerModel(),
+                    Players.PlayerOne to playersDataSource
+                        .getPlayerProfileByIdRaw(partyResult.value.playerOneId)?.toPlayerModel(),
+                    Players.PlayerTwo to playersDataSource
+                        .getPlayerProfileByIdRaw(partyResult.value.playerTwoId)?.toPlayerModel(),
+                    Players.PlayerThree to playersDataSource
+                        .getPlayerProfileByIdRaw(partyResult.value.playerThreeId)?.toPlayerModel(),
+                    Players.PlayerFour to playersDataSource
+                        .getPlayerProfileByIdRaw(partyResult.value.playerFourId)?.toPlayerModel(),
                 )
                     .mapValues {
                         if (it.value == null) return ResultDataBase.Error<Map<Players, PlayerModel>>(message = R.string.message_error_bad_database)
@@ -107,7 +94,9 @@ class PartyRepositoryImpl @Inject constructor(
                     }
                 )
             }
-            is ResultDataBase.Error -> ResultDataBase.Error(message = R.string.message_error_bad_database)
+            is ResultDataBase.Error -> ResultDataBase.Error(
+                message = R.string.message_error_bad_database
+            )
         }
     }
 
@@ -126,7 +115,7 @@ class PartyRepositoryImpl @Inject constructor(
                             1 -> party.playerTwoId
                             2 -> party.playerThreeId
                             3 -> party.playerFourId
-                            else -> throw IllegalStateException()
+                            else -> return ResultDataBase.Error(message = R.string.message_error_data_load)
                         }
                         return playersDataSource.getPlayerProfileById(playerId)
                             .mapResult { it.toPlayerModel() }
@@ -155,11 +144,20 @@ class PartyRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun createGameNote(partyId: Long, gameType: GameType): ResultDataBase<Long> {
-        val gameId = gamesDataSource.createGameNote(gameType, partyId)
-        Log.i(TAG, "PartyRepositoryImpl createGameNote: $gameType , $partyId = $gameId")
-        return gameId
-    }
+    override suspend fun getAllTricksNotesByGameId(gameId: Long): List<TricksNoteModel>
+        = tricksDataSource.getTricksNoteByGameId(gameId).map { it.toTricksNoteModel() }
+
+    override suspend fun createGameNote(partyId: Long, gameType: GameType): ResultDataBase<Long> =
+        gamesDataSource.createGameNote(gameType, partyId)
+
+    override suspend fun getPartyModelById(partyId: Long): ResultDataBase<PartyModel> =
+        partiesDataSource.getPartyNoteById(partyId).mapResult { it.toPartyModel() }
+
+    override suspend fun deletePartyById(partyId: Long): ResultDataBase<Int> =
+        partiesDataSource.deletePartyNotesById(partyId)
+
+    override suspend fun getAllPlayersCount(): ResultDataBase<Int> =
+        wrapResult { playersDataSource.getAllActivePlayersNames().size }
 
     override suspend fun deleteAllPartyNotes(): ResultDataBase<Int> =
         wrapResult {

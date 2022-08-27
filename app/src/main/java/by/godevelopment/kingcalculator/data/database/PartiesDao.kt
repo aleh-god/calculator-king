@@ -23,5 +23,8 @@ interface PartiesDao {
     suspend fun getPartyNoteById(key: Long): PartyNote?
 
     @Query("SELECT * from parties WHERE playerOneId = :key OR playerTwoId = :key OR playerThreeId = :key OR playerFourId = :key")
-    fun getAllPartiesListByPlayerId(key: Long): List<PartyNote>
+    suspend fun getAllPartiesListByPlayerId(key: Long): List<PartyNote>
+
+    @Query("DELETE FROM parties WHERE id = :key")
+    suspend fun deletePartyNotesById(key: Long): Int
 }
