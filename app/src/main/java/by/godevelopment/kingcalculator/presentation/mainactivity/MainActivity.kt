@@ -56,10 +56,12 @@ class MainActivity : AppCompatActivity() {
         binding.toolbar.setupWithNavController(navController, appBarConfiguration)
 
         setupListeners()
+
     }
 
     private fun setupListeners() {
         navController.addOnDestinationChangedListener(listener)
+        binding.toolbar.setNavigationOnClickListener { onBackPressed() }    // For Game Add Form Screen
         setupConfirmDialogListener()
     }
 
