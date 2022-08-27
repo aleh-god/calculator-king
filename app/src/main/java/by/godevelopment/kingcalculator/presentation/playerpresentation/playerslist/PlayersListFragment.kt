@@ -76,7 +76,7 @@ class PlayersListFragment : Fragment() {
                 Snackbar
                     .make(binding.root, event, Snackbar.LENGTH_INDEFINITE)
                     .setAction(getString(R.string.snackbar_btn_reload))
-                    { viewModel.fetchDataModel() }
+                    { viewModel.reloadDataModel() }
                     .show()
             }
             .launchIn(lifecycle.coroutineScope)

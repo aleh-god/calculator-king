@@ -31,7 +31,7 @@ class PlayersListViewModel @Inject constructor(
         fetchDataModel()
     }
 
-    fun fetchDataModel() {
+    private fun fetchDataModel() {
         fetchJob?.cancel()
         fetchJob = viewModelScope.launch {
             getListPlayerModelUseCase()
@@ -45,6 +45,10 @@ class PlayersListViewModel @Inject constructor(
                     _uiState.update { it.copy(isFetchingData = false, dataList = list) }
                 }
         }
+    }
+
+    fun reloadDataModel() {
+        fetchDataModel()
     }
 
     data class UiState(

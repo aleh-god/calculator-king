@@ -82,6 +82,7 @@ class PartyAddFormViewModel @Inject constructor(
                     PartyNote(
                         partyName = it.partyName,
                         startedAt = System.currentTimeMillis(),
+                        partyLastTime = System.currentTimeMillis(),
                         playerOneId = it.players[it.playerOneName]!!,
                         playerTwoId = it.players[it.playerTwoName]!!,
                         playerThreeId = it.players[it.playerThreeName]!!,
