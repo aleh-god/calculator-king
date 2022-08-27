@@ -45,7 +45,7 @@ class PartiesListFragment : Fragment() {
 
     private fun setupUi(lifecycle: Lifecycle) {
         val rvAdapter = PartiesAdapter(
-            onItemClick = ::navigateToPartyCard,
+            onItemClick = ::checkPayersIsActiveAndNavigateToPartyCard,
             onStatClick = ::navigateToPartyInfo,
             onDelClick = ::deleteParty
         )
@@ -68,21 +68,27 @@ class PartiesListFragment : Fragment() {
         viewModel.uiEvent
             .flowWithLifecycle(lifecycle)
             .onEach { event ->
-                // TODO("Add variable action")
                 // TODO("impl Snackbar scope")
-                Snackbar
-                    .make(binding.root, event, Snackbar.LENGTH_LONG)
-                    .setAction(getString(R.string.snackbar_btn_reload))
-                    { viewModel.onAction() }
-                    .show()
+                when(event){
+                    PartiesListUiEvent.NavigateToPartyAddForm -> navigateToPartyAddForm()
+                    is PartiesListUiEvent.NavigateToPartyCard -> navigateToPartyCard(event.navArgs)
+                    is PartiesListUiEvent.NavigateToPartyInfo -> navigateToPartyInfo(event.navArgs)
+                    is PartiesListUiEvent.ShowMessage -> {
+                        Snackbar
+                            .make(binding.root, event.message, Snackbar.LENGTH_LONG)
+                            .setAction(event.textAction)
+                            { event.onAction() }
+                            .show()
+                    }
+                }
+
             }
             .launchIn(lifecycle.coroutineScope)
     }
 
     private fun setupListeners() {
         binding.floatingActionButton.setOnClickListener {
-            // TODO("validate min players count")
-            findNavController().navigate(R.id.action_partiesListFragment_to_partyAddFormFragment)
+            viewModel.checkPlayersMinAndNavigate()
         }
     }
 
@@ -90,8 +96,15 @@ class PartiesListFragment : Fragment() {
         viewModel.deleteParty(partyId)
     }
 
+    private fun checkPayersIsActiveAndNavigateToPartyCard(partyId: Long) {
+        viewModel.checkPayersIsActiveAndNavigateToPartyCard(partyId)
+    }
+
+    private fun navigateToPartyAddForm() {
+        findNavController().navigate(R.id.action_partiesListFragment_to_partyAddFormFragment)
+    }
+
     private fun navigateToPartyCard(partyId: Long) {
-        // TODO("validate all players as Active")
         val direction = PartiesListFragmentDirections
             .actionPartiesListFragmentToPartyCardFragment(partyId)
         findNavController().navigate(direction)

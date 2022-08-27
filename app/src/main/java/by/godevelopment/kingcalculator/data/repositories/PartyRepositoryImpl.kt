@@ -72,7 +72,7 @@ class PartyRepositoryImpl @Inject constructor(
         partiesDataSource.createPartyNote(party)
 
     override suspend fun getAllPlayersIdToNames(): Map<String, Long> =
-        playersDataSource.getAllPlayersIdToNames()
+        playersDataSource.getAllActivePlayersIdToNames()
 
     override suspend fun getPlayersByPartyId(partyId: Long): ResultDataBase<Map<Players, PlayerModel>> {
         val partyResult = partiesDataSource.getPartyNoteById(partyId)
@@ -155,6 +155,9 @@ class PartyRepositoryImpl @Inject constructor(
 
     override suspend fun deletePartyById(partyId: Long): ResultDataBase<Int> =
         partiesDataSource.deletePartyNotesById(partyId)
+
+    override suspend fun getAllPlayersCount(): ResultDataBase<Int> =
+        wrapResult { playersDataSource.getAllActivePlayersNames().size }
 
     override suspend fun deleteAllPartyNotes(): ResultDataBase<Int> =
         wrapResult {

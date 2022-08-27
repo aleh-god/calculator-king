@@ -9,6 +9,7 @@ import by.godevelopment.kingcalculator.di.IoDispatcher
 import by.godevelopment.kingcalculator.domain.commons.models.ResultDataBase
 import by.godevelopment.kingcalculator.domain.partiesdomain.models.ItemPartyModel
 import by.godevelopment.kingcalculator.domain.partiesdomain.usecases.DeletePartyUseCase
+import by.godevelopment.kingcalculator.domain.partiesdomain.usecases.GetAllActivePlayersCountUseCase
 import by.godevelopment.kingcalculator.domain.partiesdomain.usecases.GetPartyModelItemsUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
@@ -22,14 +23,15 @@ import javax.inject.Inject
 class PartiesListViewModel @Inject constructor(
     private val getPartyModelItemsUseCase: GetPartyModelItemsUseCase,
     private val deletePartyUseCase: DeletePartyUseCase,
+    private val getAllActivePlayersCountUseCase: GetAllActivePlayersCountUseCase,
     @IoDispatcher private val ioDispatcher: CoroutineDispatcher
 ) : ViewModel() {
 
     private val _uiState: MutableStateFlow<UiState> = MutableStateFlow(UiState())
     val uiState: StateFlow<UiState> = _uiState.asStateFlow()
 
-    private val _uiEvent  = Channel<Int>()
-    val uiEvent: Flow<Int> = _uiEvent.receiveAsFlow()
+    private val _uiEvent  = Channel<PartiesListUiEvent>()
+    val uiEvent: Flow<PartiesListUiEvent> = _uiEvent.receiveAsFlow()
 
     private var fetchJob: Job? = null
 
@@ -45,7 +47,11 @@ class PartiesListViewModel @Inject constructor(
                 .catch { exception ->
                     Log.i(TAG, "PartiesListViewModel viewModelScope.catch ${exception.message}")
                     _uiState.update { it.copy(isFetchingData = false) }
-                    _uiEvent.send(R.string.message_error_data_load)
+                    _uiEvent.send(PartiesListUiEvent.ShowMessage(
+                        message = R.string.message_error_data_load,
+                        textAction = R.string.snackbar_btn_reload,
+                        onAction = ::reloadDataModel
+                    ))
                 }
                 .collect { list ->
                     _uiState.update { it.copy(isFetchingData = false, dataList = list) }
@@ -58,17 +64,82 @@ class PartiesListViewModel @Inject constructor(
             _uiState.update { it.copy(isFetchingData = true) }
             val deleteResult = deletePartyUseCase(partyId)
             when(deleteResult) {
-                is ResultDataBase.Error -> _uiEvent.send(deleteResult.message)
+                is ResultDataBase.Error -> _uiEvent.send(PartiesListUiEvent.ShowMessage(
+                    message = deleteResult.message,
+                    textAction = R.string.snackbar_btn_neutral_ok,
+                    onAction = {}
+                ))
                 is ResultDataBase.Success -> {
-                    _uiEvent.send(R.string.message_delete_party_result)
+                    _uiEvent.send(PartiesListUiEvent.ShowMessage(
+                        message = R.string.message_delete_party_result,
+                        textAction = R.string.snackbar_btn_neutral_ok,
+                        onAction = {}
+                    ))
                 }
             }
             _uiState.update { it.copy(isFetchingData = false) }
         }
     }
 
-    fun onAction() {
+    private fun reloadDataModel() {
+        // TODO("count reload")
         fetchDataModel()
+    }
+
+    fun checkPlayersMinAndNavigate() {
+        viewModelScope.launch(ioDispatcher) {
+            _uiState.update { it.copy(isFetchingData = true) }
+            val playersCount = getAllActivePlayersCountUseCase()
+            when(playersCount) {
+                is ResultDataBase.Error -> _uiEvent.send(PartiesListUiEvent.ShowMessage(
+                    message = playersCount.message,
+                    textAction = R.string.snackbar_btn_neutral_ok,
+                    onAction = {}
+                ))
+                is ResultDataBase.Success -> {
+                    if (playersCount.value > 3)
+                        _uiEvent.send(PartiesListUiEvent.NavigateToPartyAddForm)
+                    else _uiEvent.send(PartiesListUiEvent.ShowMessage(
+                        message = R.string.message_error_validate_payers_count,
+                        textAction = R.string.snackbar_btn_neutral_ok,
+                        onAction = {}
+                    ))
+                }
+            }
+            _uiState.update { it.copy(isFetchingData = false) }
+        }
+    }
+
+    fun checkPayersIsActiveAndNavigateToPartyCard(partyId: Long) {
+        viewModelScope.launch(ioDispatcher) {
+            _uiState.update { it.copy(isFetchingData = true) }
+            _uiState.value.dataList.firstOrNull { it.id == partyId }?.let {
+                Log.i(TAG, "checkPayersIsActiveAndNavigateToPartyCard: ${it.player_one}")
+                Log.i(TAG, "checkPayersIsActiveAndNavigateToPartyCard: ${it.player_two}")
+                Log.i(TAG, "checkPayersIsActiveAndNavigateToPartyCard: ${it.player_three}")
+                Log.i(TAG, "checkPayersIsActiveAndNavigateToPartyCard: ${it.player_four}")
+                Log.i(
+                    TAG, "checkPayersIsActiveAndNavigateToPartyCard: ${
+                        (it.player_one.isActive &&
+                                it.player_two.isActive &&
+                                it.player_three.isActive &&
+                                it.player_four.isActive)
+                    }"
+                )
+                if(it.player_one.isActive &&
+                    it.player_two.isActive &&
+                    it.player_three.isActive &&
+                    it.player_four.isActive)
+                    _uiEvent.send(PartiesListUiEvent.NavigateToPartyCard(partyId))
+                else _uiEvent.send(PartiesListUiEvent.ShowMessage(
+                    message = R.string.message_error_validate_players_is_active,
+                    textAction = R.string.snackbar_btn_neutral_ok,
+                    onAction = { reloadDataModel() }
+                ))
+            }
+
+            _uiState.update { it.copy(isFetchingData = false) }
+        }
     }
 
     data class UiState(

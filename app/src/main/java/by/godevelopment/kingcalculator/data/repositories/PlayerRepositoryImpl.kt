@@ -52,7 +52,7 @@ class PlayerRepositoryImpl @Inject constructor(
     suspend fun deleteAllPlayers(): ResultDataBase<Int> = playersDataSource.deleteAllPlayers()
 
     override suspend fun getAllPlayersNames(): List<String> =
-        playersDataSource.getAllPlayersNames()
+        playersDataSource.getAllActivePlayersNames()
 
     override fun getAllPlayers(): Flow<List<PlayerModel>> =
         playersDataSource

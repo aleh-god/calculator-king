@@ -22,7 +22,7 @@ class GetPartyModelItemsUseCase @Inject constructor(
             id = 0,
             name = stringHelper.getString(R.string.player_null),
             email = stringHelper.getString(R.string.player_null),
-            isActive = true
+            isActive = false
         )
         return partyRepository.getAllParties()
             .map { list ->

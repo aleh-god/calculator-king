@@ -61,11 +61,15 @@ class PlayersDataSource @Inject constructor(
         }
     }
 
-    suspend fun getAllPlayersIdToNames(): Map<String, Long> =
-        playersDao.getSuspendAllPlayerProfiles().associate { it.name to it.id }
+    suspend fun getAllActivePlayersIdToNames(): Map<String, Long> =
+        playersDao.getSuspendAllPlayerProfiles()
+            .filter { it.isActive }
+            .associate { it.name to it.id }
 
-    suspend fun getAllPlayersNames(): List<String> =
-        playersDao.getSuspendAllPlayerProfiles().map { it.name }
+    suspend fun getAllActivePlayersNames(): List<String> =
+        playersDao.getSuspendAllPlayerProfiles()
+            .filter { it.isActive }
+            .map { it.name }
 
     suspend fun deleteAllPlayers(): ResultDataBase<Int> =
         wrapResult { playersDao.deleteAll() }

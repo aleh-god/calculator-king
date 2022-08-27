@@ -32,4 +32,6 @@ interface PartyRepository {
     suspend fun getPartyModelById(partyId: Long): ResultDataBase<PartyModel>
 
     suspend fun deletePartyById(partyId: Long): ResultDataBase<Int>
+
+    suspend fun getAllPlayersCount(): ResultDataBase<Int>
 }
