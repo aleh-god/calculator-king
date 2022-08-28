@@ -39,21 +39,23 @@ class PartyCardViewModel @Inject constructor(
     private val _uiEvent  = Channel<PartyCardUiEvent>()
     val uiEvent: Flow<PartyCardUiEvent> = _uiEvent.receiveAsFlow()
 
-    private var suspendJob: Job? = null
+    private var fetchJob: Job? = null
+    private var reloadsNumber = 0
 
     init {
         Log.i(TAG, "PartyCardViewModel: $partyId")
     }
 
     fun checkUnfinishedGame() {
-        suspendJob?.cancel()
-        suspendJob = viewModelScope.launch(ioDispatcher) {
+        fetchJob?.cancel()
+        fetchJob = viewModelScope.launch(ioDispatcher) {
             if (partyId != null)  {
                 val checkResult = checkUnfinishedGameInPartyUseCase(partyId)
                 when(checkResult) {
                     is ResultDataBase.Error -> {
                         _uiEvent.send(PartyCardUiEvent.ShowMessage(
                             message = checkResult.message,
+                            textAction = R.string.snackbar_btn_neutral_ok,
                             onAction = { }
                         ))
                     }
@@ -70,7 +72,8 @@ class PartyCardViewModel @Inject constructor(
             else {
                 _uiEvent.send(PartyCardUiEvent.ShowMessage(
                     message = R.string.message_error_data_load,
-                    onAction = { reloadDataModel() }
+                    textAction = R.string.snackbar_btn_reload,
+                    onAction = ::reloadDataModel
                 )
                 )
             }
@@ -78,9 +81,9 @@ class PartyCardViewModel @Inject constructor(
     }
 
     private fun fetchDataModel() {
-        suspendJob?.cancel()
+        fetchJob?.cancel()
         try {
-            suspendJob = viewModelScope.launch(ioDispatcher) {
+            fetchJob = viewModelScope.launch(ioDispatcher) {
                 if (partyId != null) {
                     _uiState.update { it.copy(isFetchingData = true) }
                     // TODO("rework to async await")
@@ -93,6 +96,7 @@ class PartyCardViewModel @Inject constructor(
                     _uiEvent.send(
                         PartyCardUiEvent.ShowMessage(
                             message = R.string.message_error_data_load,
+                            textAction = R.string.snackbar_btn_reload,
                             onAction = ::reloadDataModel
                         )
                     )
@@ -106,6 +110,7 @@ class PartyCardViewModel @Inject constructor(
                 _uiEvent.send(
                     PartyCardUiEvent.ShowMessage(
                         message = R.string.message_error_data_load,
+                        textAction = R.string.snackbar_btn_reload,
                         onAction = ::reloadDataModel
                     )
                 )
@@ -119,6 +124,7 @@ class PartyCardViewModel @Inject constructor(
             is ResultDataBase.Error -> {
                 _uiEvent.send(PartyCardUiEvent.ShowMessage(
                     message = result.message,
+                    textAction = R.string.snackbar_btn_neutral_ok,
                     onAction = { }
                 ))
             }
@@ -139,6 +145,7 @@ class PartyCardViewModel @Inject constructor(
             is ResultDataBase.Error -> {
                 _uiEvent.send(PartyCardUiEvent.ShowMessage(
                     message = result.message,
+                    textAction = R.string.snackbar_btn_neutral_ok,
                     onAction = { }
                 ))
             }
@@ -154,6 +161,7 @@ class PartyCardViewModel @Inject constructor(
             is ResultDataBase.Error -> {
                 _uiEvent.send(PartyCardUiEvent.ShowMessage(
                     message = result.message,
+                    textAction = R.string.snackbar_btn_reload,
                     onAction = ::reloadDataModel
                 ))
             }
@@ -164,14 +172,23 @@ class PartyCardViewModel @Inject constructor(
     }
 
     private fun reloadDataModel() {
-        // TODO("Count invoke and navigate to main menu")
-        fetchDataModel()
+        if (reloadsNumber > 3) {
+            fetchJob?.cancel()
+            fetchJob = viewModelScope.launch {
+                reloadsNumber = 0
+                _uiEvent.send(PartyCardUiEvent.NavigateToBackScreen)
+            }
+        }
+        else {
+            reloadsNumber++
+            fetchDataModel()
+        }
     }
 
     fun createGameNote(gameType: GameType) {
         Log.i(TAG, "createGameNote: gameType = $gameType partyId = $partyId")
-        suspendJob?.cancel()
-        suspendJob = viewModelScope.launch(ioDispatcher) {
+        fetchJob?.cancel()
+        fetchJob = viewModelScope.launch(ioDispatcher) {
             try {
                 _uiState.update { it.copy(isFetchingData = true) }
                 val gameResult = createGameNoteUseCase(
@@ -182,6 +199,7 @@ class PartyCardViewModel @Inject constructor(
                     is ResultDataBase.Error -> {
                         _uiEvent.send(PartyCardUiEvent.ShowMessage(
                             message = R.string.message_error_data_save,
+                            textAction = R.string.snackbar_btn_neutral_ok,
                             onAction = { }
                         ))
                     }
@@ -193,6 +211,7 @@ class PartyCardViewModel @Inject constructor(
                 Log.i(TAG, "PartyCardViewModel createGameNote.catch ${e.message} ")
                 _uiEvent.send(PartyCardUiEvent.ShowMessage(
                     message = R.string.message_error_data_save,
+                    textAction = R.string.snackbar_btn_neutral_ok,
                     onAction = { }
                 )
                 )

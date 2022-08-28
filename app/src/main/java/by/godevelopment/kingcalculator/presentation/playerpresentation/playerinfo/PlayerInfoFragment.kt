@@ -9,9 +9,11 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.coroutineScope
 import androidx.lifecycle.flowWithLifecycle
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import by.godevelopment.kingcalculator.R
 import by.godevelopment.kingcalculator.databinding.FragmentPlayerInfoBinding
+import by.godevelopment.kingcalculator.presentation.partypresentation.partyinfo.PartyInfoFragmentDirections
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.launchIn
@@ -60,11 +62,21 @@ class PlayerInfoFragment : Fragment() {
         viewModel.uiEvent
             .flowWithLifecycle(lifecycle)
             .onEach { event ->
-                Snackbar
-                    .make(binding.root, event, Snackbar.LENGTH_INDEFINITE)
-                    .setAction(getString(R.string.snackbar_btn_reload))
-                    { viewModel.reloadDataList() }
-                    .show()
+                when(event) {
+                    is PlayerInfoUiEvent.NavigateToBackScreen -> {
+                        findNavController().navigate(
+                            PartyInfoFragmentDirections
+                                .actionPartyInfoFragmentToPartiesListFragment()
+                        )
+                    }
+                    is PlayerInfoUiEvent.ShowMessage -> {
+                        Snackbar
+                            .make(binding.root, event.message, Snackbar.LENGTH_INDEFINITE)
+                            .setAction(event.textAction)
+                            { event.onAction() }
+                            .show()
+                    }
+                }
             }
             .launchIn(lifecycle.coroutineScope)
     }

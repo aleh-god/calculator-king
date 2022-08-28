@@ -7,6 +7,7 @@ import by.godevelopment.kingcalculator.commons.TAG
 import by.godevelopment.kingcalculator.data.database.TricksDao
 import by.godevelopment.kingcalculator.data.entities.TricksNote
 import by.godevelopment.kingcalculator.domain.commons.models.ResultDataBase
+import by.godevelopment.kingcalculator.domain.commons.utils.wrapResult
 import by.godevelopment.kingcalculator.domain.commons.utils.wrapResultBy
 import javax.inject.Inject
 
@@ -38,4 +39,7 @@ class TricksDataSource @Inject constructor(
 
     suspend fun getTricksNoteByPlayerId(playerId: Long): ResultDataBase<List<TricksNote>> =
         wrapResultBy(playerId) { tricksDao.getTricksNotesByPlayerId(it) }
+
+    suspend fun deleteAllTricks(): ResultDataBase<Int> =
+        wrapResult { tricksDao.deleteAll() }
 }

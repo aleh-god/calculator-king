@@ -84,11 +84,18 @@ class PartyCardFragment : Fragment() {
             .flowWithLifecycle(lifecycle)
             .onEach { event ->
                 when(event) {
-                    is PartyCardUiEvent.ShowMessage -> Snackbar
-                        .make(binding.root, event.message, Snackbar.LENGTH_INDEFINITE)
-                        .setAction(getString(R.string.snackbar_btn_reload))
-                        { event.onAction.invoke() }
-                        .show()
+                    is PartyCardUiEvent.NavigateToBackScreen -> {
+                        findNavController().navigate(
+                            PartyCardFragmentDirections.actionPartyCardFragmentToPartiesListFragment()
+                        )
+                    }
+                    is PartyCardUiEvent.ShowMessage -> {
+                        Snackbar
+                            .make(binding.root, event.message, Snackbar.LENGTH_INDEFINITE)
+                            .setAction(event.textAction)
+                            { event.onAction() }
+                            .show()
+                    }
                     is PartyCardUiEvent.NavigateToGameAddForm -> {
                         navigateToGameAddForm(event.navArgs)
                     }

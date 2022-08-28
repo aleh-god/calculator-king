@@ -4,11 +4,12 @@ import androidx.annotation.StringRes
 
 sealed interface GameAddFormUiEvent {
 
-    data class ShowMessageUiEvent(
-        @StringRes
-        val message: Int,
+    data class ShowMessage(
+        @StringRes val message: Int,
+        @StringRes val textAction: Int,
         val onAction: () -> Unit
     ) : GameAddFormUiEvent
 
-    data class NavigateToPartyCardUiEvent(val navArg: Long) : GameAddFormUiEvent
+    object NavigateToBackScreen : GameAddFormUiEvent
+    data class NavigateToPartyCard(val navArg: Long) : GameAddFormUiEvent
 }

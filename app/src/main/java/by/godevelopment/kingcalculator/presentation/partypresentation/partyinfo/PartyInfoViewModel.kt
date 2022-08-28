@@ -3,6 +3,7 @@ package by.godevelopment.kingcalculator.presentation.partypresentation.partyinfo
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import by.godevelopment.kingcalculator.R
 import by.godevelopment.kingcalculator.di.IoDispatcher
 import by.godevelopment.kingcalculator.domain.commons.models.ResultDataBase
 import by.godevelopment.kingcalculator.domain.partiesdomain.models.PartyInfoItemModel
@@ -32,13 +33,28 @@ class PartyInfoViewModel @Inject constructor(
     private val _uiState: MutableStateFlow<UiState> = MutableStateFlow(UiState())
     val uiState: StateFlow<UiState> = _uiState.asStateFlow()
 
-    private val _uiEvent  = Channel<Int>()
-    val uiEvent: Flow<Int> = _uiEvent.receiveAsFlow()
+    private val _uiEvent  = Channel<PartyInfoUiEvent>()
+    val uiEvent: Flow<PartyInfoUiEvent> = _uiEvent.receiveAsFlow()
 
     private var fetchJob: Job? = null
+    private var reloadsNumber = 0
 
     init {
         fetchDataModel()
+    }
+
+    private fun reloadDataModel() {
+        if (reloadsNumber > 3) {
+            fetchJob?.cancel()
+            fetchJob = viewModelScope.launch {
+                reloadsNumber = 0
+                _uiEvent.send(PartyInfoUiEvent.NavigateToBackScreen)
+            }
+        }
+        else {
+            reloadsNumber++
+            fetchDataModel()
+        }
     }
 
     private fun fetchDataModel() {
@@ -59,7 +75,13 @@ class PartyInfoViewModel @Inject constructor(
         val result = getPartyNameUseCase(partyId)
         when(result) {
             is ResultDataBase.Error -> {
-                _uiEvent.send(result.message)
+                _uiEvent.send(
+                    PartyInfoUiEvent.ShowMessage(
+                        message = result.message,
+                        textAction = R.string.snackbar_btn_reload,
+                        onAction = { reloadDataModel() }
+                    )
+                )
                 _uiState.update { it.copy(isFetchingData = false) }
             }
             is ResultDataBase.Success -> {
@@ -77,7 +99,13 @@ class PartyInfoViewModel @Inject constructor(
         val result = getGamesScoreByPartyIdUseCase(partyId)
         when(result) {
             is ResultDataBase.Error -> {
-                _uiEvent.send(result.message)
+                _uiEvent.send(
+                    PartyInfoUiEvent.ShowMessage(
+                        message = result.message,
+                        textAction = R.string.snackbar_btn_reload,
+                        onAction = { reloadDataModel() }
+                    )
+                )
                 _uiState.update { it.copy(isFetchingData = false) }
             }
             is ResultDataBase.Success -> {
@@ -95,7 +123,13 @@ class PartyInfoViewModel @Inject constructor(
         val result = getPlayersByPartyIdUseCase(partyId)
         when(result) {
             is ResultDataBase.Error -> {
-                _uiEvent.send(result.message)
+                _uiEvent.send(
+                    PartyInfoUiEvent.ShowMessage(
+                        message = result.message,
+                        textAction = R.string.snackbar_btn_reload,
+                        onAction = { reloadDataModel() }
+                    )
+                )
                 _uiState.update { it.copy(isFetchingData = false) }
             }
             is ResultDataBase.Success -> {

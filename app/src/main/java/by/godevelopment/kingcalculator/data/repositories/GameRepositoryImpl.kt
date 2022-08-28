@@ -12,11 +12,13 @@ import by.godevelopment.kingcalculator.domain.commons.models.GameType
 import by.godevelopment.kingcalculator.domain.commons.models.ResultDataBase
 import by.godevelopment.kingcalculator.domain.commons.utils.flatMapResult
 import by.godevelopment.kingcalculator.domain.commons.utils.mapResult
+import by.godevelopment.kingcalculator.domain.commons.utils.wrapResult
 import by.godevelopment.kingcalculator.domain.gamesdomain.models.GameModel
 import by.godevelopment.kingcalculator.domain.gamesdomain.models.Players
 import by.godevelopment.kingcalculator.domain.gamesdomain.models.TricksNoteModel
 import by.godevelopment.kingcalculator.domain.gamesdomain.repositories.GameRepository
 import by.godevelopment.kingcalculator.domain.playersdomain.models.PlayerModel
+import by.godevelopment.kingcalculator.domain.settingsdomain.repositories.DeleteGamesRepository
 import javax.inject.Inject
 
 class GameRepositoryImpl @Inject constructor(
@@ -24,7 +26,7 @@ class GameRepositoryImpl @Inject constructor(
     private val partiesDataSource: PartiesDataSource,
     private val tricksDataSource: TricksDataSource,
     private val playersDataSource: PlayersDataSource
-): GameRepository {
+): GameRepository, DeleteGamesRepository {
 
     override suspend fun getPlayersByPartyId(partyId: Long): ResultDataBase<Map<Players, PlayerModel>> {
         val partyResult = partiesDataSource.getPartyNoteById(partyId)
@@ -70,4 +72,7 @@ class GameRepositoryImpl @Inject constructor(
 
     override suspend fun undoBadDbTransaction(gameId: Long): ResultDataBase<Int>
             = tricksDataSource.deleteTricksNotesByGameId(gameId)
+
+    override suspend fun deleteAllGames(): ResultDataBase<Int> =
+        wrapResult { gamesDataSource.deleteAllGameNotes() }
 }

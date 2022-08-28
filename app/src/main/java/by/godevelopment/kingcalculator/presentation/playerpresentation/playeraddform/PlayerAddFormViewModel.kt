@@ -28,8 +28,8 @@ class PlayerAddFormViewModel @Inject constructor(
     private val _uiState: MutableStateFlow<AddFormState> = MutableStateFlow(AddFormState())
     val uiState: StateFlow<AddFormState> = _uiState.asStateFlow()
 
-    private val _uiEvent  = Channel<UiEvent>()
-    val uiEvent: Flow<UiEvent> = _uiEvent.receiveAsFlow()
+    private val _uiEvent  = Channel<PlayerAddFormUiEvent>()
+    val uiEvent: Flow<PlayerAddFormUiEvent> = _uiEvent.receiveAsFlow()
 
     private var suspendJob: Job? = null
 
@@ -59,7 +59,13 @@ class PlayerAddFormViewModel @Inject constructor(
                     savePlayerDataToRepository()
                 } else {
                     viewModelScope.launch {
-                        _uiEvent.send(UiEvent.ShowSnackbar(R.string.message_error_player_info))
+                        _uiEvent.send(
+                            PlayerAddFormUiEvent.ShowMessage(
+                                message = R.string.message_error_player_info,
+                                textAction = R.string.snackbar_btn_neutral_ok,
+                                onAction = { }
+                            )
+                        )
                     }
                 }
             }
@@ -85,15 +91,16 @@ class PlayerAddFormViewModel @Inject constructor(
                 )
             )
             when (result) {
-                is ResultDataBase.Error -> { _uiEvent.send(UiEvent.ShowSnackbar(result.message)) }
-                is ResultDataBase.Success -> { _uiEvent.send(UiEvent.NavigateToList) }
+                is ResultDataBase.Error -> { _uiEvent.send(
+                    PlayerAddFormUiEvent.ShowMessage(
+                        message = result.message,
+                        textAction = R.string.snackbar_btn_neutral_ok,
+                        onAction = { }
+                    ))
+                }
+                is ResultDataBase.Success -> { _uiEvent.send(PlayerAddFormUiEvent.NavigateToBackScreen) }
             }
             _uiState.update { it.copy(showsProgress = false) }
         }
-    }
-
-    sealed class UiEvent {
-        data class ShowSnackbar(val message: Int) : UiEvent()
-        object NavigateToList : UiEvent()
     }
 }

@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
@@ -39,6 +40,15 @@ class GameAddFormFragment : Fragment() {
             setupUi(it)
             setupEvent(it)
         }
+        requireActivity().onBackPressedDispatcher.addCallback(
+            viewLifecycleOwner,
+            object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                findNavController().navigate(
+                    GameAddFormFragmentDirections.actionGameAddFormFragmentToPartiesListFragment()
+                )
+            }
+        })
         return binding.root
     }
 
@@ -71,14 +81,20 @@ class GameAddFormFragment : Fragment() {
             .flowWithLifecycle(lifecycle)
             .onEach { event ->
                 when (event) {
-                    is GameAddFormUiEvent.ShowMessageUiEvent -> {
+                    is GameAddFormUiEvent.NavigateToBackScreen -> {
+                        findNavController().navigate(
+                            GameAddFormFragmentDirections
+                                .actionGameAddFormFragmentToPartiesListFragment()
+                        )
+                    }
+                    is GameAddFormUiEvent.ShowMessage -> {
                         Snackbar
-                            .make(binding.root, event.message, Snackbar.LENGTH_LONG)
-                            .setAction(getString(R.string.snackbar_btn_neutral_ok))
-                            { event.onAction.invoke() }
+                            .make(binding.root, event.message, Snackbar.LENGTH_INDEFINITE)
+                            .setAction(event.textAction)
+                            { event.onAction() }
                             .show()
                     }
-                    is GameAddFormUiEvent.NavigateToPartyCardUiEvent -> navigateToPartyCard(event.navArg)
+                    is GameAddFormUiEvent.NavigateToPartyCard -> navigateToPartyCard(event.navArg)
                 }
             }
             .launchIn(lifecycle.coroutineScope)

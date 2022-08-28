@@ -70,7 +70,7 @@ class PartiesListFragment : Fragment() {
             .onEach { event ->
                 // TODO("impl Snackbar scope")
                 when(event){
-                    PartiesListUiEvent.NavigateToPartyAddForm -> navigateToPartyAddForm()
+                    is PartiesListUiEvent.NavigateToPartyAddForm -> navigateToPartyAddForm()
                     is PartiesListUiEvent.NavigateToPartyCard -> navigateToPartyCard(event.navArgs)
                     is PartiesListUiEvent.NavigateToPartyInfo -> navigateToPartyInfo(event.navArgs)
                     is PartiesListUiEvent.ShowMessage -> {

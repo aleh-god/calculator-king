@@ -22,16 +22,17 @@ class PlayersListViewModel @Inject constructor(
     private val _uiState: MutableStateFlow<UiState> = MutableStateFlow(UiState())
     val uiState: StateFlow<UiState> = _uiState.asStateFlow()
 
-    private val _uiEvent  = Channel<Int>()
-    val uiEvent: Flow<Int> = _uiEvent.receiveAsFlow()
+    private val _uiEvent  = Channel<PlayersListUiEvent>()
+    val uiEvent: Flow<PlayersListUiEvent> = _uiEvent.receiveAsFlow()
 
     private var fetchJob: Job? = null
+    private var reloadsNumber = 0
 
     init {
         fetchDataModel()
     }
 
-    fun fetchDataModel() {
+    private fun fetchDataModel() {
         fetchJob?.cancel()
         fetchJob = viewModelScope.launch {
             getListPlayerModelUseCase()
@@ -39,11 +40,29 @@ class PlayersListViewModel @Inject constructor(
                 .catch { exception ->
                     Log.i(TAG, "viewModelScope.catch ${exception.message}")
                     _uiState.update { it.copy(isFetchingData = false) }
-                    _uiEvent.send(R.string.message_error_data_load)
+                    _uiEvent.send(PlayersListUiEvent.ShowMessage(
+                        message = R.string.message_error_data_load,
+                        textAction = R.string.snackbar_btn_reload,
+                        onAction = ::reloadDataModel
+                    ))
                 }
                 .collect { list ->
                     _uiState.update { it.copy(isFetchingData = false, dataList = list) }
                 }
+        }
+    }
+
+    private fun reloadDataModel() {
+        if (reloadsNumber > 3) {
+            fetchJob?.cancel()
+            fetchJob = viewModelScope.launch {
+                reloadsNumber = 0
+                _uiEvent.send(PlayersListUiEvent.NavigateToBackScreen)
+            }
+        }
+        else {
+            reloadsNumber++
+            fetchDataModel()
         }
     }
 

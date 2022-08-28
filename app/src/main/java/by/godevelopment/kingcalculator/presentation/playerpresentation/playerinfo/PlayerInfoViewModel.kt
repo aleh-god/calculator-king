@@ -3,10 +3,12 @@ package by.godevelopment.kingcalculator.presentation.playerpresentation.playerin
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import by.godevelopment.kingcalculator.R
 import by.godevelopment.kingcalculator.di.IoDispatcher
 import by.godevelopment.kingcalculator.domain.commons.models.ResultDataBase
 import by.godevelopment.kingcalculator.domain.playersdomain.models.ItemPlayerInfoModel
 import by.godevelopment.kingcalculator.domain.playersdomain.usecases.GetPlayerInfoListUseCase
+import by.godevelopment.kingcalculator.presentation.playerpresentation.playerslist.PlayersListUiEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Job
@@ -27,23 +29,29 @@ class PlayerInfoViewModel @Inject constructor(
     private val _uiState: MutableStateFlow<UiState> = MutableStateFlow(UiState())
     val uiState: StateFlow<UiState> = _uiState.asStateFlow()
 
-    private val _uiEvent  = Channel<Int>()
-    val uiEvent: Flow<Int> = _uiEvent.receiveAsFlow()
+    private val _uiEvent  = Channel<PlayerInfoUiEvent>()
+    val uiEvent: Flow<PlayerInfoUiEvent> = _uiEvent.receiveAsFlow()
 
     private var fetchJob: Job? = null
+    private var reloadsNumber = 0
 
     init {
-        fetchDataList()
+        fetchDataModel()
     }
 
-    private fun fetchDataList() {
+    private fun fetchDataModel() {
         playerId?.let {
             fetchJob?.cancel()
             fetchJob = viewModelScope.launch(ioDispatcher) {
                 _uiState.update { it.copy(isFetchingData = true) }
                 val result = getPlayerInfoListUseCase(playerId)
                 when(result) {
-                    is ResultDataBase.Error -> { _uiEvent.send(result.message) }
+                    is ResultDataBase.Error -> { _uiEvent.send(PlayerInfoUiEvent.ShowMessage(
+                        message = result.message,
+                        textAction = R.string.snackbar_btn_reload,
+                        onAction = ::reloadDataModel
+                    ))
+                    }
                     is ResultDataBase.Success -> {
                         _uiState.update { it.copy(dataList = result.value) }
                     }
@@ -53,9 +61,19 @@ class PlayerInfoViewModel @Inject constructor(
         }
     }
 
-    fun reloadDataList() {
-        // TODO("count reload and navigate to root")
-        fetchDataList()
+
+    private fun reloadDataModel() {
+        if (reloadsNumber > 3) {
+            fetchJob?.cancel()
+            fetchJob = viewModelScope.launch {
+                reloadsNumber = 0
+                _uiEvent.send(PlayerInfoUiEvent.NavigateToBackScreen)
+            }
+        }
+        else {
+            reloadsNumber++
+            fetchDataModel()
+        }
     }
 
     data class UiState(

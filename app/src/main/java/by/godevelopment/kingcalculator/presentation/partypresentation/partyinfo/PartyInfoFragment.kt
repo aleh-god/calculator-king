@@ -9,6 +9,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.coroutineScope
 import androidx.lifecycle.flowWithLifecycle
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import by.godevelopment.kingcalculator.R
 import by.godevelopment.kingcalculator.databinding.FragmentPartyInfoBinding
@@ -66,12 +67,20 @@ class PartyInfoFragment : Fragment() {
         viewModel.uiEvent
             .flowWithLifecycle(lifecycle)
             .onEach { event ->
-                when (event) { // TODO("rework this")
-                    else -> Snackbar
-                        .make(binding.root, event, Snackbar.LENGTH_LONG)
-                        .setAction(getString(R.string.snackbar_btn_neutral_ok))
-                        { viewModel.reload() }
-                        .show()
+                when(event) {
+                    is PartyInfoUiEvent.NavigateToBackScreen -> {
+                        findNavController().navigate(
+                            PartyInfoFragmentDirections
+                                .actionPartyInfoFragmentToPartiesListFragment()
+                        )
+                    }
+                    is PartyInfoUiEvent.ShowMessage -> {
+                        Snackbar
+                            .make(binding.root, event.message, Snackbar.LENGTH_INDEFINITE)
+                            .setAction(event.textAction)
+                            { event.onAction() }
+                            .show()
+                    }
                 }
             }
             .launchIn(lifecycle.coroutineScope)

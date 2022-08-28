@@ -1,0 +1,237 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".presentation.settingsscreen.SettingsFragment"
+    >
+
+<androidx.constraintlayout.widget.ConstraintLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    >
+
+    <ProgressBar
+        android:id="@+id/progress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="@dimen/big_margin"
+        />
+
+    <TextView
+        android:id="@+id/header_settings"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="@dimen/big_margin"
+        android:layout_marginHorizontal="@dimen/big_margin"
+        android:textAppearance="@style/TextAppearance.Material3.HeadlineMedium"
+        android:text="@string/ui_settings_text_header"
+        />
+
+    <com.google.android.material.divider.MaterialDivider
+        android:id="@+id/divider_top"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/header_settings"
+        app:layout_constraintBottom_toTopOf="@id/title_delete_parties"
+        android:layout_marginHorizontal="@dimen/big_margin"
+        android:layout_marginVertical="@dimen/main_margin"
+        app:dividerColor="?attr/colorOnSurface"
+        app:dividerInsetStart="15dp"
+        app:dividerInsetEnd="15dp"
+        app:layout_constraintVertical_chainStyle="packed"
+        />
+
+    <TextView
+        android:id="@+id/title_delete_parties"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/divider_top"
+        app:layout_constraintBottom_toTopOf="@id/text_delete_parties"
+        android:layout_marginTop="@dimen/medium_margin"
+        android:layout_marginBottom="@dimen/small_margin"
+        android:layout_marginHorizontal="@dimen/big_margin"
+        android:textAppearance="@style/TextAppearance.Material3.TitleMedium"
+        android:text="@string/ui_settings_text_title_delete_parties"
+        />
+
+    <TextView
+        android:id="@+id/text_delete_parties"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/title_delete_parties"
+        app:layout_constraintBottom_toTopOf="@id/bttn_delete_parties"
+        android:layout_marginHorizontal="@dimen/ultra_margin"
+        android:layout_marginVertical="@dimen/small_margin"
+        android:paddingHorizontal="15dp"
+        android:textAlignment="textStart"
+        android:textAppearance="@style/TextAppearance.Material3.BodyMedium"
+        android:text="@string/ui_settings_text_delete_parties"
+        />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/bttn_delete_parties"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/text_delete_parties"
+        app:layout_constraintBottom_toTopOf="@id/divider_medium"
+        android:layout_marginHorizontal="@dimen/big_margin"
+        android:layout_marginVertical="@dimen/medium_margin"
+        android:text="@string/ui_settings_text_bttn_delete_parties"
+        />
+
+    <com.google.android.material.divider.MaterialDivider
+        android:id="@+id/divider_medium"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/bttn_delete_parties"
+        app:layout_constraintBottom_toTopOf="@id/title_delete_games"
+        android:layout_marginHorizontal="@dimen/big_margin"
+        android:layout_marginVertical="@dimen/main_margin"
+        app:dividerColor="?attr/colorOnSurface"
+        app:dividerInsetStart="15dp"
+        app:dividerInsetEnd="15dp"
+        app:layout_constraintVertical_chainStyle="packed"
+        />
+
+    <TextView
+        android:id="@+id/title_delete_games"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/divider_medium"
+        app:layout_constraintBottom_toTopOf="@id/text_delete_games"
+        android:layout_marginTop="@dimen/medium_margin"
+        android:layout_marginBottom="@dimen/small_margin"
+        android:layout_marginHorizontal="@dimen/big_margin"
+        android:textAppearance="@style/TextAppearance.Material3.TitleMedium"
+        android:text="@string/ui_settings_text_title_delete_games"
+        />
+
+    <TextView
+        android:id="@+id/text_delete_games"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/title_delete_games"
+        app:layout_constraintBottom_toTopOf="@id/bttn_delete_games"
+        android:layout_marginHorizontal="@dimen/ultra_margin"
+        android:layout_marginVertical="@dimen/small_margin"
+        android:paddingHorizontal="15dp"
+        android:textAlignment="textStart"
+        android:textAppearance="@style/TextAppearance.Material3.BodyMedium"
+        android:text="@string/ui_settings_text_delete_games"
+        />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/bttn_delete_games"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/text_delete_games"
+        app:layout_constraintBottom_toTopOf="@id/divider_medium2"
+        android:layout_marginHorizontal="@dimen/big_margin"
+        android:layout_marginVertical="@dimen/medium_margin"
+        android:text="@string/ui_settings_text_bttn_delete_games"
+        />
+
+    <com.google.android.material.divider.MaterialDivider
+        android:id="@+id/divider_medium2"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/bttn_delete_games"
+        app:layout_constraintBottom_toTopOf="@id/title_delete_all"
+        android:layout_marginHorizontal="@dimen/big_margin"
+        android:layout_marginVertical="@dimen/main_margin"
+        app:dividerColor="?attr/colorOnSurface"
+        app:dividerInsetStart="15dp"
+        app:dividerInsetEnd="15dp"
+        app:layout_constraintVertical_chainStyle="packed"
+        />
+
+    <TextView
+        android:id="@+id/title_delete_all"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/divider_medium2"
+        app:layout_constraintBottom_toTopOf="@id/text_delete_all"
+        android:layout_marginTop="@dimen/medium_margin"
+        android:layout_marginBottom="@dimen/small_margin"
+        android:layout_marginHorizontal="@dimen/big_margin"
+        android:textAppearance="@style/TextAppearance.Material3.TitleMedium"
+        android:text="@string/ui_settings_text_title_delete_all"
+        />
+
+    <TextView
+        android:id="@+id/text_delete_all"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/title_delete_all"
+        app:layout_constraintBottom_toTopOf="@id/bttn_delete_all"
+        android:layout_marginHorizontal="@dimen/ultra_margin"
+        android:layout_marginVertical="@dimen/small_margin"
+        android:paddingHorizontal="15dp"
+        android:textAlignment="textStart"
+        android:textAppearance="@style/TextAppearance.Material3.BodyMedium"
+        android:text="@string/ui_settings_text_delete_all"
+        />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/bttn_delete_all"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/text_delete_all"
+        app:layout_constraintBottom_toTopOf="@id/divider_bot"
+        android:layout_marginHorizontal="@dimen/big_margin"
+        android:layout_marginVertical="@dimen/medium_margin"
+        android:text="@string/ui_settings_text_bttn_delete_all"
+        />
+
+    <com.google.android.material.divider.MaterialDivider
+        android:id="@+id/divider_bot"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/bttn_delete_all"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginHorizontal="@dimen/big_margin"
+        android:layout_marginVertical="@dimen/main_margin"
+        app:dividerColor="?attr/colorOnSurface"
+        app:dividerInsetStart="15dp"
+        app:dividerInsetEnd="15dp"
+        app:layout_constraintVertical_chainStyle="packed"
+        />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.core.widget.NestedScrollView>

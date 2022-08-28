@@ -23,6 +23,9 @@
         <action
             android:id="@+id/action_partiesListFragment_to_partyAddFormFragment"
             app:destination="@id/partyAddFormFragment" />
+        <action
+            android:id="@+id/action_partiesListFragment_to_settingsFragment"
+            app:destination="@id/settingsFragment" />
     </fragment>
 
     <fragment
@@ -148,6 +151,18 @@
             app:popUpTo="@+id/partyCardFragment"
             app:popUpToInclusive="true"
             />
+        <action
+            android:id="@+id/action_gameAddFormFragment_to_partiesListFragment"
+            app:destination="@id/partiesListFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/settingsFragment"
+        android:name="by.godevelopment.kingcalculator.presentation.settingsscreen.SettingsFragment"
+        android:label="fragment_settings"
+        tools:layout="@layout/fragment_settings" >
+        <action
+            android:id="@+id/action_settingsFragment_to_partiesListFragment"
+            app:destination="@id/partiesListFragment" />
     </fragment>
 
 </navigation>

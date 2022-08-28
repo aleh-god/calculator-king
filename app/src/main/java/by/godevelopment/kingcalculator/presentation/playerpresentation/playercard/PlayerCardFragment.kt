@@ -81,19 +81,22 @@ class PlayerCardFragment : Fragment() {
             .flowWithLifecycle(lifecycle)
             .onEach { event ->
                 when(event) {
-                    is PlayerCardViewModel.UiEvent.ShowSnackbar -> {
-                        Snackbar.make(binding.root, event.message, Snackbar.LENGTH_LONG).show()
+                    is PlayerCardUiEvent.NavigateToBackScreen -> {
+                        findNavController().navigate(
+                            PlayerCardFragmentDirections
+                                .actionPlayerCardFragmentToPlayersListFragment()
+                        )
                     }
-                    is PlayerCardViewModel.UiEvent.NavigateToList -> {
-                        navigateToListUser()
+                    is PlayerCardUiEvent.ShowMessage -> {
+                        Snackbar
+                            .make(binding.root, event.message, Snackbar.LENGTH_INDEFINITE)
+                            .setAction(event.textAction)
+                            { event.onAction() }
+                            .show()
                     }
                 }
             }
             .launchIn(lifecycle.coroutineScope)
-    }
-
-    private fun navigateToListUser() {
-        findNavController().navigate(R.id.action_playerCardFragment_to_playersListFragment)
     }
 
     private fun showProgress(key: Boolean) {
