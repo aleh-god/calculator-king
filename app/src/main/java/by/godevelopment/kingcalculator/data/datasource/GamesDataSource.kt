@@ -21,7 +21,7 @@ class GamesDataSource @Inject constructor(
         wrapResultBy(gameId) { gamesDao.getGameNoteById(it) }
 
     suspend fun createGameNote(gameType: GameType, partyId: Long): ResultDataBase<Long> {
-        val gameId = gamesDao.insertPartyNote(
+        val gameId = gamesDao.insertGamesNote(
             GameNote(
                 partyId = partyId,
                 gameType = gameType)
@@ -35,7 +35,7 @@ class GamesDataSource @Inject constructor(
 
     suspend fun updateTimeInGameNoteByGameId(gameId: Long): ResultDataBase<Int> {
         gamesDao.getGameNoteById(gameId)?.let {
-            val resultUpdate = gamesDao.updatePartyNote(it.copy(
+            val resultUpdate = gamesDao.updateGamesNote(it.copy(
                 finishedAt = Calendar.getInstance().timeInMillis
             ))
             return ResultDataBase.Success(value = resultUpdate)

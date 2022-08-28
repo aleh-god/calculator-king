@@ -11,10 +11,10 @@ interface GamesDao {
     suspend fun deleteAll(): Int
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    suspend fun insertPartyNote(gameNote: GameNote): Long
+    suspend fun insertGamesNote(gameNote: GameNote): Long
 
     @Update
-    suspend fun updatePartyNote(gameNote: GameNote): Int
+    suspend fun updateGamesNote(gameNote: GameNote): Int
 
     @Query("SELECT * FROM games ORDER BY id DESC")
     fun getAllGameNotes(): Flow<List<GameNote>>
