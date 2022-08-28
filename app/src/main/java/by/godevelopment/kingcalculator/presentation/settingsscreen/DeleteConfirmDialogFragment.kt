@@ -1,4 +1,4 @@
-package by.godevelopment.kingcalculator.presentation.mainactivity
+package by.godevelopment.kingcalculator.presentation.settingsscreen
 
 import android.app.Dialog
 import android.content.DialogInterface

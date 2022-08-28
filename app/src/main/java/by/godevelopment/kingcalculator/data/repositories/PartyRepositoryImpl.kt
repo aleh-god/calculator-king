@@ -21,7 +21,7 @@ import by.godevelopment.kingcalculator.domain.partiesdomain.models.RawItemPartyM
 import by.godevelopment.kingcalculator.domain.partiesdomain.repositories.PartyRepository
 import by.godevelopment.kingcalculator.domain.playersdomain.models.PartyModel
 import by.godevelopment.kingcalculator.domain.playersdomain.models.PlayerModel
-import by.godevelopment.kingcalculator.presentation.mainactivity.MainActivityRepository
+import by.godevelopment.kingcalculator.domain.settingsdomain.repositories.DeletePartiesRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
@@ -31,7 +31,7 @@ class PartyRepositoryImpl @Inject constructor(
     private val gamesDataSource: GamesDataSource,
     private val tricksDataSource: TricksDataSource,
     private val playersDataSource: PlayersDataSource
-) : PartyRepository, MainActivityRepository {
+) : PartyRepository, DeletePartiesRepository {
 
     override fun getAllParties(): Flow<List<RawItemPartyModel>> {
         val result= partiesDataSource.getAllPartyNotes().map { list ->
@@ -159,10 +159,8 @@ class PartyRepositoryImpl @Inject constructor(
     override suspend fun getAllPlayersCount(): ResultDataBase<Int> =
         wrapResult { playersDataSource.getAllActivePlayersNames().size }
 
-    override suspend fun deleteAllPartyNotes(): ResultDataBase<Int> =
+    override suspend fun deleteAllParties(): ResultDataBase<Int> =
         wrapResult {
-            val deletedParties = partiesDataSource.deleteAllPartyNotes()
-            val deletedGames = gamesDataSource.deleteAllGameNotes()
-            deletedGames + deletedParties
+            partiesDataSource.deleteAllPartyNotes()
         }
 }

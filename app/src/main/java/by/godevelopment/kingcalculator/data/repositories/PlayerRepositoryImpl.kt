@@ -13,6 +13,7 @@ import by.godevelopment.kingcalculator.domain.gamesdomain.models.TricksNoteModel
 import by.godevelopment.kingcalculator.domain.playersdomain.models.PartyModel
 import by.godevelopment.kingcalculator.domain.playersdomain.models.PlayerModel
 import by.godevelopment.kingcalculator.domain.playersdomain.repositories.PlayerRepository
+import by.godevelopment.kingcalculator.domain.settingsdomain.repositories.DeletePlayersRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
@@ -22,7 +23,7 @@ class PlayerRepositoryImpl @Inject constructor(
     private val partiesDataSource: PartiesDataSource,
     private val gamesDataSource: GamesDataSource,
     private val tricksDataSource: TricksDataSource
-) : PlayerRepository {
+) : PlayerRepository, DeletePlayersRepository {
 
     override suspend fun getPlayerById(id: Long): ResultDataBase<PlayerModel> {
         return playersDataSource.getPlayerProfileById(id).mapResult {
@@ -49,7 +50,7 @@ class PlayerRepositoryImpl @Inject constructor(
         return playersDataSource.disablePlayerById(params.toPlayerProfile())
     }
 
-    suspend fun deleteAllPlayers(): ResultDataBase<Int> = playersDataSource.deleteAllPlayers()
+    override suspend fun deleteAllPlayers(): ResultDataBase<Int> = playersDataSource.deleteAllPlayers()
 
     override suspend fun getAllPlayersNames(): List<String> =
         playersDataSource.getAllActivePlayersNames()

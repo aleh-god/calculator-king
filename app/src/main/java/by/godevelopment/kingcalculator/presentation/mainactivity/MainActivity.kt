@@ -1,13 +1,10 @@
 package by.godevelopment.kingcalculator.presentation.mainactivity
 
-import android.content.DialogInterface
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.FragmentResultListener
-import androidx.lifecycle.coroutineScope
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
@@ -15,11 +12,7 @@ import androidx.navigation.ui.setupWithNavController
 import by.godevelopment.kingcalculator.R
 import by.godevelopment.kingcalculator.commons.TAG
 import by.godevelopment.kingcalculator.databinding.ActivityMainBinding
-import by.godevelopment.kingcalculator.domain.commons.models.ResultDataBase
-import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.launch
-import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
@@ -27,11 +20,7 @@ class MainActivity : AppCompatActivity() {
     private var _binding: ActivityMainBinding? = null
     private val binding get() = _binding!!
 
-    @Inject
-    lateinit var mainActivityRepository: MainActivityRepository
-
     private val navController by lazy {
-        Log.i(TAG, "navController by lazy: ")
         findNavController(R.id.nav_host_fragment)
     }
 
@@ -62,7 +51,6 @@ class MainActivity : AppCompatActivity() {
     private fun setupListeners() {
         navController.addOnDestinationChangedListener(listener)
         binding.toolbar.setNavigationOnClickListener { onBackPressed() }    // For Game Add Form Screen
-        setupConfirmDialogListener()
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -76,61 +64,21 @@ class MainActivity : AppCompatActivity() {
             true
         }
         R.id.menu_delete_all -> {
-            showDeleteConfirmDialog()
+            navController.navigate(R.id.action_partiesListFragment_to_settingsFragment)
             true
         }
-        R.id.menu_settings -> {
-            Log.i(TAG, "onOptionsItemSelected: R.id.menu_settings")
-            /*
-             TODO("implement menu settings")
-            val fragment = SettingsFragment.newInstance {
-                Log.i(TAG, "SettingsFragment.newInstance: ")
-            }
-            supportFragmentManager
-                .beginTransaction()
-                .replace(R.id.nav_host_fragment, fragment)
-                .commit()
-             */
-            true
-        }
+//        R.id.menu_settings -> {
+//            Log.i(TAG, "onOptionsItemSelected: R.id.menu_settings")
+//            val fragment = SettingsFragment.newInstance {
+//                Log.i(TAG, "SettingsFragment.newInstance: ")
+//            }
+//            supportFragmentManager
+//                .beginTransaction()
+//                .replace(R.id.nav_host_fragment, fragment)
+//                .commit()
+//            true
+//        }
         else -> { super.onOptionsItemSelected(item) }
-    }
-
-    private fun showDeleteConfirmDialog() {
-        val dialogFragment = DeleteConfirmDialogFragment()
-        dialogFragment.show(supportFragmentManager, DeleteConfirmDialogFragment.TAG)
-    }
-
-    private fun setupConfirmDialogListener() {
-        supportFragmentManager.setFragmentResultListener(
-            DeleteConfirmDialogFragment.REQUEST_KEY,
-            this,
-            FragmentResultListener { _, result ->
-                when(result.getInt(DeleteConfirmDialogFragment.KEY_RESPONSE)) {
-                    DialogInterface.BUTTON_POSITIVE -> {
-                        Log.i(TAG, "setupConfirmDialogListener: BUTTON_POSITIVE")
-                        deleteAllPartyNotes()
-                    }
-                    DialogInterface.BUTTON_NEGATIVE -> {}
-                }
-            }
-        )
-    }
-
-    private fun deleteAllPartyNotes() {
-        lifecycle.coroutineScope.launch {
-            val deleteResult = mainActivityRepository.deleteAllPartyNotes()
-            when(deleteResult) {
-                is ResultDataBase.Error -> showMessage(getString(deleteResult.message))
-                is ResultDataBase.Success -> showMessage(
-                    getString(R.string.message_delete_parties_result, deleteResult.value)
-                )
-            }
-        }
-    }
-
-    private fun showMessage(message: String) {
-        Snackbar.make(binding.root, message, Snackbar.LENGTH_LONG).show()
     }
 
     override fun onDestroy() {

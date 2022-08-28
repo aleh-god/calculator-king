@@ -59,13 +59,13 @@
     <string name="nav_label_game_add_form">Game add form</string>
 
     <string name="snackbar_btn_return">Return to table</string>
-    <string name="snackbar_btn_reload">Reload table</string>
+    <string name="snackbar_btn_reload">Reload</string>
     <string name="snackbar_btn_neutral_ok">OK</string>
     <string name="dialog_neutral_btn_text">OK</string>
     <string name="button_save_player">Save player</string>
     <string name="button_delete_player">Delete player</string>
     <string name="button_start_party">Start party</string>
-    <string name="button_save_result">save result</string>
+    <string name="button_save_result">Save result</string>
     <string name="button_dec">dec</string>
     <string name="button_inc">inc</string>
 
@@ -105,7 +105,7 @@
     <string name="message_error_validate_payers_count">Not enough players</string>
     <string name="message_error_validate_players_is_active">Somebody players is deleted</string>
     <string name="message_delete_party_result">Deleted database note</string>
-    <string name="message_delete_parties_result">Deleted %1$d database notes</string>
+    <string name="message_delete_notes_result">Deleted %1$d database notes</string>
     <string name="message_error_game_validate_not_equal_sum">Total score is not equal to game score</string>
     <string name="message_error_email_check">This email is already registered</string>
 
@@ -116,10 +116,23 @@
 
     <string name="ui_text_contacts">\ contracts the game</string>
     <string name="ui_text_total_games">\ in 56</string>
-    <string name="ui_text_header_party_info">Game type \\ Player</string>
+    <string name="ui_text_header_party_info">Game type</string>
+    <string name="ui_settings_text_header">Data app settings</string>
+
+    <string name="ui_settings_text_title_delete_parties">Delete all party notes</string>
+    <string name="ui_settings_text_delete_parties">All party records will be deleted. Games notes and tricks notes will not be affected. The player\'s personal statistics will remain for accounting.</string>
+    <string name="ui_settings_text_bttn_delete_parties">Delete parties</string>
+
+    <string name="ui_settings_text_title_delete_games">Delete all games notes</string>
+    <string name="ui_settings_text_delete_games">All parties, games and tricks notes will be deleted. Players notes will not be affected. Start your parties again.</string>
+    <string name="ui_settings_text_bttn_delete_games">Delete games</string>
+
+    <string name="ui_settings_text_title_delete_all">Delete all notes!!!</string>
+    <string name="ui_settings_text_delete_all">All parties, games, tricks and players notes will be deleted. Eliminates all notes errors.</string>
+    <string name="ui_settings_text_bttn_delete_all">Delete all</string>
 
     <string name="alert_confirm_delete_title">WARNING!</string>
-    <string name="alert_confirm_delete_message">Confirm delete all party notes</string>
+    <string name="alert_confirm_delete_message">Confirm delete current notes</string>
     <string name="alert_confirm_title">Confirm game type</string>
     <string name="alert_confirm_message">Confirm selected game as %1s</string>
     <string name="input_tricks_title">Tricks count</string>
