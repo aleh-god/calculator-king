@@ -81,14 +81,20 @@ class GameAddFormFragment : Fragment() {
             .flowWithLifecycle(lifecycle)
             .onEach { event ->
                 when (event) {
-                    is GameAddFormUiEvent.ShowMessageUiEvent -> {
+                    is GameAddFormUiEvent.NavigateToBackScreen -> {
+                        findNavController().navigate(
+                            GameAddFormFragmentDirections
+                                .actionGameAddFormFragmentToPartiesListFragment()
+                        )
+                    }
+                    is GameAddFormUiEvent.ShowMessage -> {
                         Snackbar
-                            .make(binding.root, event.message, Snackbar.LENGTH_LONG)
-                            .setAction(getString(R.string.snackbar_btn_neutral_ok))
+                            .make(binding.root, event.message, Snackbar.LENGTH_INDEFINITE)
+                            .setAction(event.textAction)
                             { event.onAction() }
                             .show()
                     }
-                    is GameAddFormUiEvent.NavigateToPartyCardUiEvent -> navigateToPartyCard(event.navArg)
+                    is GameAddFormUiEvent.NavigateToPartyCard -> navigateToPartyCard(event.navArg)
                 }
             }
             .launchIn(lifecycle.coroutineScope)

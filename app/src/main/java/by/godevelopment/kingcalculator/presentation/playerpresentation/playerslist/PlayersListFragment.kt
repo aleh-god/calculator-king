@@ -73,11 +73,21 @@ class PlayersListFragment : Fragment() {
         viewModel.uiEvent
             .flowWithLifecycle(lifecycle)
             .onEach { event ->
-                Snackbar
-                    .make(binding.root, event, Snackbar.LENGTH_INDEFINITE)
-                    .setAction(getString(R.string.snackbar_btn_reload))
-                    { viewModel.reloadDataModel() }
-                    .show()
+                when(event) {
+                    is PlayersListUiEvent.NavigateToBackScreen -> {
+                        findNavController().navigate(
+                            PlayersListFragmentDirections
+                                .actionPlayersListFragmentToPartiesListFragment()
+                        )
+                    }
+                    is PlayersListUiEvent.ShowMessage -> {
+                        Snackbar
+                            .make(binding.root, event.message, Snackbar.LENGTH_INDEFINITE)
+                            .setAction(event.textAction)
+                            { event.onAction() }
+                            .show()
+                    }
+                }
             }
             .launchIn(lifecycle.coroutineScope)
     }

@@ -29,8 +29,8 @@ class PartyAddFormViewModel @Inject constructor(
     private val _uiState: MutableStateFlow<AddPartyFormState> = MutableStateFlow(AddPartyFormState())
     val uiState: StateFlow<AddPartyFormState> = _uiState.asStateFlow()
 
-    private val _uiEvent  = Channel<UiEvent>()
-    val uiEvent: Flow<UiEvent> = _uiEvent.receiveAsFlow()
+    private val _uiEvent  = Channel<PartyAddFormUiEvent>()
+    val uiEvent: Flow<PartyAddFormUiEvent> = _uiEvent.receiveAsFlow()
 
     private var suspendJob: Job? = null
 
@@ -89,22 +89,35 @@ class PartyAddFormViewModel @Inject constructor(
                         playerFourId = it.players[it.playerFourName]!!
                     )
                 }
-                val createResult = partyRepository.createNewPartyAndReturnId(newParty)
+                val createResult = partyRepository
+                    .createNewPartyAndReturnId(newParty)
                 when(createResult) {
                     is ResultDataBase.Error -> {
-                        _uiEvent.send(UiEvent.ShowSnackbar(R.string.message_error_data_save))
+                        _uiEvent.send(PartyAddFormUiEvent.ShowMessage(
+                            R.string.message_error_data_save,
+                            textAction = R.string.snackbar_btn_neutral_ok,
+                            onAction = { }
+                        ))
                     }
                     is ResultDataBase.Success -> {
                         if (createResult.value < 0) {
-                            _uiEvent.send(UiEvent.ShowSnackbar(R.string.message_error_data_save))
+                            _uiEvent.send(PartyAddFormUiEvent.ShowMessage(
+                                R.string.message_error_data_save,
+                                textAction = R.string.snackbar_btn_neutral_ok,
+                                onAction = { }
+                            ))
                         }
-                        else { _uiEvent.send(UiEvent.NavigateToList(createResult.value)) }
+                        else { _uiEvent.send(PartyAddFormUiEvent.NavigateToList(createResult.value)) }
                     }
                 }
             }
             else {
                 _uiEvent.send(
-                    UiEvent.ShowSnackbar(R.string.message_error_players_info_empty)
+                    PartyAddFormUiEvent.ShowMessage(
+                        R.string.message_error_players_info_empty,
+                        textAction = R.string.snackbar_btn_neutral_ok,
+                        onAction = { }
+                    )
                 )
             }
             _uiState.update { it.copy(showsProgress = false) }
@@ -138,10 +151,5 @@ class PartyAddFormViewModel @Inject constructor(
             _uiState.value.playerFourName
         )
         return validatePlayersChoiceUseCase.execute(playersChoice)
-    }
-
-    sealed class UiEvent {
-        data class ShowSnackbar(val message: Int) : UiEvent()
-        data class NavigateToList(val idParty: Long) : UiEvent()
     }
 }

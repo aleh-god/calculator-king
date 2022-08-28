@@ -78,19 +78,22 @@ class PlayerAddFormFragment : Fragment() {
             .flowWithLifecycle(lifecycle)
             .onEach { event ->
                 when(event) {
-                    is PlayerAddFormViewModel.UiEvent.ShowSnackbar -> {
-                        Snackbar.make(binding.root, event.message, Snackbar.LENGTH_LONG).show()
+                    is PlayerAddFormUiEvent.NavigateToBackScreen -> {
+                        findNavController().navigate(
+                            PlayerAddFormFragmentDirections
+                                .actionPlayerAddFormFragmentToPlayersListFragment()
+                        )
                     }
-                    is PlayerAddFormViewModel.UiEvent.NavigateToList -> {
-                        navigateToListUser()
+                    is PlayerAddFormUiEvent.ShowMessage -> {
+                        Snackbar
+                            .make(binding.root, event.message, Snackbar.LENGTH_INDEFINITE)
+                            .setAction(event.textAction)
+                            { event.onAction() }
+                            .show()
                     }
                 }
             }
             .launchIn(lifecycle.coroutineScope)
-    }
-
-    private fun navigateToListUser() {
-        findNavController().navigate(R.id.action_playerAddFormFragment_to_playersListFragment)
     }
 
     private fun showProgressUi(key: Boolean) {

@@ -82,11 +82,22 @@ class PartyAddFormFragment : Fragment() {
         viewModel.uiEvent
             .flowWithLifecycle(lifecycle)
             .onEach { event ->
+
                 when(event) {
-                    is PartyAddFormViewModel.UiEvent.ShowSnackbar -> {
-                        Snackbar.make(binding.root, event.message, Snackbar.LENGTH_LONG).show()
+                    is PartyAddFormUiEvent.NavigateToBackScreen -> {
+                        findNavController().navigate(
+                            PartyAddFormFragmentDirections
+                                .actionPartyAddFormFragmentToPartiesListFragment()
+                        )
                     }
-                    is PartyAddFormViewModel.UiEvent.NavigateToList -> {
+                    is PartyAddFormUiEvent.ShowMessage -> {
+                        Snackbar
+                            .make(binding.root, event.message, Snackbar.LENGTH_INDEFINITE)
+                            .setAction(event.textAction)
+                            { event.onAction() }
+                            .show()
+                    }
+                    is PartyAddFormUiEvent.NavigateToList -> {
                         navigateToPartyCard(event.idParty)
                     }
                 }

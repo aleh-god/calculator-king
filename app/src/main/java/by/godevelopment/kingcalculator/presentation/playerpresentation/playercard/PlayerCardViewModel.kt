@@ -40,25 +40,45 @@ class PlayerCardViewModel @Inject constructor(
     )
     val uiState: StateFlow<CardUiState> = _uiState.asStateFlow()
 
-    private val _uiEvent  = Channel<UiEvent>()
-    val uiEvent: Flow<UiEvent> = _uiEvent.receiveAsFlow()
+    private val _uiEvent  = Channel<PlayerCardUiEvent>()
+    val uiEvent: Flow<PlayerCardUiEvent> = _uiEvent.receiveAsFlow()
 
     private val idPlayer = state.get<Long>("idPlayer")
-    private var suspendJob: Job? = null
+    private var fetchJob: Job? = null
+    private var reloadsNumber = 0
 
     init {
         Log.i(TAG, "PlayerCardViewModel: $idPlayer")
-        loadPlayerCardModelById(idPlayer)
+        fetchDataModel(idPlayer)
     }
 
-    private fun loadPlayerCardModelById(idPlayer: Long?) {
-        viewModelScope.launch(ioDispatcher) {
+    private fun reloadDataModel() {
+        if (reloadsNumber > 3) {
+            fetchJob?.cancel()
+            fetchJob = viewModelScope.launch {
+                reloadsNumber = 0
+                _uiEvent.send(PlayerCardUiEvent.NavigateToBackScreen)
+            }
+        }
+        else {
+            reloadsNumber++
+            fetchDataModel(idPlayer)
+        }
+    }
+
+    private fun fetchDataModel(idPlayer: Long?) {
+        fetchJob?.cancel()
+        fetchJob = viewModelScope.launch(ioDispatcher) {
             if (idPlayer != null) {
                 _uiState.update { it.copy(showsProgress = true) }
                 val playerResult = getActivePlayerByIdUseCase(idPlayer)
                 when(playerResult) {
                     is ResultDataBase.Error -> _uiEvent.send(
-                        UiEvent.ShowSnackbar(playerResult.message)
+                        PlayerCardUiEvent.ShowMessage(
+                            message = playerResult.message,
+                            textAction = R.string.snackbar_btn_reload,
+                            onAction = ::reloadDataModel
+                        )
                     )
                     is ResultDataBase.Success -> _uiState.update {
                         it.copy(playerModel = playerResult.value)
@@ -66,7 +86,13 @@ class PlayerCardViewModel @Inject constructor(
                 }
                 _uiState.update { it.copy(showsProgress = false) }
             } else {
-                _uiEvent.send(UiEvent.ShowSnackbar(R.string.message_error_player_id))
+                _uiEvent.send(
+                    PlayerCardUiEvent.ShowMessage(
+                            message = R.string.message_error_player_id,
+                    textAction = R.string.snackbar_btn_reload,
+                    onAction = ::reloadDataModel
+                )
+                )
             }
         }
     }
@@ -90,7 +116,13 @@ class PlayerCardViewModel @Inject constructor(
                     updatePlayerDataToRepository()
                 } else {
                     viewModelScope.launch {
-                        _uiEvent.send(UiEvent.ShowSnackbar(R.string.message_error_player_info))
+                        _uiEvent.send(
+                            PlayerCardUiEvent.ShowMessage(
+                                    message = R.string.message_error_player_info,
+                                    textAction = R.string.snackbar_btn_reload,
+                                    onAction = ::reloadDataModel
+                                )
+                        )
                     }
                 }
             }
@@ -101,33 +133,40 @@ class PlayerCardViewModel @Inject constructor(
     }
 
     private fun deletePlayerDataFromRepository() {
-        suspendJob?.cancel()
-        suspendJob = viewModelScope.launch(ioDispatcher) {
+        fetchJob?.cancel()
+        fetchJob = viewModelScope.launch(ioDispatcher) {
             _uiState.update { it.copy(showsProgress = true) }
             val result = playerRepository.disablePlayerById(uiState.value.playerModel)
             when (result) {
-                is ResultDataBase.Error -> _uiEvent.send(UiEvent.ShowSnackbar(result.message))
-                is ResultDataBase.Success -> _uiEvent.send(UiEvent.NavigateToList)
+                is ResultDataBase.Error -> _uiEvent.send(
+                    PlayerCardUiEvent.ShowMessage(
+                        message = result.message,
+                        textAction = R.string.snackbar_btn_neutral_ok,
+                        onAction = {  }
+                    )
+                )
+                is ResultDataBase.Success -> _uiEvent.send(PlayerCardUiEvent.NavigateToBackScreen)
             }
             _uiState.update { it.copy(showsProgress = false) }
         }
     }
 
     private fun updatePlayerDataToRepository() {
-        suspendJob?.cancel()
-        suspendJob = viewModelScope.launch(ioDispatcher) {
+        fetchJob?.cancel()
+        fetchJob = viewModelScope.launch(ioDispatcher) {
             _uiState.update { it.copy(showsProgress = true) }
             val result = playerRepository.updatePlayerById(uiState.value.playerModel)
             when (result) {
-                is ResultDataBase.Error -> _uiEvent.send(UiEvent.ShowSnackbar(result.message))
-                is ResultDataBase.Success -> _uiEvent.send(UiEvent.NavigateToList)
+                is ResultDataBase.Error -> _uiEvent.send(
+                    PlayerCardUiEvent.ShowMessage(
+                        message = result.message,
+                        textAction = R.string.snackbar_btn_neutral_ok,
+                        onAction = {  }
+                    )
+                )
+                is ResultDataBase.Success -> _uiEvent.send(PlayerCardUiEvent.NavigateToBackScreen)
             }
             _uiState.update { it.copy(showsProgress = false) }
         }
-    }
-
-    sealed class UiEvent {
-        data class ShowSnackbar(val message: Int) : UiEvent()
-        object NavigateToList : UiEvent()
     }
 }

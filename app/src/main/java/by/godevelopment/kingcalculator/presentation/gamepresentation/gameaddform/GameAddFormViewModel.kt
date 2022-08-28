@@ -42,6 +42,7 @@ class GameAddFormViewModel @Inject constructor(
     val uiEvent: Flow<GameAddFormUiEvent> = _uiEvent.receiveAsFlow()
 
     private var fetchJob: Job? = null
+    private var reloadsNumber = 0
 
     init {
         fetchDataModel()
@@ -57,9 +58,10 @@ class GameAddFormViewModel @Inject constructor(
                 when(listResult) {
                     is ResultDataBase.Error -> {
                         _uiEvent.send(
-                            GameAddFormUiEvent.ShowMessageUiEvent(
+                            GameAddFormUiEvent.ShowMessage(
                                 message = listResult.message,
-                                onAction = { }
+                                textAction = R.string.snackbar_btn_reload,
+                                onAction = { reloadDataModel() }
                             ))
                     }
                     is ResultDataBase.Success -> {
@@ -70,9 +72,10 @@ class GameAddFormViewModel @Inject constructor(
             catch (e: Exception) {
                 Log.i(TAG, "fetchDataModel.catch: ${e.message}")
                 _uiEvent.send(
-                    GameAddFormUiEvent.ShowMessageUiEvent(
+                    GameAddFormUiEvent.ShowMessage(
                         message = R.string.message_error_data_load,
-                        onAction = ::reloadDataModel
+                        textAction = R.string.snackbar_btn_reload,
+                        onAction = { reloadDataModel() }
                     )
                 )
             }
@@ -81,7 +84,17 @@ class GameAddFormViewModel @Inject constructor(
     }
 
     private fun reloadDataModel() {
-        fetchDataModel()
+        if (reloadsNumber > 3) {
+            fetchJob?.cancel()
+            fetchJob = viewModelScope.launch {
+                reloadsNumber = 0
+                _uiEvent.send(GameAddFormUiEvent.NavigateToBackScreen)
+            }
+        }
+        else {
+            reloadsNumber++
+            fetchDataModel()
+        }
     }
 
     fun onClickDec(rowId: Int) {
@@ -182,8 +195,9 @@ class GameAddFormViewModel @Inject constructor(
                     when (isSaved) {
                         is ResultDataBase.Error -> {
                             _uiEvent.send(
-                                GameAddFormUiEvent.ShowMessageUiEvent(
+                                GameAddFormUiEvent.ShowMessage(
                                     message = R.string.message_error_data_save,
+                                    textAction = R.string.snackbar_btn_neutral_ok,
                                     onAction = { }
                                 ))
                         }
@@ -192,14 +206,15 @@ class GameAddFormViewModel @Inject constructor(
                             when(partyIdResult) {
                                 is ResultDataBase.Error -> {
                                     _uiEvent.send(
-                                        GameAddFormUiEvent.ShowMessageUiEvent(
+                                        GameAddFormUiEvent.ShowMessage(
                                             message = partyIdResult.message,
+                                            textAction = R.string.snackbar_btn_neutral_ok,
                                             onAction = { }
                                         ))
                                 }
                                 is ResultDataBase.Success -> {
                                     _uiEvent.send(
-                                        GameAddFormUiEvent.NavigateToPartyCardUiEvent(
+                                        GameAddFormUiEvent.NavigateToPartyCard(
                                             partyIdResult.value
                                         )
                                     )
@@ -211,8 +226,9 @@ class GameAddFormViewModel @Inject constructor(
                 catch (e: Exception) {
                     Log.i(TAG, "saveGameData.catch: ${e.message}")
                     _uiEvent.send(
-                        GameAddFormUiEvent.ShowMessageUiEvent(
+                        GameAddFormUiEvent.ShowMessage(
                             message = R.string.message_error_data_save,
+                            textAction = R.string.snackbar_btn_neutral_ok,
                             onAction = { }
                         ))
                 }
@@ -225,8 +241,9 @@ class GameAddFormViewModel @Inject constructor(
                     )
                 }
                 _uiEvent.send(
-                    GameAddFormUiEvent.ShowMessageUiEvent(
+                    GameAddFormUiEvent.ShowMessage(
                         message = R.string.message_error_input_values,
+                        textAction = R.string.snackbar_btn_neutral_ok,
                         onAction = { }
                     ))
             }
