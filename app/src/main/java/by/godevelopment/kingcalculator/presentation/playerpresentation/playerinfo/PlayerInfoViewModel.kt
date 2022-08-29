@@ -7,6 +7,7 @@ import by.godevelopment.kingcalculator.R
 import by.godevelopment.kingcalculator.di.IoDispatcher
 import by.godevelopment.kingcalculator.domain.commons.models.ResultDataBase
 import by.godevelopment.kingcalculator.domain.playersdomain.models.ItemPlayerInfoModel
+import by.godevelopment.kingcalculator.domain.playersdomain.repositories.PlayerRepository
 import by.godevelopment.kingcalculator.domain.playersdomain.usecases.GetPlayerInfoListUseCase
 import by.godevelopment.kingcalculator.presentation.playerpresentation.playerslist.PlayersListUiEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -21,7 +22,8 @@ import javax.inject.Inject
 class PlayerInfoViewModel @Inject constructor(
     state: SavedStateHandle,
     @IoDispatcher private val ioDispatcher: CoroutineDispatcher,
-    private val getPlayerInfoListUseCase: GetPlayerInfoListUseCase
+    private val getPlayerInfoListUseCase: GetPlayerInfoListUseCase,
+    private val playerRepository: PlayerRepository
 ) : ViewModel() {
 
     val playerId = state.get<Long>("idPlayer")
@@ -44,23 +46,42 @@ class PlayerInfoViewModel @Inject constructor(
             fetchJob?.cancel()
             fetchJob = viewModelScope.launch(ioDispatcher) {
                 _uiState.update { it.copy(isFetchingData = true) }
-                val result = getPlayerInfoListUseCase(playerId)
-                when(result) {
-                    is ResultDataBase.Error -> { _uiEvent.send(PlayerInfoUiEvent.ShowMessage(
-                        message = result.message,
-                        textAction = R.string.snackbar_btn_reload,
-                        onAction = ::reloadDataModel
-                    ))
-                    }
-                    is ResultDataBase.Success -> {
-                        _uiState.update { it.copy(dataList = result.value) }
-                    }
-                }
+                fetchPlayerName(it)
+                fetchPlayerInfoList(it)
                 _uiState.update { it.copy(isFetchingData = false) }
             }
         }
     }
 
+    private suspend fun fetchPlayerName(playerId: Long) {
+        val resultName = playerRepository.getPlayerById(playerId)
+        when(resultName) {
+            is ResultDataBase.Error -> { _uiEvent.send(PlayerInfoUiEvent.ShowMessage(
+                message = resultName.message,
+                textAction = R.string.snackbar_btn_reload,
+                onAction = ::reloadDataModel
+            ))
+            }
+            is ResultDataBase.Success -> {
+                _uiState.update { it.copy(playerName = resultName.value.name) }
+            }
+        }
+    }
+
+    private suspend fun fetchPlayerInfoList(playerId: Long) {
+        val resultInfo = getPlayerInfoListUseCase(playerId)
+        when(resultInfo) {
+            is ResultDataBase.Error -> { _uiEvent.send(PlayerInfoUiEvent.ShowMessage(
+                message = resultInfo.message,
+                textAction = R.string.snackbar_btn_reload,
+                onAction = ::reloadDataModel
+            ))
+            }
+            is ResultDataBase.Success -> {
+                _uiState.update { it.copy(dataList = resultInfo.value) }
+            }
+        }
+    }
 
     private fun reloadDataModel() {
         if (reloadsNumber > 3) {
@@ -78,6 +99,7 @@ class PlayerInfoViewModel @Inject constructor(
 
     data class UiState(
         val isFetchingData: Boolean = false,
+        val playerName: String = "",
         val dataList: List<ItemPlayerInfoModel> = emptyList()
     )
 }
