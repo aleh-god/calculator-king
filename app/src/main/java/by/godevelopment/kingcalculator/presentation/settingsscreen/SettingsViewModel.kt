@@ -33,7 +33,6 @@ class SettingsViewModel @Inject constructor(
     val uiEvent: Flow<SettingsUiEvent> = _uiEvent.receiveAsFlow()
 
     private var fetchJob: Job? = null
-    private var reloadsNumber = 0
 
     fun deleteAllParties() {
         fetchJob?.cancel()

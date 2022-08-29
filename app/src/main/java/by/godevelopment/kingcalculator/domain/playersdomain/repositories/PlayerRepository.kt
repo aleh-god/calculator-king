@@ -14,10 +14,6 @@ interface PlayerRepository {
 
     suspend fun createPlayer(params: PlayerModel): ResultDataBase<Long>
 
-    suspend fun updatePlayerById(params: PlayerModel): ResultDataBase<Int>
-
-    suspend fun disablePlayerById(params: PlayerModel): ResultDataBase<Int>
-
     suspend fun getAllPlayersNames(): List<String>
 
     fun getAllPlayers(): Flow<List<PlayerModel>>

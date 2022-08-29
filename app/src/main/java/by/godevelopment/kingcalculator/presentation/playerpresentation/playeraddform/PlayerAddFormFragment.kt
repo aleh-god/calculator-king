@@ -11,7 +11,6 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.coroutineScope
 import androidx.lifecycle.flowWithLifecycle
 import androidx.navigation.fragment.findNavController
-import by.godevelopment.kingcalculator.R
 import by.godevelopment.kingcalculator.databinding.FragmentPlayerAddFormBinding
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
@@ -29,6 +28,7 @@ class PlayerAddFormFragment : Fragment() {
     private val viewModel: PlayerAddFormViewModel by viewModels()
     private var _binding: FragmentPlayerAddFormBinding? = null
     private val binding get() = _binding!!
+    private var snackbar: Snackbar? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -85,11 +85,12 @@ class PlayerAddFormFragment : Fragment() {
                         )
                     }
                     is PlayerAddFormUiEvent.ShowMessage -> {
-                        Snackbar
+                        snackbar?.dismiss()
+                        snackbar = Snackbar
                             .make(binding.root, event.message, Snackbar.LENGTH_INDEFINITE)
                             .setAction(event.textAction)
                             { event.onAction() }
-                            .show()
+                        snackbar?.show()
                     }
                 }
             }
@@ -106,6 +107,12 @@ class PlayerAddFormFragment : Fragment() {
                 bttnSave.visibility = View.VISIBLE
             }
         }
+    }
+
+    override fun onStop() {
+        snackbar?.dismiss()
+        snackbar = null
+        super.onStop()
     }
 
     override fun onDestroy() {

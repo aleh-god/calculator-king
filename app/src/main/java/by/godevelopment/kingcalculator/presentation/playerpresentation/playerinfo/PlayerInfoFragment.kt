@@ -30,6 +30,7 @@ class PlayerInfoFragment : Fragment() {
     private val viewModel: PlayerInfoViewModel by viewModels()
     private var _binding: FragmentPlayerInfoBinding? = null
     private val binding get() = _binding!!
+    private var snackbar: Snackbar? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -70,15 +71,22 @@ class PlayerInfoFragment : Fragment() {
                         )
                     }
                     is PlayerInfoUiEvent.ShowMessage -> {
-                        Snackbar
+                        snackbar?.dismiss()
+                        snackbar = Snackbar
                             .make(binding.root, event.message, Snackbar.LENGTH_INDEFINITE)
                             .setAction(event.textAction)
                             { event.onAction() }
-                            .show()
+                        snackbar?.show()
                     }
                 }
             }
             .launchIn(lifecycle.coroutineScope)
+    }
+
+    override fun onStop() {
+        snackbar?.dismiss()
+        snackbar = null
+        super.onStop()
     }
 
     override fun onDestroy() {

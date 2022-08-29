@@ -1,15 +1,13 @@
 package by.godevelopment.kingcalculator.presentation.playerpresentation.playercard
 
-import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import by.godevelopment.kingcalculator.R
-import by.godevelopment.kingcalculator.commons.TAG
 import by.godevelopment.kingcalculator.di.IoDispatcher
 import by.godevelopment.kingcalculator.domain.commons.models.ResultDataBase
 import by.godevelopment.kingcalculator.domain.playersdomain.models.PlayerModel
-import by.godevelopment.kingcalculator.domain.playersdomain.repositories.PlayerRepository
+import by.godevelopment.kingcalculator.domain.playersdomain.repositories.PlayerCardRepository
 import by.godevelopment.kingcalculator.domain.playersdomain.usecases.GetActivePlayerByIdUseCase
 import by.godevelopment.kingcalculator.domain.playersdomain.usecases.ValidatePlayerNameUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -25,7 +23,7 @@ class PlayerCardViewModel @Inject constructor(
     state: SavedStateHandle,
     private val getActivePlayerByIdUseCase: GetActivePlayerByIdUseCase,
     private val validatePlayerNameUseCase: ValidatePlayerNameUseCase,
-    private val playerRepository: PlayerRepository, // TODO("Split interface")
+    private val playerCardRepository: PlayerCardRepository,
     @IoDispatcher private val ioDispatcher: CoroutineDispatcher
 ) : ViewModel() {
 
@@ -48,7 +46,6 @@ class PlayerCardViewModel @Inject constructor(
     private var reloadsNumber = 0
 
     init {
-        Log.i(TAG, "PlayerCardViewModel: $idPlayer")
         fetchDataModel(idPlayer)
     }
 
@@ -88,10 +85,10 @@ class PlayerCardViewModel @Inject constructor(
             } else {
                 _uiEvent.send(
                     PlayerCardUiEvent.ShowMessage(
-                            message = R.string.message_error_player_id,
-                    textAction = R.string.snackbar_btn_reload,
-                    onAction = ::reloadDataModel
-                )
+                        message = R.string.message_error_player_id,
+                        textAction = R.string.snackbar_btn_reload,
+                        onAction = ::reloadDataModel
+                    )
                 )
             }
         }
@@ -118,10 +115,10 @@ class PlayerCardViewModel @Inject constructor(
                     viewModelScope.launch {
                         _uiEvent.send(
                             PlayerCardUiEvent.ShowMessage(
-                                    message = R.string.message_error_player_info,
-                                    textAction = R.string.snackbar_btn_reload,
-                                    onAction = ::reloadDataModel
-                                )
+                                message = R.string.message_error_player_info,
+                                textAction = R.string.snackbar_btn_reload,
+                                onAction = ::reloadDataModel
+                            )
                         )
                     }
                 }
@@ -136,7 +133,7 @@ class PlayerCardViewModel @Inject constructor(
         fetchJob?.cancel()
         fetchJob = viewModelScope.launch(ioDispatcher) {
             _uiState.update { it.copy(showsProgress = true) }
-            val result = playerRepository.disablePlayerById(uiState.value.playerModel)
+            val result = playerCardRepository.disablePlayerById(uiState.value.playerModel)
             when (result) {
                 is ResultDataBase.Error -> _uiEvent.send(
                     PlayerCardUiEvent.ShowMessage(
@@ -155,7 +152,7 @@ class PlayerCardViewModel @Inject constructor(
         fetchJob?.cancel()
         fetchJob = viewModelScope.launch(ioDispatcher) {
             _uiState.update { it.copy(showsProgress = true) }
-            val result = playerRepository.updatePlayerById(uiState.value.playerModel)
+            val result = playerCardRepository.updatePlayerById(uiState.value.playerModel)
             when (result) {
                 is ResultDataBase.Error -> _uiEvent.send(
                     PlayerCardUiEvent.ShowMessage(

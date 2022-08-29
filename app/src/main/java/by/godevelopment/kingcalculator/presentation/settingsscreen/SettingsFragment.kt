@@ -29,11 +29,12 @@ class SettingsFragment : Fragment() {
     private var _binding: FragmentSettingsBinding? = null
     private val binding: FragmentSettingsBinding get() = _binding!!
     private var onActionForDialog: (()-> Unit)? = null
+    private var snackbar: Snackbar? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentSettingsBinding.inflate(inflater, container, false)
         setupListeners()
         viewLifecycleOwner.lifecycle.also {
@@ -97,33 +98,40 @@ class SettingsFragment : Fragment() {
         viewModel.uiEvent
             .flowWithLifecycle(lifecycle)
             .onEach { event ->
-                // TODO("impl Snackbar scope")
                 when(event){
                     is SettingsUiEvent.NavigateToSystemSettings -> {
-                        // ("Impl to next time")
+                        // ("Impl intent to next time")
                     }
                     is SettingsUiEvent.ShowMessage -> {
                         if (event.valueForText != null) {
-                            Snackbar
+                            snackbar?.dismiss()
+                            snackbar = Snackbar
                                 .make(
                                     binding.root,
                                     getString(event.message, event.valueForText),
                                     Snackbar.LENGTH_LONG)
                                 .setAction(event.textAction)
                                 { event.onAction() }
-                                .show()
+                            snackbar?.show()
                         }
                         else {
-                            Snackbar
+                            snackbar?.dismiss()
+                            snackbar = Snackbar
                                 .make(binding.root, event.message, Snackbar.LENGTH_LONG)
                                 .setAction(event.textAction)
                                 { event.onAction() }
-                                .show()
+                            snackbar?.show()
                         }
                     }
                 }
             }
             .launchIn(lifecycle.coroutineScope)
+    }
+
+    override fun onStop() {
+        snackbar?.dismiss()
+        snackbar = null
+        super.onStop()
     }
 
     override fun onDestroy() {

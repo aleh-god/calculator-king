@@ -6,7 +6,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.coroutineScope
@@ -39,6 +38,7 @@ class PartyCardFragment : Fragment() {
         gameType = key
         showConfirmDialog(key)
     }
+    private var snackbar: Snackbar? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -90,11 +90,12 @@ class PartyCardFragment : Fragment() {
                         )
                     }
                     is PartyCardUiEvent.ShowMessage -> {
-                        Snackbar
+                        snackbar?.dismiss()
+                        snackbar = Snackbar
                             .make(binding.root, event.message, Snackbar.LENGTH_INDEFINITE)
                             .setAction(event.textAction)
                             { event.onAction() }
-                            .show()
+                        snackbar?.show()
                     }
                     is PartyCardUiEvent.NavigateToGameAddForm -> {
                         navigateToGameAddForm(event.navArgs)
@@ -132,6 +133,12 @@ class PartyCardFragment : Fragment() {
         val action =
             PartyCardFragmentDirections.actionPartyCardFragmentToGameAddFormFragment(navArgs)
         findNavController().navigate(action)
+    }
+
+    override fun onStop() {
+        snackbar?.dismiss()
+        snackbar = null
+        super.onStop()
     }
 
     override fun onDestroy() {

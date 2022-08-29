@@ -31,6 +31,7 @@ class PartyAddFormFragment : Fragment() {
     private var _binding: FragmentPartyAddFormBinding? = null
     private val binding: FragmentPartyAddFormBinding
         get() = _binding!!
+    private var snackbar: Snackbar? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -91,11 +92,12 @@ class PartyAddFormFragment : Fragment() {
                         )
                     }
                     is PartyAddFormUiEvent.ShowMessage -> {
-                        Snackbar
+                        snackbar?.dismiss()
+                        snackbar = Snackbar
                             .make(binding.root, event.message, Snackbar.LENGTH_INDEFINITE)
                             .setAction(event.textAction)
                             { event.onAction() }
-                            .show()
+                        snackbar?.show()
                     }
                     is PartyAddFormUiEvent.NavigateToList -> {
                         navigateToPartyCard(event.idParty)
@@ -142,6 +144,12 @@ class PartyAddFormFragment : Fragment() {
         val directions = PartyAddFormFragmentDirections
             .actionPartyAddFormFragmentToPartyCardFragment(idParty)
         findNavController().navigate(directions)
+    }
+
+    override fun onStop() {
+        snackbar?.dismiss()
+        snackbar = null
+        super.onStop()
     }
 
     override fun onDestroy() {
