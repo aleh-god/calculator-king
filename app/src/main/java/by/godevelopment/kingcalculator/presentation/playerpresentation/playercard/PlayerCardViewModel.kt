@@ -7,7 +7,7 @@ import by.godevelopment.kingcalculator.R
 import by.godevelopment.kingcalculator.di.IoDispatcher
 import by.godevelopment.kingcalculator.domain.commons.models.ResultDataBase
 import by.godevelopment.kingcalculator.domain.playersdomain.models.PlayerModel
-import by.godevelopment.kingcalculator.domain.playersdomain.repositories.PlayerRepository
+import by.godevelopment.kingcalculator.domain.playersdomain.repositories.PlayerCardRepository
 import by.godevelopment.kingcalculator.domain.playersdomain.usecases.GetActivePlayerByIdUseCase
 import by.godevelopment.kingcalculator.domain.playersdomain.usecases.ValidatePlayerNameUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -23,7 +23,7 @@ class PlayerCardViewModel @Inject constructor(
     state: SavedStateHandle,
     private val getActivePlayerByIdUseCase: GetActivePlayerByIdUseCase,
     private val validatePlayerNameUseCase: ValidatePlayerNameUseCase,
-    private val playerRepository: PlayerRepository, // TODO("Split interface")
+    private val playerCardRepository: PlayerCardRepository,
     @IoDispatcher private val ioDispatcher: CoroutineDispatcher
 ) : ViewModel() {
 
@@ -133,7 +133,7 @@ class PlayerCardViewModel @Inject constructor(
         fetchJob?.cancel()
         fetchJob = viewModelScope.launch(ioDispatcher) {
             _uiState.update { it.copy(showsProgress = true) }
-            val result = playerRepository.disablePlayerById(uiState.value.playerModel)
+            val result = playerCardRepository.disablePlayerById(uiState.value.playerModel)
             when (result) {
                 is ResultDataBase.Error -> _uiEvent.send(
                     PlayerCardUiEvent.ShowMessage(
@@ -152,7 +152,7 @@ class PlayerCardViewModel @Inject constructor(
         fetchJob?.cancel()
         fetchJob = viewModelScope.launch(ioDispatcher) {
             _uiState.update { it.copy(showsProgress = true) }
-            val result = playerRepository.updatePlayerById(uiState.value.playerModel)
+            val result = playerCardRepository.updatePlayerById(uiState.value.playerModel)
             when (result) {
                 is ResultDataBase.Error -> _uiEvent.send(
                     PlayerCardUiEvent.ShowMessage(
