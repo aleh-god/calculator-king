@@ -11,7 +11,6 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.coroutineScope
 import androidx.lifecycle.flowWithLifecycle
 import androidx.navigation.fragment.findNavController
-import by.godevelopment.kingcalculator.R
 import by.godevelopment.kingcalculator.databinding.FragmentPlayerCardBinding
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
@@ -29,6 +28,7 @@ class PlayerCardFragment : Fragment() {
     private val viewModel: PlayerCardViewModel by viewModels()
     private var _binding: FragmentPlayerCardBinding? = null
     private val binding get() = _binding!!
+    private var snackbar: Snackbar? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -88,11 +88,12 @@ class PlayerCardFragment : Fragment() {
                         )
                     }
                     is PlayerCardUiEvent.ShowMessage -> {
-                        Snackbar
+                        snackbar?.dismiss()
+                        snackbar = Snackbar
                             .make(binding.root, event.message, Snackbar.LENGTH_INDEFINITE)
                             .setAction(event.textAction)
                             { event.onAction() }
-                            .show()
+                        snackbar?.show()
                     }
                 }
             }
@@ -111,6 +112,12 @@ class PlayerCardFragment : Fragment() {
                 bttnDelete.visibility = View.VISIBLE
             }
         }
+    }
+
+    override fun onStop() {
+        snackbar?.dismiss()
+        snackbar = null
+        super.onStop()
     }
 
     override fun onDestroy() {

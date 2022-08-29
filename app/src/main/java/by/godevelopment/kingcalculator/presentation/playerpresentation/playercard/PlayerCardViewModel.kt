@@ -1,11 +1,9 @@
 package by.godevelopment.kingcalculator.presentation.playerpresentation.playercard
 
-import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import by.godevelopment.kingcalculator.R
-import by.godevelopment.kingcalculator.commons.TAG
 import by.godevelopment.kingcalculator.di.IoDispatcher
 import by.godevelopment.kingcalculator.domain.commons.models.ResultDataBase
 import by.godevelopment.kingcalculator.domain.playersdomain.models.PlayerModel
@@ -48,7 +46,6 @@ class PlayerCardViewModel @Inject constructor(
     private var reloadsNumber = 0
 
     init {
-        Log.i(TAG, "PlayerCardViewModel: $idPlayer")
         fetchDataModel(idPlayer)
     }
 
@@ -88,10 +85,10 @@ class PlayerCardViewModel @Inject constructor(
             } else {
                 _uiEvent.send(
                     PlayerCardUiEvent.ShowMessage(
-                            message = R.string.message_error_player_id,
-                    textAction = R.string.snackbar_btn_reload,
-                    onAction = ::reloadDataModel
-                )
+                        message = R.string.message_error_player_id,
+                        textAction = R.string.snackbar_btn_reload,
+                        onAction = ::reloadDataModel
+                    )
                 )
             }
         }
@@ -118,10 +115,10 @@ class PlayerCardViewModel @Inject constructor(
                     viewModelScope.launch {
                         _uiEvent.send(
                             PlayerCardUiEvent.ShowMessage(
-                                    message = R.string.message_error_player_info,
-                                    textAction = R.string.snackbar_btn_reload,
-                                    onAction = ::reloadDataModel
-                                )
+                                message = R.string.message_error_player_info,
+                                textAction = R.string.snackbar_btn_reload,
+                                onAction = ::reloadDataModel
+                            )
                         )
                     }
                 }

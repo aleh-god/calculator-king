@@ -29,6 +29,7 @@ class PartiesListFragment : Fragment() {
     private val viewModel: PartiesListViewModel by viewModels()
     private var _binding: FragmentPartiesListBinding? = null
     private val binding get() = _binding!!
+    private var snackbar: Snackbar? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -68,17 +69,17 @@ class PartiesListFragment : Fragment() {
         viewModel.uiEvent
             .flowWithLifecycle(lifecycle)
             .onEach { event ->
-                // TODO("impl Snackbar scope")
                 when(event){
                     is PartiesListUiEvent.NavigateToPartyAddForm -> navigateToPartyAddForm()
                     is PartiesListUiEvent.NavigateToPartyCard -> navigateToPartyCard(event.navArgs)
                     is PartiesListUiEvent.NavigateToPartyInfo -> navigateToPartyInfo(event.navArgs)
                     is PartiesListUiEvent.ShowMessage -> {
-                        Snackbar
+                        snackbar?.dismiss()
+                        snackbar = Snackbar
                             .make(binding.root, event.message, Snackbar.LENGTH_LONG)
                             .setAction(event.textAction)
                             { event.onAction() }
-                            .show()
+                        snackbar?.show()
                     }
                 }
 
@@ -114,6 +115,12 @@ class PartiesListFragment : Fragment() {
         val direction = PartiesListFragmentDirections
             .actionPartiesListFragmentToPartyInfoFragment(partyId)
         findNavController().navigate(direction)
+    }
+
+    override fun onStop() {
+        snackbar?.dismiss()
+        snackbar = null
+        super.onStop()
     }
 
     override fun onDestroy() {

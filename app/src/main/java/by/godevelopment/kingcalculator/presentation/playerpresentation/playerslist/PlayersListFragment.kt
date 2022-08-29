@@ -29,6 +29,7 @@ class PlayersListFragment : Fragment() {
     private val viewModel: PlayersListViewModel by viewModels()
     private var _binding: FragmentPlayersListBinding? = null
     private val binding get() = _binding!!
+    private var snackbar: Snackbar? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -81,11 +82,12 @@ class PlayersListFragment : Fragment() {
                         )
                     }
                     is PlayersListUiEvent.ShowMessage -> {
-                        Snackbar
+                        snackbar?.dismiss()
+                        snackbar = Snackbar
                             .make(binding.root, event.message, Snackbar.LENGTH_INDEFINITE)
                             .setAction(event.textAction)
                             { event.onAction() }
-                            .show()
+                        snackbar?.show()
                     }
                 }
             }
@@ -102,6 +104,12 @@ class PlayersListFragment : Fragment() {
         val direction = PlayersListFragmentDirections
             .actionPlayersListFragmentToPlayerInfoFragment(playerId)
         findNavController().navigate(direction)
+    }
+
+    override fun onStop() {
+        snackbar?.dismiss()
+        snackbar = null
+        super.onStop()
     }
 
     override fun onDestroy() {
