@@ -6,6 +6,7 @@ import by.godevelopment.kingcalculator.data.repositories.PlayerRepositoryImpl
 import by.godevelopment.kingcalculator.data.repositories.TricksRepositoryImpl
 import by.godevelopment.kingcalculator.domain.gamesdomain.repositories.GameRepository
 import by.godevelopment.kingcalculator.domain.partiesdomain.repositories.PartyRepository
+import by.godevelopment.kingcalculator.domain.playersdomain.repositories.PlayerCardRepository
 import by.godevelopment.kingcalculator.domain.playersdomain.repositories.PlayerRepository
 import by.godevelopment.kingcalculator.domain.settingsdomain.repositories.DeleteGamesRepository
 import by.godevelopment.kingcalculator.domain.settingsdomain.repositories.DeletePartiesRepository
@@ -22,6 +23,9 @@ abstract class BindModule {
 
     @Binds
     abstract fun bindPlayerRepository(playerRepositoryImpl: PlayerRepositoryImpl): PlayerRepository
+
+    @Binds
+    abstract fun bindPlayerCardRepository(playerRepositoryImpl: PlayerRepositoryImpl): PlayerCardRepository
 
     @Binds
     abstract fun bindPartyRepository(partyRepositoryImpl: PartyRepositoryImpl): PartyRepository

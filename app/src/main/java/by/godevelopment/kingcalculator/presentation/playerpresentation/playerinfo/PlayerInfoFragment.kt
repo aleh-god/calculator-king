@@ -11,7 +11,6 @@ import androidx.lifecycle.coroutineScope
 import androidx.lifecycle.flowWithLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import by.godevelopment.kingcalculator.R
 import by.godevelopment.kingcalculator.databinding.FragmentPlayerInfoBinding
 import by.godevelopment.kingcalculator.presentation.partypresentation.partyinfo.PartyInfoFragmentDirections
 import com.google.android.material.snackbar.Snackbar
@@ -53,6 +52,7 @@ class PlayerInfoFragment : Fragment() {
                     .collect { uiState ->
                         if (!uiState.isFetchingData) progress.visibility = View.GONE
                         else progress.visibility = View.VISIBLE
+                        playerName.text = uiState.playerName
                         infoList.adapter = InfoAdapter(uiState.dataList)
                     }
             }

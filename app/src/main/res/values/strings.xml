@@ -117,16 +117,14 @@
     <string name="ui_text_contacts">\ contracts the game</string>
     <string name="ui_text_total_games">\ in 56</string>
     <string name="ui_text_header_party_info">Game type</string>
-    <string name="ui_settings_text_header">Data app settings</string>
 
+    <string name="ui_settings_text_header">Data settings</string>
     <string name="ui_settings_text_title_delete_parties">Delete all party notes</string>
     <string name="ui_settings_text_delete_parties">All party records will be deleted. Games notes and tricks notes will not be affected. The player\'s personal statistics will remain for accounting.</string>
     <string name="ui_settings_text_bttn_delete_parties">Delete parties</string>
-
     <string name="ui_settings_text_title_delete_games">Delete all games notes</string>
     <string name="ui_settings_text_delete_games">All parties, games and tricks notes will be deleted. Players notes will not be affected. Start your parties again.</string>
     <string name="ui_settings_text_bttn_delete_games">Delete games</string>
-
     <string name="ui_settings_text_title_delete_all">Delete all notes!!!</string>
     <string name="ui_settings_text_delete_all">All parties, games, tricks and players notes will be deleted. Eliminates all notes errors.</string>
     <string name="ui_settings_text_bttn_delete_all">Delete all</string>

@@ -9,6 +9,11 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import javax.inject.Provider
 import javax.inject.Singleton
 
 @Module
@@ -27,14 +32,29 @@ object DataBaseModule {
     @Provides
     fun provideTricksDao(kingDatabase: KingDatabase): TricksDao = kingDatabase.tricksDao()
 
+    private val applicationScope = CoroutineScope(SupervisorJob())
+    private val dispatcher: CoroutineDispatcher = Dispatchers.IO
+
     @Provides
     @Singleton
     fun provideKingDatabase(
-        @ApplicationContext appContext: Context
+        @ApplicationContext appContext: Context,
+        providerPlayers: Provider<PlayersDao>,
+        providerParties: Provider<PartiesDao>,
+        providerGames: Provider<GamesDao>,
+        providerTricks: Provider<TricksDao>
     ): KingDatabase = Room.databaseBuilder(
         appContext,
         KingDatabase::class.java,
         DB_NAME
     )
+        .addCallback(PrepopulateCallBack(
+            providerPlayers = providerPlayers,
+            providerParties = providerParties,
+            providerGames = providerGames,
+            providerTricks = providerTricks,
+            applicationScope = applicationScope,
+            dispatcher = dispatcher
+        ))
         .build()
 }
