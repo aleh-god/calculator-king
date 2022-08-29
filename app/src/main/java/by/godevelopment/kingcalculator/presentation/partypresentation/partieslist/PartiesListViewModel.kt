@@ -34,6 +34,7 @@ class PartiesListViewModel @Inject constructor(
     val uiEvent: Flow<PartiesListUiEvent> = _uiEvent.receiveAsFlow()
 
     private var fetchJob: Job? = null
+    private var reloadsNumber = 0
 
     init {
         fetchDataModel()
@@ -66,8 +67,8 @@ class PartiesListViewModel @Inject constructor(
             when(deleteResult) {
                 is ResultDataBase.Error -> _uiEvent.send(PartiesListUiEvent.ShowMessage(
                     message = deleteResult.message,
-                    textAction = R.string.snackbar_btn_neutral_ok,
-                    onAction = {}
+                    textAction = R.string.snackbar_btn_reload,
+                    onAction = ::reloadDataModel
                 ))
                 is ResultDataBase.Success -> {
                     _uiEvent.send(PartiesListUiEvent.ShowMessage(
@@ -82,8 +83,21 @@ class PartiesListViewModel @Inject constructor(
     }
 
     private fun reloadDataModel() {
-        // TODO("count reload")
-        fetchDataModel()
+        if (reloadsNumber > 3) {
+            fetchJob?.cancel()
+            fetchJob = viewModelScope.launch {
+                reloadsNumber = 0
+                _uiEvent.send(PartiesListUiEvent.ShowMessage(
+                    message = R.string.message_error_bad_database,
+                    textAction = R.string.snackbar_btn_neutral_ok,
+                    onAction = {}
+                ))
+            }
+        }
+        else {
+            reloadsNumber++
+            fetchDataModel()
+        }
     }
 
     fun checkPlayersMinAndNavigate() {
@@ -114,18 +128,6 @@ class PartiesListViewModel @Inject constructor(
         viewModelScope.launch(ioDispatcher) {
             _uiState.update { it.copy(isFetchingData = true) }
             _uiState.value.dataList.firstOrNull { it.id == partyId }?.let {
-                Log.i(TAG, "checkPayersIsActiveAndNavigateToPartyCard: ${it.player_one}")
-                Log.i(TAG, "checkPayersIsActiveAndNavigateToPartyCard: ${it.player_two}")
-                Log.i(TAG, "checkPayersIsActiveAndNavigateToPartyCard: ${it.player_three}")
-                Log.i(TAG, "checkPayersIsActiveAndNavigateToPartyCard: ${it.player_four}")
-                Log.i(
-                    TAG, "checkPayersIsActiveAndNavigateToPartyCard: ${
-                        (it.player_one.isActive &&
-                                it.player_two.isActive &&
-                                it.player_three.isActive &&
-                                it.player_four.isActive)
-                    }"
-                )
                 if(it.player_one.isActive &&
                     it.player_two.isActive &&
                     it.player_three.isActive &&
@@ -137,7 +139,6 @@ class PartiesListViewModel @Inject constructor(
                     onAction = { reloadDataModel() }
                 ))
             }
-
             _uiState.update { it.copy(isFetchingData = false) }
         }
     }
