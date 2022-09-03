@@ -26,7 +26,6 @@ import javax.inject.Inject
 @HiltViewModel
 class GameAddFormViewModel @Inject constructor(
     state: SavedStateHandle,
-    @IoDispatcher private val ioDispatcher: CoroutineDispatcher,
     private val getMultiItemModels: GetMultiItemModelsUseCase,
     private val validatePlayersScoreUseCase: ValidatePlayersScoreUseCase,
     private val getPartyIdByGameIdUseCase: GetPartyIdByGameIdUseCase,
@@ -51,7 +50,7 @@ class GameAddFormViewModel @Inject constructor(
 
     private fun fetchDataModel() {
         fetchJob?.cancel()
-        fetchJob = viewModelScope.launch(ioDispatcher) {
+        fetchJob = viewModelScope.launch {
             try {
                 _uiState.update { it.copy(isFetchingData = true) }
                 val listResult = getMultiItemModels(gameId = gameId ?: throw NullPointerException())
@@ -183,7 +182,7 @@ class GameAddFormViewModel @Inject constructor(
     }
 
     fun saveGameData() {
-        viewModelScope.launch(ioDispatcher) {
+        viewModelScope.launch {
             _uiState.update { it.copy(isFetchingData = true) }
             val result = validatePlayersScoreUseCase(_uiState.value.listMultiItems)
             if (result.successful) {

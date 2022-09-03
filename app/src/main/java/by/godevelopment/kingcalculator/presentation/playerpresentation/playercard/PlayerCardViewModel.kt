@@ -24,7 +24,6 @@ class PlayerCardViewModel @Inject constructor(
     private val getActivePlayerByIdUseCase: GetActivePlayerByIdUseCase,
     private val validatePlayerNameUseCase: ValidatePlayerNameUseCase,
     private val playerCardRepository: PlayerCardRepository,
-    @IoDispatcher private val ioDispatcher: CoroutineDispatcher
 ) : ViewModel() {
 
     private val _uiState: MutableStateFlow<CardUiState> = MutableStateFlow(
@@ -65,7 +64,7 @@ class PlayerCardViewModel @Inject constructor(
 
     private fun fetchDataModel(idPlayer: Long?) {
         fetchJob?.cancel()
-        fetchJob = viewModelScope.launch(ioDispatcher) {
+        fetchJob = viewModelScope.launch {
             if (idPlayer != null) {
                 _uiState.update { it.copy(showsProgress = true) }
                 val playerResult = getActivePlayerByIdUseCase(idPlayer)
@@ -131,7 +130,7 @@ class PlayerCardViewModel @Inject constructor(
 
     private fun deletePlayerDataFromRepository() {
         fetchJob?.cancel()
-        fetchJob = viewModelScope.launch(ioDispatcher) {
+        fetchJob = viewModelScope.launch {
             _uiState.update { it.copy(showsProgress = true) }
             val result = playerCardRepository.disablePlayerById(uiState.value.playerModel)
             when (result) {
@@ -150,7 +149,7 @@ class PlayerCardViewModel @Inject constructor(
 
     private fun updatePlayerDataToRepository() {
         fetchJob?.cancel()
-        fetchJob = viewModelScope.launch(ioDispatcher) {
+        fetchJob = viewModelScope.launch {
             _uiState.update { it.copy(showsProgress = true) }
             val result = playerCardRepository.updatePlayerById(uiState.value.playerModel)
             when (result) {

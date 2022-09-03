@@ -23,10 +23,9 @@ class SettingsViewModel @Inject constructor(
     private val deleteGamesRepository: DeleteGamesRepository,
     private val deleteTricksRepository: DeleteTricksRepository,
     private val deletePlayersRepository: DeletePlayersRepository,
-    @IoDispatcher private val ioDispatcher: CoroutineDispatcher
 ) : ViewModel() {
 
-    private val _uiState: MutableStateFlow<UiState> = MutableStateFlow(UiState())
+    private val _uiState: MutableStateFlow<UiState> = MutableStateFlow(UiState("loading"))
     val uiState: StateFlow<UiState> = _uiState.asStateFlow()
 
     private val _uiEvent  = Channel<SettingsUiEvent>()
@@ -36,7 +35,7 @@ class SettingsViewModel @Inject constructor(
 
     fun deleteAllParties() {
         fetchJob?.cancel()
-        fetchJob = viewModelScope.launch(ioDispatcher) {
+        fetchJob = viewModelScope.launch {
             _uiState.update { it.copy(isProgress = true) }
             deleteParties()
             _uiState.update { it.copy(isProgress = false) }
@@ -45,7 +44,7 @@ class SettingsViewModel @Inject constructor(
 
     fun deleteAllGames() {
         fetchJob?.cancel()
-        fetchJob = viewModelScope.launch(ioDispatcher) {
+        fetchJob = viewModelScope.launch {
             _uiState.update { it.copy(isProgress = true) }
             deleteParties()
             deleteGames()
@@ -56,7 +55,7 @@ class SettingsViewModel @Inject constructor(
 
     fun deleteAll() {
         fetchJob?.cancel()
-        fetchJob = viewModelScope.launch(ioDispatcher) {
+        fetchJob = viewModelScope.launch {
             _uiState.update { it.copy(isProgress = true) }
             deleteParties()
             deleteGames()
@@ -157,6 +156,7 @@ class SettingsViewModel @Inject constructor(
     }
 
     data class UiState(
+        val badString: String?,
         val isProgress: Boolean = false
     )
 }

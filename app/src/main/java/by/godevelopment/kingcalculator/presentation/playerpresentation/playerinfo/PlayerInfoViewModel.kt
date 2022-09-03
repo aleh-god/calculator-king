@@ -21,7 +21,6 @@ import javax.inject.Inject
 @HiltViewModel
 class PlayerInfoViewModel @Inject constructor(
     state: SavedStateHandle,
-    @IoDispatcher private val ioDispatcher: CoroutineDispatcher,
     private val getPlayerInfoListUseCase: GetPlayerInfoListUseCase,
     private val playerRepository: PlayerRepository
 ) : ViewModel() {
@@ -44,7 +43,7 @@ class PlayerInfoViewModel @Inject constructor(
     private fun fetchDataModel() {
         playerId?.let {
             fetchJob?.cancel()
-            fetchJob = viewModelScope.launch(ioDispatcher) {
+            fetchJob = viewModelScope.launch {
                 _uiState.update { it.copy(isFetchingData = true) }
                 fetchPlayerName(it)
                 fetchPlayerInfoList(it)

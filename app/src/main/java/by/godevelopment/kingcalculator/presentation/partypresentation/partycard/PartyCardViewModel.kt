@@ -27,7 +27,6 @@ class PartyCardViewModel @Inject constructor(
     private val getContractorPlayerByPartyIdUseCase: GetContractorPlayerByPartyIdUseCase,
     private val getPlayersByPartyIdUseCase: GetPlayersByPartyIdUseCase,
     private val createGameNoteUseCase: CreateGameNoteUseCase,
-    @IoDispatcher private val ioDispatcher: CoroutineDispatcher,
     state: SavedStateHandle
 ) : ViewModel() {
 
@@ -48,7 +47,7 @@ class PartyCardViewModel @Inject constructor(
 
     fun checkUnfinishedGame() {
         fetchJob?.cancel()
-        fetchJob = viewModelScope.launch(ioDispatcher) {
+        fetchJob = viewModelScope.launch {
             if (partyId != null)  {
                 val checkResult = checkUnfinishedGameInPartyUseCase(partyId)
                 when(checkResult) {
@@ -83,7 +82,7 @@ class PartyCardViewModel @Inject constructor(
     private fun fetchDataModel() {
         fetchJob?.cancel()
         try {
-            fetchJob = viewModelScope.launch(ioDispatcher) {
+            fetchJob = viewModelScope.launch {
                 if (partyId != null) {
                     _uiState.update { it.copy(isFetchingData = true) }
                     // TODO("rework to async await")
@@ -188,7 +187,7 @@ class PartyCardViewModel @Inject constructor(
     fun createGameNote(gameType: GameType) {
         Log.i(TAG, "createGameNote: gameType = $gameType partyId = $partyId")
         fetchJob?.cancel()
-        fetchJob = viewModelScope.launch(ioDispatcher) {
+        fetchJob = viewModelScope.launch {
             try {
                 _uiState.update { it.copy(isFetchingData = true) }
                 val gameResult = createGameNoteUseCase(

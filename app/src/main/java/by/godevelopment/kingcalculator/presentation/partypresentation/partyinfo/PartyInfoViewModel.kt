@@ -22,7 +22,6 @@ import javax.inject.Inject
 @HiltViewModel
 class PartyInfoViewModel @Inject constructor(
     state: SavedStateHandle,
-    @IoDispatcher private val ioDispatcher: CoroutineDispatcher,
     private val getGamesScoreByPartyIdUseCase: GetGamesScoreByPartyIdUseCase,
     private val getPlayersByPartyIdUseCase: GetPlayersByPartyIdUseCase,
     private val getPartyNameUseCase: GetPartyNameUseCase
@@ -61,7 +60,7 @@ class PartyInfoViewModel @Inject constructor(
         partyId?.let {
 
             fetchJob?.cancel()
-            fetchJob = viewModelScope.launch(ioDispatcher) {
+            fetchJob = viewModelScope.launch {
                 _uiState.update { it.copy(isFetchingData = true) }
                 // TODO("rework to async await")
                 launch { fetchPartyName(partyId) }
@@ -139,10 +138,6 @@ class PartyInfoViewModel @Inject constructor(
                 ) }
             }
         }
-    }
-
-    fun reload() {
-        fetchDataModel()
     }
 
     data class UiState(
