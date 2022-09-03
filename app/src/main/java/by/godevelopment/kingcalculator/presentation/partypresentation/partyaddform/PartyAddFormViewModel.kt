@@ -23,7 +23,6 @@ class PartyAddFormViewModel @Inject constructor(
     private val partyRepository: PartyRepository,
     private val validatePartyNameUseCase: ValidatePartyNameUseCase,
     private val validatePlayersChoiceUseCase: ValidatePlayersChoiceUseCase,
-    @IoDispatcher private val ioDispatcher: CoroutineDispatcher
 ) : ViewModel() {
 
     private val _uiState: MutableStateFlow<AddPartyFormState> = MutableStateFlow(AddPartyFormState())
@@ -35,7 +34,7 @@ class PartyAddFormViewModel @Inject constructor(
     private var suspendJob: Job? = null
 
     init {
-        viewModelScope.launch(ioDispatcher) {
+        viewModelScope.launch {
             _uiState.update {
                 it.copy(players = partyRepository.getAllPlayersIdToNames())
             }
@@ -75,7 +74,7 @@ class PartyAddFormViewModel @Inject constructor(
 
     private fun createNewParty() {
         suspendJob?.cancel()
-        suspendJob = viewModelScope.launch(ioDispatcher) {
+        suspendJob = viewModelScope.launch {
             _uiState.update { it.copy(showsProgress = true) }
             if(checkInputFieldsUiState()) {
                 val newParty = uiState.value.let {

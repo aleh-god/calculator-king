@@ -1,6 +1,8 @@
 package by.godevelopment.kingcalculator.data.repositories
 
+import android.util.Log
 import by.godevelopment.kingcalculator.R
+import by.godevelopment.kingcalculator.commons.TAG
 import by.godevelopment.kingcalculator.data.datasource.GamesDataSource
 import by.godevelopment.kingcalculator.data.datasource.PartiesDataSource
 import by.godevelopment.kingcalculator.data.datasource.PlayersDataSource
@@ -10,6 +12,7 @@ import by.godevelopment.kingcalculator.data.entities.TricksNote
 import by.godevelopment.kingcalculator.data.utils.toPartyModel
 import by.godevelopment.kingcalculator.data.utils.toPlayerModel
 import by.godevelopment.kingcalculator.data.utils.toTricksNoteModel
+import by.godevelopment.kingcalculator.di.IoDispatcher
 import by.godevelopment.kingcalculator.domain.commons.models.GameType
 import by.godevelopment.kingcalculator.domain.commons.models.ResultDataBase
 import by.godevelopment.kingcalculator.domain.commons.utils.mapResult
@@ -22,15 +25,18 @@ import by.godevelopment.kingcalculator.domain.partiesdomain.repositories.PartyRe
 import by.godevelopment.kingcalculator.domain.playersdomain.models.PartyModel
 import by.godevelopment.kingcalculator.domain.playersdomain.models.PlayerModel
 import by.godevelopment.kingcalculator.domain.settingsdomain.repositories.DeletePartiesRepository
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 class PartyRepositoryImpl @Inject constructor(
     private val partiesDataSource: PartiesDataSource,
     private val gamesDataSource: GamesDataSource,
     private val tricksDataSource: TricksDataSource,
-    private val playersDataSource: PlayersDataSource
+    private val playersDataSource: PlayersDataSource,
+    @IoDispatcher private val ioDispatcher: CoroutineDispatcher
 ) : PartyRepository, DeletePartiesRepository {
 
     override fun getAllParties(): Flow<List<RawItemPartyModel>> {
@@ -56,7 +62,8 @@ class PartyRepositoryImpl @Inject constructor(
         return result
     }
 
-    private suspend fun getPlayerTricksByPartyIdRaw(partyId: Long, playerId: Long): List<TricksNote> {
+    private suspend fun getPlayerTricksByPartyIdRaw(partyId: Long, playerId: Long): List<TricksNote> =
+        withContext(ioDispatcher) {
         val gamesResult = gamesDataSource.getGameNotesByPartyIdRaw(partyId)
         val gamesIdList = gamesResult.map { it.id }
         val tricksResult = mutableListOf<TricksNote>()
@@ -65,18 +72,23 @@ class PartyRepositoryImpl @Inject constructor(
                 tricksDataSource.getTricksNoteByGameId(gameId).filter { it.playerId == playerId }
             )
         }
-        return tricksResult
+        tricksResult
     }
 
     override suspend fun createNewPartyAndReturnId(party: PartyNote): ResultDataBase<Long> =
-        partiesDataSource.createPartyNote(party)
+        withContext(ioDispatcher) {
+            partiesDataSource.createPartyNote(party)
+        }
 
     override suspend fun getAllPlayersIdToNames(): Map<String, Long> =
-        playersDataSource.getAllActivePlayersIdToNames()
+        withContext(ioDispatcher) {
+            playersDataSource.getAllActivePlayersIdToNames()
+        }
 
-    override suspend fun getPlayersByPartyId(partyId: Long): ResultDataBase<Map<Players, PlayerModel>> {
+    override suspend fun getPlayersByPartyId(partyId: Long): ResultDataBase<Map<Players, PlayerModel>> =
+        withContext(ioDispatcher) {
         val partyResult = partiesDataSource.getPartyNoteById(partyId)
-        return when(partyResult) {
+        when(partyResult) {
             is ResultDataBase.Success -> {
                 ResultDataBase.Success(value = mapOf<Players, PlayerModel?>(
                     Players.PlayerOne to playersDataSource
@@ -89,7 +101,7 @@ class PartyRepositoryImpl @Inject constructor(
                         .getPlayerProfileByIdRaw(partyResult.value.playerFourId)?.toPlayerModel(),
                 )
                     .mapValues {
-                        if (it.value == null) return ResultDataBase.Error<Map<Players, PlayerModel>>(message = R.string.message_error_bad_database)
+                        if (it.value == null) return@withContext ResultDataBase.Error<Map<Players, PlayerModel>>(message = R.string.message_error_bad_database)
                         it.value!!
                     }
                 )
@@ -100,9 +112,10 @@ class PartyRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun getContractorPlayerByPartyId(partyId: Long): ResultDataBase<PlayerModel> {
+    override suspend fun getContractorPlayerByPartyId(partyId: Long): ResultDataBase<PlayerModel> =
+        withContext(ioDispatcher) {
         val partyResult = partiesDataSource.getPartyNoteById(partyId)
-        return when(partyResult) {
+        when(partyResult) {
             is ResultDataBase.Error -> ResultDataBase.Error(message = partyResult.message)
             is ResultDataBase.Success -> {
                 val party = partyResult.value
@@ -115,9 +128,9 @@ class PartyRepositoryImpl @Inject constructor(
                             1 -> party.playerTwoId
                             2 -> party.playerThreeId
                             3 -> party.playerFourId
-                            else -> return ResultDataBase.Error(message = R.string.message_error_data_load)
+                            else -> return@withContext ResultDataBase.Error(message = R.string.message_error_data_load)
                         }
-                        return playersDataSource.getPlayerProfileById(playerId)
+                        return@withContext playersDataSource.getPlayerProfileById(playerId)
                             .mapResult { it.toPlayerModel() }
                     }
                 }
@@ -125,9 +138,10 @@ class PartyRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun getAllGamesNotesByPartyId(partyId: Long): ResultDataBase<List<GameModel>> {
+    override suspend fun getAllGamesNotesByPartyId(partyId: Long): ResultDataBase<List<GameModel>> =
+        withContext(ioDispatcher) {
         val notesListResult  = gamesDataSource.getGameNotesByPartyId(partyId)
-        return when(notesListResult) {
+        when(notesListResult) {
             is ResultDataBase.Error -> ResultDataBase.Error(message = notesListResult.message)
             is ResultDataBase.Success -> {
                 ResultDataBase.Success(
@@ -144,23 +158,27 @@ class PartyRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun getAllTricksNotesByGameId(gameId: Long): List<TricksNoteModel>
-        = tricksDataSource.getTricksNoteByGameId(gameId).map { it.toTricksNoteModel() }
+    override suspend fun getAllTricksNotesByGameId(gameId: Long): List<TricksNoteModel> =
+        withContext(ioDispatcher) {
+            tricksDataSource.getTricksNoteByGameId(gameId).map { it.toTricksNoteModel() }
+        }
 
     override suspend fun createGameNote(partyId: Long, gameType: GameType): ResultDataBase<Long> =
-        gamesDataSource.createGameNote(gameType, partyId)
+        withContext(ioDispatcher) { gamesDataSource.createGameNote(gameType, partyId) }
 
     override suspend fun getPartyModelById(partyId: Long): ResultDataBase<PartyModel> =
-        partiesDataSource.getPartyNoteById(partyId).mapResult { it.toPartyModel() }
+        withContext(ioDispatcher) {
+            partiesDataSource.getPartyNoteById(partyId).mapResult { it.toPartyModel() }
+        }
 
     override suspend fun deletePartyById(partyId: Long): ResultDataBase<Int> =
-        partiesDataSource.deletePartyNotesById(partyId)
+        withContext(ioDispatcher) { partiesDataSource.deletePartyNotesById(partyId) }
 
     override suspend fun getAllPlayersCount(): ResultDataBase<Int> =
-        wrapResult { playersDataSource.getAllActivePlayersNames().size }
+        withContext(ioDispatcher) {
+            wrapResult { playersDataSource.getAllActivePlayersNames().size }
+        }
 
     override suspend fun deleteAllParties(): ResultDataBase<Int> =
-        wrapResult {
-            partiesDataSource.deleteAllPartyNotes()
-        }
+        withContext(ioDispatcher) { wrapResult { partiesDataSource.deleteAllPartyNotes() } }
 }

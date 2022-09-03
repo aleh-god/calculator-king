@@ -22,7 +22,6 @@ class PlayerAddFormViewModel @Inject constructor(
     private val playerRepository: PlayerRepository,
     private val validateEmailUseCase: ValidateEmailUseCase,
     private val validatePlayerNameUseCase: ValidatePlayerNameUseCase,
-    @IoDispatcher private val ioDispatcher: CoroutineDispatcher
 ): ViewModel() {
 
     private val _uiState: MutableStateFlow<AddFormState> = MutableStateFlow(AddFormState())
@@ -81,7 +80,7 @@ class PlayerAddFormViewModel @Inject constructor(
 
     private fun savePlayerDataToRepository() {
         suspendJob?.cancel()
-        suspendJob = viewModelScope.launch(ioDispatcher) {
+        suspendJob = viewModelScope.launch {
             _uiState.update { it.copy(showsProgress = true) }
             val result = playerRepository.createPlayer(
                 PlayerModel(

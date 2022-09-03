@@ -23,8 +23,7 @@ import javax.inject.Inject
 class PartiesListViewModel @Inject constructor(
     private val getPartyModelItemsUseCase: GetPartyModelItemsUseCase,
     private val deletePartyUseCase: DeletePartyUseCase,
-    private val getAllActivePlayersCountUseCase: GetAllActivePlayersCountUseCase,
-    @IoDispatcher private val ioDispatcher: CoroutineDispatcher
+    private val getAllActivePlayersCountUseCase: GetAllActivePlayersCountUseCase
 ) : ViewModel() {
 
     private val _uiState: MutableStateFlow<UiState> = MutableStateFlow(UiState())
@@ -61,7 +60,7 @@ class PartiesListViewModel @Inject constructor(
     }
 
     fun deleteParty(partyId: Long) {
-        viewModelScope.launch(ioDispatcher) {
+        viewModelScope.launch {
             _uiState.update { it.copy(isFetchingData = true) }
             val deleteResult = deletePartyUseCase(partyId)
             when(deleteResult) {
@@ -101,7 +100,7 @@ class PartiesListViewModel @Inject constructor(
     }
 
     fun checkPlayersMinAndNavigate() {
-        viewModelScope.launch(ioDispatcher) {
+        viewModelScope.launch {
             _uiState.update { it.copy(isFetchingData = true) }
             val playersCount = getAllActivePlayersCountUseCase()
             when(playersCount) {
@@ -125,7 +124,7 @@ class PartiesListViewModel @Inject constructor(
     }
 
     fun checkPayersIsActiveAndNavigateToPartyCard(partyId: Long) {
-        viewModelScope.launch(ioDispatcher) {
+        viewModelScope.launch {
             _uiState.update { it.copy(isFetchingData = true) }
             _uiState.value.dataList.firstOrNull { it.id == partyId }?.let {
                 if(it.player_one.isActive &&
