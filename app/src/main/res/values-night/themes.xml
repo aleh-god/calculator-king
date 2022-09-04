@@ -2,15 +2,16 @@
     <!-- Base application theme. -->
     <style name="Theme.KingCalculator" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/primaryDarkBrandGreen</item>
-        <item name="colorPrimaryVariant">@color/primaryLightBrandGreen</item>
-        <item name="colorOnPrimary">@color/white</item>
+        <item name="colorPrimary">@color/brandBasilGreen800</item>
+        <item name="colorPrimaryVariant">@color/brandBasilGreen500</item>
         <!-- Secondary brand color. -->
-        <item name="colorSecondary">@color/primaryDarkBrandGold</item>
-        <item name="colorSecondaryVariant">@color/primaryLightBrandGold</item>
-        <item name="colorOnSecondary">@color/black</item>
-        <!-- Status bar color. -->
-        <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
+        <item name="colorSecondary">@color/brandBasilOrange800</item>
+        <item name="colorSecondaryVariant">@color/brandOrange500</item>
+
+        <!-- TextView Style. -->
+        <item name="android:textViewStyle">@style/Widget.KingCalculator.TextView</item>
+
         <!-- Customize your theme here. -->
+        <item name="colorPrimaryDark">?attr/colorPrimaryVariant</item>
     </style>
 </resources>

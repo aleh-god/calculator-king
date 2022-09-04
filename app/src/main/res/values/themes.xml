@@ -1,48 +1,27 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
-    <style name="Theme.KingCalculator" parent="Theme.MaterialComponents.NoActionBar">
-
+    <style name="Theme.KingCalculator" parent="Theme.MaterialComponents.Light.NoActionBar">
         <!-- Primary brand color. -->
-        <!-- The color displayed most frequently across your app’s screens and components. This color should pass accessibilty guidelines for text / iconography when drawn on top of the surface or background color.-->
-        <item name="colorPrimary">@color/primaryBrandGreen</item>
-        <!-- A tonal variation of the primary color.-->
-        <item name="colorPrimaryVariant">@color/primaryDarkBrandGreen</item>
-        <!-- A color that passes accessibility guidelines for text/iconography when drawn on top of the primary color.-->
-        <item name="colorOnPrimary">@color/secondaryLightBrandGold</item>
-
+        <item name="colorPrimary">@color/brandBasilGreen800</item>
+        <item name="colorPrimaryVariant">@color/brandBasilGreen500</item>
+        <item name="colorOnPrimary">@color/white</item>
         <!-- Secondary brand color. -->
-        <!-- The secondary branding color for the app, usually an accented complement to the primary branding color.-->
-        <item name="colorSecondary">@color/secondaryBrandGold</item>
-        <!-- A tonal variation of the secondary color.-->
-        <item name="colorSecondaryVariant">@color/secondaryDarkBrandGold</item>
-        <!-- A color that passes accessibility guidelines for text/iconography when drawn on top of the secondary color.-->
-        <item name="colorOnSecondary">@color/secondaryTextBrand</item>
+        <item name="colorSecondary">@color/brandBasilOrange800</item>
+        <item name="colorSecondaryVariant">@color/brandOrange500</item>
+        <item name="colorOnSecondary">@color/black</item>
 
-        <!-- The background color appears behind scrollable content.-->
-        <item name="android:colorBackground">@color/primaryLightBrandGreen</item>
-        <!-- A color that passes accessibility guidelines for text/iconography when drawn on top of the background color.-->
-        <item name="colorOnBackground">@color/primaryBrandGold</item>
-        <!-- Surface colors affect surfaces of components, such as cards, sheets, and menus.-->
-        <item name="colorSurface">@color/primaryDarkBrandGreen</item>
-        <!-- A color that passes accessibility guidelines for text/iconography when drawn on top of the surface color.-->
-        <item name="colorOnSurface">@color/secondaryLightBrandGold</item>
-        <!-- Error color indicates errors states, for components such as text fields-->
-        <item name="colorError">@color/secondaryDarkBrandRed</item>
-        <!-- A color that passes accessibility guidelines for text/iconography when drawn on top of the error color.-->
-        <item name="colorOnError">@color/secondaryLightBrandGold</item>
+        <item name="colorSurface">@color/brandBasilGreen100</item>
+        <item name="colorOnSurface">@color/brandBasilOrange800</item>
 
-        <!-- Status bar color. -->
-        <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
-        <!-- Customize your theme here. -->
+        <item name="android:colorBackground">@color/brandBasilOrange50</item>
+        <item name="colorOnBackground">@color/brandGreen900</item>
+
+        <!-- TextView Style. -->
         <item name="android:textViewStyle">@style/Widget.KingCalculator.TextView</item>
 
-    </style>
+        <!-- Customize your theme here. -->
+        <item name="colorPrimaryDark">?attr/colorPrimaryVariant</item>
 
-    <style name="ThemeOverlay.CurrencyAppSample" parent="">
-        <!-- Secondary brand color. -->
-        <item name="colorSecondary">@color/secondaryBrandGold</item>
-        <item name="colorSecondaryVariant">@color/secondaryDarkBrandGold</item>
-        <item name="colorOnSecondary">@color/secondaryTextBrand</item>
     </style>
 
 </resources>

@@ -5,14 +5,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="?attr/colorSurface"
-    android:layout_marginHorizontal="@dimen/small_margin"
-    android:paddingVertical="@dimen/medium_padding"
+    style="@style/ThemeOverlay.KingCalculator.Body"
     >
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/game_name"
-        android:layout_width="0.dp"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toStartOf="@id/game_tricks"
@@ -23,12 +21,13 @@
         android:layout_marginEnd="@dimen/main_margin"
         app:layout_constraintHorizontal_weight="3"
         tools:text="Do Not Take Tricks"
-        android:textAppearance="@style/TextAppearance.Material3.BodyLarge"
+        style="@style/Widget.KingCalculator.TextView.ItemViewBody"
+        android:textAppearance="?attr/textAppearanceBody2"
         />
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/game_tricks"
-        android:layout_width="0.dp"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         app:layout_constraintStart_toEndOf="@id/game_name"
         app:layout_constraintEnd_toStartOf="@id/game_score"
@@ -37,12 +36,13 @@
         android:layout_marginHorizontal="@dimen/main_margin"
         app:layout_constraintHorizontal_weight="2"
         tools:text="Tricks: 8"
-        android:textAppearance="@style/TextAppearance.Material3.BodyLarge"
+        style="@style/Widget.KingCalculator.TextView.ItemViewBody"
+        android:textAppearance="?attr/textAppearanceBody2"
         />
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/game_score"
-        android:layout_width="0.dp"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         app:layout_constraintStart_toEndOf="@id/game_tricks"
         app:layout_constraintEnd_toEndOf="parent"
@@ -52,7 +52,8 @@
         android:layout_marginEnd="@dimen/big_margin"
         app:layout_constraintHorizontal_weight="2"
         tools:text="Score: -240"
-        android:textAppearance="@style/TextAppearance.Material3.BodyLarge"
+        style="@style/Widget.KingCalculator.TextView.ItemViewBody"
+        android:textAppearance="?attr/textAppearanceBody2"
         />
 
     <androidx.constraintlayout.widget.Barrier
@@ -87,7 +88,7 @@
         android:layout_marginTop="@dimen/big_margin"
         app:icon="@drawable/ic_remove_24"
         android:text="@string/button_dec"
-        style="?attr/materialButtonOutlinedStyle"
+        style="@style/Widget.KingCalculator.OutlinedButton"
         />
 
     <com.google.android.material.button.MaterialButton
@@ -98,9 +99,9 @@
         app:layout_constraintEnd_toStartOf="@id/button_increase_tricks"
         app:layout_constraintTop_toBottomOf="@id/divider"
         app:layout_constraintBottom_toBottomOf="parent"
-        android:layout_marginHorizontal="6dp"
+        android:layout_marginHorizontal="@dimen/medium_margin"
         android:layout_marginTop="@dimen/big_margin"
-        style="?attr/materialButtonOutlinedStyle"
+        style="@style/Widget.KingCalculator.OutlinedButton"
         app:icon="@drawable/ic_baseline_keyboard_24"
         tools:text="8"
         />
@@ -117,7 +118,7 @@
         android:layout_marginTop="@dimen/big_margin"
         app:icon="@drawable/ic_plus_24"
         android:text="@string/button_inc"
-        style="?attr/materialButtonOutlinedStyle"
+        style="@style/Widget.KingCalculator.OutlinedButton"
         />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

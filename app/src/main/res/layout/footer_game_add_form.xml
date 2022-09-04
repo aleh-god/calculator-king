@@ -5,18 +5,17 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginHorizontal="@dimen/small_margin"
-    android:layout_marginBottom="@dimen/small_margin"
+    style="@style/ThemeOverlay.KingCalculator.Footer"
     >
 
     <View
         android:layout_width="wrap_content"
-        android:background="@drawable/footer_shape"
         android:layout_height="0dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="@id/footer_text"
+        android:background="@drawable/footer_shape"
         />
 
     <com.google.android.material.textview.MaterialTextView
@@ -26,11 +25,9 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:paddingVertical="@dimen/main_margin"
-        android:paddingHorizontal="16dp"
         tools:text="Total score 240 points"
-        android:textColor="?attr/colorOnSurface"
-        android:textAppearance="@style/TextAppearance.Material3.BodyLarge"
+        style="@style/Widget.KingCalculator.TextView.ItemViewFooter"
+        android:textAppearance="?attr/textAppearanceBody1"
         />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -6,18 +6,21 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".presentation.playerpresentation.playerinfo.PlayerInfoFragment"
+    style="@style/ThemeOverlay.KingCalculator.Layout"
     >
 
-    <TextView
+    <com.google.android.material.textview.MaterialTextView
         android:id="@+id/player_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:layout_margin="16dp"
+        app:layout_constraintBottom_toTopOf="@id/info_list"
+        android:layout_margin="@dimen/big_margin"
         tools:text="Player: Jesus"
-        android:textAppearance="@style/TextAppearance.MaterialComponents.Headline5"
+        android:textAppearance="?attr/textAppearanceHeadline5"
+        style="@style/Widget.KingCalculator.TextView.Header"
         />
 
     <androidx.recyclerview.widget.RecyclerView

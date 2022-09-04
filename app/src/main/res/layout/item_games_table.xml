@@ -5,8 +5,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginHorizontal="2dp"
-    android:layout_marginVertical="1dp"
+    android:layout_marginHorizontal="@dimen/mini_margin"
+    android:layout_marginVertical="@dimen/micro_margin"
     >
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -26,46 +26,46 @@
             android:layout_marginStart="@dimen/rule_table_item_horizontal_margin"
             android:layout_marginEnd="@dimen/medium_margin"
             tools:text="Do Not Take Tricks"
-            android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
+            android:textAppearance="?attr/textAppearanceBody1"
             />
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/game_collum_one"
             android:layout_width="@dimen/rule_min_touch_size"
             android:layout_height="0dp"
-
             app:layout_constraintEnd_toStartOf="@id/game_collum_two"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintDimensionRatio="1:1"
             android:background="@drawable/frame_close"
+            android:gravity="center"
             android:layout_marginVertical="@dimen/small_margin"
             android:layout_marginHorizontal="@dimen/medium_margin"
             tools:text="X"
-            android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
+            android:textAppearance="?attr/textAppearanceBody2"
             />
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/game_collum_two"
             android:layout_width="@dimen/rule_min_touch_size"
             android:layout_height="0dp"
-
-            app:layout_constraintEnd_toStartOf="@id/game_collum_three"
-            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginHorizontal="@dimen/medium_margin"
+            android:layout_marginVertical="@dimen/small_margin"
+            android:layout_marginEnd="8dp"
+            android:background="@drawable/frame_close"
+            android:gravity="center"
+            android:textAppearance="?attr/textAppearanceBody2"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintDimensionRatio="1:1"
-            android:background="@drawable/frame_close"
-            android:layout_marginVertical="@dimen/small_margin"
-            android:layout_marginHorizontal="@dimen/medium_margin"
-            tools:text="X"
-            android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
-            />
+            app:layout_constraintEnd_toStartOf="@id/game_collum_three"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="X" />
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/game_collum_three"
             android:layout_width="@dimen/rule_min_touch_size"
             android:layout_height="0dp"
-
+            android:gravity="center"
             app:layout_constraintEnd_toStartOf="@id/game_collum_four"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -74,14 +74,13 @@
             android:layout_marginVertical="@dimen/small_margin"
             android:layout_marginHorizontal="@dimen/medium_margin"
             tools:text="X"
-            android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
+            android:textAppearance="?attr/textAppearanceBody2"
             />
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/game_collum_four"
             android:layout_width="@dimen/rule_min_touch_size"
             android:layout_height="0dp"
-
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -91,7 +90,8 @@
             android:layout_marginStart="@dimen/medium_margin"
             android:layout_marginEnd="@dimen/rule_table_item_horizontal_margin"
             tools:text="X"
-            android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
+            android:textAppearance="?attr/textAppearanceBody2"
+            android:gravity="center"
             />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

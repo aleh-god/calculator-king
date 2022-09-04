@@ -1,26 +1,167 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <style name="Widget" />
-    <style name="Widget.KingCalculator" />
+    <style name="Widget.KingCalculator" parent="android:Widget"/>
 
-    <style name="Widget.KingCalculator.ToolbarTheme" parent="@style/Widget.Material3.Toolbar">
-<!--        <item name="android:background">?colorPrimary</item>-->
-<!--        <item name="titleTextAppearance">@style/CustomTitleTextAppearance</item>-->
-<!--        <item name="subtitleTextAppearance">@style/CustomSubTitleTextAppearance</item>-->
+    <style name="Widget.KingCalculator.Toolbar" parent="@style/Widget.MaterialComponents.Toolbar.PrimarySurface">
+        <!-- Status bar color. -->
+        <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
+        <item name="android:windowLightStatusBar">true</item>
+
+        <item name="textAppearanceHeadline6">@style/TextAppearance.MaterialComponents.Headline6</item>
+        <item name="textAppearanceSubtitle1">@style/TextAppearance.MaterialComponents.Subtitle1</item>
     </style>
 
-    <style name="Widget.KingCalculator.Button" parent="Widget.MaterialComponents.Button">
+    <style name="Widget.KingCalculator.CardView" parent="Widget.MaterialComponents.CardView">
+        <item name="materialThemeOverlay">@style/ThemeOverlay.KingCalculator.Card</item>
 
+    </style>
+
+    <style name="ThemeOverlay.KingCalculator.Card" parent="">
+
+    </style>
+
+    <style name="ThemeOverlay.KingCalculator.Layout" parent="">
+
+    </style>
+
+    <style name="ThemeOverlay.KingCalculator.TableInfoItemCardView" parent="">
+        <item name="cardElevation">@dimen/rule_zero</item>
+        <item name="cardCornerRadius">@dimen/rule_zero</item>
+        <item name="android:layout_marginStart">@dimen/big_margin</item>
+        <item name="android:layout_marginEnd">@dimen/big_margin</item>
+    </style>
+
+    <style name="ThemeOverlay.KingCalculator.TableInfoItemCardView.Party">
+
+    </style>
+
+    <style name="ThemeOverlay.KingCalculator.TableInfoItemCardView.Player">
+        <item name="strokeWidth">@dimen/rule_main_stroke_width</item>
+        <item name="strokeColor">@color/stroke_color</item>
+    </style>
+
+    <style name="ThemeOverlay.KingCalculator.Footer" parent="">
+        <item name="android:layout_marginStart">@dimen/composite_item_common_margin</item>
+        <item name="android:layout_marginEnd">@dimen/composite_item_common_margin</item>
+        <item name="android:layout_marginBottom">@dimen/composite_item_common_margin</item>
+    </style>
+
+    <style name="ThemeOverlay.KingCalculator.Header" parent="">
+        <item name="android:layout_marginStart">@dimen/composite_item_common_margin</item>
+        <item name="android:layout_marginEnd">@dimen/composite_item_common_margin</item>
+        <item name="android:layout_marginTop">@dimen/composite_item_common_margin</item>
+    </style>
+
+    <style name="ThemeOverlay.KingCalculator.Body" parent="">
+        <item name="android:background">?attr/colorSurface</item>
+        <item name="android:layout_marginStart">@dimen/composite_item_common_margin</item>
+        <item name="android:layout_marginEnd">@dimen/composite_item_common_margin</item>
+        <item name="android:paddingStart">@dimen/medium_padding</item>
+        <item name="android:paddingEnd">@dimen/medium_padding</item>
     </style>
 
     <style name="Widget.KingCalculator.TextView" parent="Widget.MaterialComponents.TextView">
-        <item name="android:layout_margin">@dimen/main_margin</item>
-        <item name="android:padding">@dimen/main_padding</item>
         <item name="android:gravity">center</item>
     </style>
 
-    <style name="Widget.KingCalculator.TextButton" parent="Widget.MaterialComponents.Button.TextButton">
+    <style name="Widget.KingCalculator.TextView.TextBlock">
+        <item name="android:paddingStart">@dimen/big_padding</item>
+        <item name="android:paddingEnd">@dimen/big_padding</item>
+        <item name="android:textAlignment">textStart</item>
+    </style>
 
+    <style name="Widget.KingCalculator.TextView.Main" parent="Widget.MaterialComponents.TextView">
+        <item name="android:textColor">?attr/colorOnBackground</item>
+    </style>
+
+    <style name="Widget.KingCalculator.TextView.Header" parent="Widget.MaterialComponents.TextView">
+        <item name="android:textColor">?attr/colorOnSurface</item>
+    </style>
+
+    <style name="Widget.KingCalculator.TextView.Table">
+        <item name="android:background">@drawable/frame_count</item>
+        <item name="android:layout_height">@dimen/rule_min_item_height</item>
+    </style>
+
+    <style name="Widget.KingCalculator.TextView.Table.FirstColumn">
+        <item name="android:textAlignment">textStart</item>
+        <item name="android:paddingStart">@dimen/big_padding</item>
+        <item name="android:paddingEnd">@dimen/small_padding</item>
+    </style>
+
+    <style name="Widget.KingCalculator.TextView.Table.OtherColumn">
+        <item name="android:layout_width">@dimen/rule_min_item_height</item>
+        <item name="android:textAlignment">center</item>
+        <item name="android:paddingStart">@dimen/mini_padding</item>
+        <item name="android:paddingEnd">@dimen/mini_padding</item>
+    </style>
+
+    <style name="Widget.KingCalculator.TextView.Table.FirstColumn.Header">
+        <item name="android:textColor">?attr/colorOnBackground</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="Widget.KingCalculator.TextView.Table.OtherColumn.Header">
+        <item name="android:textColor">?attr/colorOnBackground</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="Widget.KingCalculator.TextView.ItemViewFooter">
+        <item name="android:textColor">?attr/colorOnSurface</item>
+        <item name="android:paddingTop">@dimen/main_margin</item>
+        <item name="android:paddingBottom">@dimen/main_margin</item>
+        <item name="android:paddingStart">@dimen/big_padding</item>
+        <item name="android:paddingEnd">@dimen/big_padding</item>
+    </style>
+
+
+    <style name="Widget.KingCalculator.TextView.ItemViewHeader" parent="Widget.KingCalculator.TextView.ItemViewFooter">
+        <item name="android:paddingTop">@dimen/medium_margin</item>
+        <item name="android:paddingBottom">@dimen/medium_margin</item>
+    </style>
+
+    <style name="Widget.KingCalculator.TextView.ItemViewBody" parent="Widget.KingCalculator.TextView">
+        <item name="android:textColor">?attr/colorPrimary</item>
+    </style>
+
+    <style name="Widget.KingCalculator.TextInputOutlined" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+
+    </style>
+
+    <style name="Widget.KingCalculator.ExposedDropdownMenu" parent="Widget.MaterialComponents.TextInputLayout.FilledBox.ExposedDropdownMenu">
+
+    </style>
+
+    <style name="Widget.KingCalculator.OutlinedButton" parent="Widget.MaterialComponents.Button.OutlinedButton">
+        <item name="android:textColor">?attr/colorOnSurface</item>
+        <item name="strokeWidth">@dimen/custom_button_stroke_width</item>
+    </style>
+
+    <style name="Widget.KingCalculator.Button" parent="Widget.MaterialComponents.Button">
+        <item name="android:textColor">?attr/colorOnSurface</item>
+    </style>
+
+    <style name="Widget.KingCalculator.Divider" parent="Widget.MaterialComponents.MaterialDivider">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="dividerColor">?attr/colorOnSurface</item>
+        <item name="dividerInsetStart">@dimen/big_padding</item>
+        <item name="dividerInsetEnd">@dimen/big_padding</item>
+        <item name="android:layout_marginStart">@dimen/main_margin</item>
+        <item name="android:layout_marginEnd">@dimen/main_margin</item>
+        <item name="android:layout_marginTop">@dimen/main_margin</item>
+        <item name="android:layout_marginBottom">@dimen/main_margin</item>
+    </style>
+
+    <style name="Widget.KingCalculator.ImageView">
+        <item name="android:textColor">?attr/colorOnSurface</item>
+        <item name="android:layout_width">@dimen/rule_main_image_view_size</item>
+        <item name="android:layout_height">@dimen/rule_main_image_view_size</item>
+        <item name="android:layout_marginStart">@dimen/big_margin</item>
+        <item name="android:layout_marginEnd">@dimen/main_margin</item>
+        <item name="android:layout_marginTop">@dimen/main_margin</item>
+        <item name="android:layout_marginBottom">@dimen/main_margin</item>
+        <item name="tint">?attr/colorSecondary</item>
     </style>
 
 </resources>

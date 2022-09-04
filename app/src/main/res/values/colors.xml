@@ -4,20 +4,42 @@
     <color name="white">#FFFFFFFF</color>
     <color name="red">#ac0800</color>
 
-    <color name="primaryBrandGold">#ffb03b</color>
-    <color name="primaryLightBrandGold">#ffe26d</color>
-    <color name="primaryDarkBrandGold">#c78100</color>
-    <color name="secondaryBrandRed">#b64926</color>
-    <color name="secondaryLightBrandRed">#ee7851</color>
-    <color name="secondaryDarkBrandRed">#801900</color>
-    <color name="secondaryTextBrand">#000000</color>
-    <color name="primaryTextBrand">#ffffff</color>
+    <!-- Brand colors for Basil theme. -->
+    <color name="brandBasilGreen800">#356859</color>
+    <color name="brandBasilGreen500">#37966F</color>
+    <color name="brandBasilGreen100">#B9E4C9</color>
 
-    <color name="primaryBrandGreen">#428251</color>
-    <color name="primaryLightBrandGreen">#71b27e</color>
-    <color name="primaryDarkBrandGreen">#105528</color>
-    <color name="secondaryBrandGold">#ffd447</color>
-    <color name="secondaryLightBrandGold">#ffff7a</color>
-    <color name="secondaryDarkBrandGold">#c8a301</color>
+    <color name="brandBasilOrange800">#FD5523</color>
+    <color name="brandOrange500">#FF9800</color>
+    <color name="brandBasilOrange50">#FFFBE6</color>
+
+    <!-- Brand colors for Dark theme. -->
+    <color name="brandGreen700">#388E3C</color>
+    <color name="brandGreen800">#2E7D32</color>
+    <color name="brandGreen900">#1B5E20</color>
+
+    <color name="brandYellow700">#FFD600</color>
+
+    <!-- Brand colors for light theme. -->
+    <color name="brandLightGreen500">#4CAF50</color>
+    <color name="brandLightGreen700">#388E3B</color>
+    <color name="brandLightGreen50">#E8F5E9</color>
+
+    <color name="brandYellow300">#FFF176</color>
+    <color name="brandYellow500">#FFEB3B</color>
+    <color name="brandOrange">#F9AA33</color>
+
+    <!-- Frame colors. -->
+    <color name="frameClose">#b64926</color>
+    <color name="frameCloseLight">#ee7851</color>
+    <color name="frameCloseDark">#801900</color>
+
+    <color name="frameComplete">#428251</color>
+    <color name="frameCompleteLight">#71b27e</color>
+    <color name="frameCompleteDark">#105528</color>
+
+    <color name="frameOpen">#ffb03b</color>
+    <color name="frameOpenLight">#ffe26d</color>
+    <color name="frameOpenDark">#c78100</color>
 
 </resources>
