@@ -6,18 +6,19 @@ import by.godevelopment.kingcalculator.commons.HEADER_ROW_TYPE
 import by.godevelopment.kingcalculator.domain.commons.models.GameType
 import by.godevelopment.kingcalculator.domain.commons.models.ResultDataBase
 import by.godevelopment.kingcalculator.domain.gamesdomain.models.MultiItemModel
+import by.godevelopment.kingcalculator.domain.gamesdomain.repositories.GetMultiItemModelsRepository
+import by.godevelopment.kingcalculator.domain.gamesdomain.repositories.GetPartyIdByGameIdRepository
 import javax.inject.Inject
 
 class GetMultiItemModelsUseCase @Inject constructor(
-    private val getPlayersByPartyIdUseCase: GetPlayersByPartyIdUseCase,
-    private val getPartyIdByGameIdUseCase: GetPartyIdByGameIdUseCase,
-    private val getGameNoteByIdUseCase: GetGameNoteByIdUseCase
+    private val getMultiItemModelsRepository: GetMultiItemModelsRepository,
+    private val getPartyIdByGameIdRepository: GetPartyIdByGameIdRepository
 ) {
     suspend operator fun invoke(gameId: Long): ResultDataBase<List<MultiItemModel>> {
-        return when(val partyId = getPartyIdByGameIdUseCase(gameId)) {
+        return when(val partyId = getPartyIdByGameIdRepository.getPartyIdByGameId(gameId)) {
             is ResultDataBase.Error -> { ResultDataBase.Error(message = partyId.message) }
             is ResultDataBase.Success -> {
-                val playersResult = getPlayersByPartyIdUseCase(partyId.value)
+                val playersResult = getMultiItemModelsRepository.getPlayersByPartyId(partyId.value)
                 when (playersResult) {
                     is ResultDataBase.Error -> { ResultDataBase.Error(message = playersResult.message) }
                     is ResultDataBase.Success -> {
@@ -26,7 +27,7 @@ class GetMultiItemModelsUseCase @Inject constructor(
                             .toList()
                             .sortedBy { it.first.id }
 
-                        val gameNoteResult = getGameNoteByIdUseCase(gameId)
+                        val gameNoteResult = getMultiItemModelsRepository.getGameNoteById(gameId)
                         when(gameNoteResult) {
                             is ResultDataBase.Error -> { ResultDataBase.Error(message = gameNoteResult.message) }
                             is ResultDataBase.Success -> {
