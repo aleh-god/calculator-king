@@ -158,7 +158,7 @@
     <fragment
         android:id="@+id/settingsFragment"
         android:name="by.godevelopment.kingcalculator.presentation.settingsscreen.SettingsFragment"
-        android:label="fragment_settings"
+        android:label="@string/nav_label_data_settings"
         tools:layout="@layout/fragment_settings" >
         <action
             android:id="@+id/action_settingsFragment_to_partiesListFragment"

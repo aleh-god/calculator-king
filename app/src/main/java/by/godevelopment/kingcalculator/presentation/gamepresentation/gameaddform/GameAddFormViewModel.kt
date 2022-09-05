@@ -7,16 +7,14 @@ import androidx.lifecycle.viewModelScope
 import by.godevelopment.kingcalculator.R
 import by.godevelopment.kingcalculator.commons.BODY_ROW_TYPE
 import by.godevelopment.kingcalculator.commons.TAG
-import by.godevelopment.kingcalculator.di.IoDispatcher
 import by.godevelopment.kingcalculator.domain.commons.models.ResultDataBase
 import by.godevelopment.kingcalculator.domain.gamesdomain.models.MultiItemModel
 import by.godevelopment.kingcalculator.domain.gamesdomain.models.Players
 import by.godevelopment.kingcalculator.domain.gamesdomain.usecases.GetMultiItemModelsUseCase
-import by.godevelopment.kingcalculator.domain.gamesdomain.usecases.GetPartyIdByGameIdUseCase
+import by.godevelopment.kingcalculator.domain.gamesdomain.repositories.GetPartyIdByGameIdRepository
 import by.godevelopment.kingcalculator.domain.gamesdomain.usecases.SaveGameUseCase
 import by.godevelopment.kingcalculator.domain.gamesdomain.usecases.ValidatePlayersScoreUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.*
@@ -28,7 +26,7 @@ class GameAddFormViewModel @Inject constructor(
     state: SavedStateHandle,
     private val getMultiItemModels: GetMultiItemModelsUseCase,
     private val validatePlayersScoreUseCase: ValidatePlayersScoreUseCase,
-    private val getPartyIdByGameIdUseCase: GetPartyIdByGameIdUseCase,
+    private val getPartyIdByGameIdRepository: GetPartyIdByGameIdRepository,
     private val saveGameUseCase: SaveGameUseCase
 ) : ViewModel() {
 
@@ -201,7 +199,7 @@ class GameAddFormViewModel @Inject constructor(
                                 ))
                         }
                         is ResultDataBase.Success -> {
-                            val partyIdResult = getPartyIdByGameIdUseCase(gameId)
+                            val partyIdResult = getPartyIdByGameIdRepository.getPartyIdByGameId(gameId)
                             when(partyIdResult) {
                                 is ResultDataBase.Error -> {
                                     _uiEvent.send(

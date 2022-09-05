@@ -9,7 +9,7 @@
     android:padding="@dimen/main_padding"
     tools:context=".presentation.gamepresentation.gameaddform.GameAddFormFragment">
 
-    <TextView
+    <com.google.android.material.textview.MaterialTextView
         android:id="@+id/header_game_add_form"
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -17,7 +17,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="Game total score = 240"
-        style="@style/TextAppearance.Material3.TitleLarge"
+        android:textAppearance="?attr/textAppearanceHeadline6"
         />
 
     <androidx.recyclerview.widget.RecyclerView

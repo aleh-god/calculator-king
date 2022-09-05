@@ -12,6 +12,7 @@ import androidx.navigation.ui.setupWithNavController
 import by.godevelopment.kingcalculator.R
 import by.godevelopment.kingcalculator.commons.TAG
 import by.godevelopment.kingcalculator.databinding.ActivityMainBinding
+import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -28,9 +29,9 @@ class MainActivity : AppCompatActivity() {
         Log.i(TAG, "listener by lazy: ${binding.toolbar.menu} ")
         NavController.OnDestinationChangedListener { _, destination, _ ->
             Log.i(TAG, "listener by destination: $destination")
-            binding.toolbar.menu.findItem(R.id.menu_players)?.isEnabled =
+            binding.toolbar.menu.findItem(R.id.menu_players)?.isVisible =
                 destination.id == R.id.partiesListFragment
-            binding.toolbar.menu.findItem(R.id.menu_delete_all)?.isEnabled =
+            binding.toolbar.menu.findItem(R.id.menu_delete_all)?.isVisible =
                 destination.id == R.id.partiesListFragment
         }
     }
@@ -67,18 +68,35 @@ class MainActivity : AppCompatActivity() {
             navController.navigate(R.id.action_partiesListFragment_to_settingsFragment)
             true
         }
-//        R.id.menu_settings -> {
-//            Log.i(TAG, "onOptionsItemSelected: R.id.menu_settings")
-//            val fragment = SettingsFragment.newInstance {
-//                Log.i(TAG, "SettingsFragment.newInstance: ")
-//            }
-//            supportFragmentManager
-//                .beginTransaction()
-//                .replace(R.id.nav_host_fragment, fragment)
-//                .commit()
-//            true
-//        }
+        R.id.menu_help -> {
+            showHelpText()
+            true
+        }
         else -> { super.onOptionsItemSelected(item) }
+    }
+
+    private fun showHelpText() {
+        val helpText = when (navController.currentDestination?.id) {
+            R.id.partiesListFragment -> R.string.help_text_parties_list
+            R.id.playersListFragment -> R.string.help_text_players_list
+            R.id.playerCardFragment -> R.string.help_text_player_card
+            R.id.playerInfoFragment -> R.string.help_text_player_info
+            R.id.playerAddFormFragment -> R.string.help_text_player_add_form
+            R.id.partyCardFragment -> R.string.help_text_party_card
+            R.id.partyInfoFragment -> R.string.help_text_party_info
+            R.id.partyAddFormFragment -> R.string.help_text_player_add_form
+            R.id.gameAddFormFragment -> R.string.help_text_game_add_form
+            R.id.settingsFragment -> R.string.help_text_data_settings
+            else -> R.string.message_error_data_null
+        }
+        //  TODO("Rework to DialogFragment")
+        Snackbar.make(
+            binding.root,
+            helpText,
+            Snackbar.LENGTH_LONG
+        )
+            .setAction(R.string.snackbar_btn_neutral_ok, null)
+            .show()
     }
 
     override fun onDestroy() {

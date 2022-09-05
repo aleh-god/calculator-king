@@ -6,15 +6,15 @@
     >
 
     <stroke android:width="3dp"
-        android:color="@color/primaryDarkBrandGreen"
+        android:color="@color/frameCompleteDark"
         />
 
     <corners android:radius="5dp"
         />
 
     <gradient
-        android:startColor="@color/primaryBrandGreen"
-        android:endColor="@color/primaryLightBrandGreen"
+        android:startColor="@color/frameComplete"
+        android:endColor="@color/frameCompleteLight"
         android:type="linear"
         android:angle="270"
         />

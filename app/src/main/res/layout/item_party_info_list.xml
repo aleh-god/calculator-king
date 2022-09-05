@@ -5,8 +5,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginHorizontal="@dimen/big_margin"
-    app:cardElevation="0dp"
+    style="@style/ThemeOverlay.KingCalculator.TableInfoItemCardView.Party"
     >
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -17,87 +16,63 @@
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/game_name"
             android:layout_width="0dp"
-            android:layout_height="56dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toStartOf="@id/game_collum_one"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
-            tools:text="Do Not Take Tricks"
             app:layout_constraintHorizontal_chainStyle="packed"
-            android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
-            android:textSize="16sp"
-            android:textColor="?android:attr/textColorSecondary"
-            android:textAlignment="textStart"
+            tools:text="Do Not Take Tricks"
             app:layout_constraintHorizontal_weight="1"
-            android:background="@drawable/frame_count"
+            android:textAppearance="?attr/textAppearanceBody2"
+            style="@style/Widget.KingCalculator.TextView.Table.FirstColumn"
             />
 
-        <TextView
+        <com.google.android.material.textview.MaterialTextView
             android:id="@+id/game_collum_one"
-            android:layout_width="56dp"
-            android:layout_height="56dp"
             app:layout_constraintStart_toEndOf="@id/game_name"
             app:layout_constraintEnd_toStartOf="@id/game_collum_two"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             tools:text="-2000"
-            android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
-            android:textSize="14sp"
-            android:textColor="?android:attr/textColorSecondary"
-            android:textAlignment="center"
             app:layout_constraintHorizontal_weight="1"
-            android:background="@drawable/frame_count"
+            android:textAppearance="?attr/textAppearanceBody2"
+            style="@style/Widget.KingCalculator.TextView.Table.OtherColumn"
             />
 
-        <TextView
+        <com.google.android.material.textview.MaterialTextView
             android:id="@+id/game_collum_two"
-            android:layout_width="56dp"
-            android:layout_height="56dp"
             app:layout_constraintStart_toEndOf="@id/game_collum_one"
             app:layout_constraintEnd_toStartOf="@id/game_collum_three"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             tools:text="-2000"
-            android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
-            android:textSize="14sp"
-            android:textColor="?android:attr/textColorSecondary"
-            android:textAlignment="center"
             app:layout_constraintHorizontal_weight="1"
-            android:background="@drawable/frame_count"
+            android:textAppearance="?attr/textAppearanceBody2"
+            style="@style/Widget.KingCalculator.TextView.Table.OtherColumn"
             />
 
-        <TextView
+        <com.google.android.material.textview.MaterialTextView
             android:id="@+id/game_collum_three"
-            android:layout_width="56dp"
-            android:layout_height="56dp"
             app:layout_constraintStart_toEndOf="@id/game_collum_two"
             app:layout_constraintEnd_toStartOf="@id/game_collum_four"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             tools:text="-2000"
-            android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
-            android:textSize="14sp"
-            android:textColor="?android:attr/textColorSecondary"
-            android:textAlignment="center"
             app:layout_constraintHorizontal_weight="1"
-            android:background="@drawable/frame_count"
+            android:textAppearance="?attr/textAppearanceBody2"
+            style="@style/Widget.KingCalculator.TextView.Table.OtherColumn"
             />
 
-        <TextView
+        <com.google.android.material.textview.MaterialTextView
             android:id="@+id/game_collum_four"
-            android:layout_width="56dp"
-            android:layout_height="56dp"
             app:layout_constraintStart_toEndOf="@id/game_collum_three"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             tools:text="-2000"
-            android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
-            android:textSize="14sp"
-            android:textColor="?android:attr/textColorSecondary"
-            android:textAlignment="center"
             app:layout_constraintHorizontal_weight="1"
-            android:background="@drawable/frame_count"
+            android:textAppearance="?attr/textAppearanceBody2"
+            style="@style/Widget.KingCalculator.TextView.Table.OtherColumn"
             />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

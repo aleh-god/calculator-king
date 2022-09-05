@@ -5,7 +5,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="1dp"
+    android:layout_margin="@dimen/micro_margin"
     >
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -23,7 +23,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintHorizontal_weight="3"
             tools:text="Do Not Take Tricks"
-            android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
+            android:textAppearance="?attr/textAppearanceBody2"
             />
 
         <com.google.android.material.textview.MaterialTextView
@@ -36,7 +36,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintHorizontal_weight="1"
             tools:text="-240"
-            android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
+            android:textAppearance="?attr/textAppearanceBody2"
             />
 
         <com.google.android.material.textview.MaterialTextView
@@ -49,7 +49,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintHorizontal_weight="1"
             tools:text="Played"
-            android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
+            android:textAppearance="?attr/textAppearanceBody2"
             />
 
 

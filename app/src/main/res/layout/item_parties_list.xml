@@ -5,7 +5,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="3dp"
+    android:layout_margin="@dimen/small_margin"
+    style="@style/Widget.KingCalculator.CardView"
     >
 
 <androidx.constraintlayout.widget.ConstraintLayout
@@ -23,7 +24,8 @@
         app:layout_constraintBottom_toTopOf="@+id/divider"
         app:layout_constraintHorizontal_weight="7"
         tools:text="Game #1"
-        android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
+        android:textAppearance="?attr/textAppearanceSubtitle1"
+        style="@style/Widget.KingCalculator.TextView.Main"
         />
 
     <com.google.android.material.textview.MaterialTextView
@@ -36,31 +38,31 @@
         app:layout_constraintBottom_toTopOf="@+id/divider"
         app:layout_constraintHorizontal_weight="3"
         tools:text="17 in 56"
-        android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
+        android:textAppearance="?attr/textAppearanceSubtitle1"
+        style="@style/Widget.KingCalculator.TextView.Main"
         />
 
     <com.google.android.material.divider.MaterialDivider
         android:id="@+id/divider"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
         app:layout_constraintTop_toBottomOf="@+id/party_name"
         app:layout_constraintBottom_toTopOf="@+id/player_one_name"
         app:layout_constraintStart_toEndOf="@id/party_stat"
-        app:dividerInsetStart="15dp"
-        app:dividerInsetEnd="15dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        style="@style/Widget.KingCalculator.Divider"
         />
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/player_one_name"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        app:layout_constraintStart_toEndOf="@id/party_stat"
+        app:layout_constraintStart_toStartOf="@id/party_name"
         app:layout_constraintEnd_toStartOf="@+id/player_one_score"
         app:layout_constraintTop_toBottomOf="@+id/divider"
         app:layout_constraintBottom_toTopOf="@+id/player_two_name"
         app:layout_constraintHorizontal_weight="7"
         tools:text="Michelangelo"
-        android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
+        android:textAppearance="?attr/textAppearanceBody2"
+        style="@style/Widget.KingCalculator.TextView.Main"
         />
 
     <com.google.android.material.textview.MaterialTextView
@@ -73,20 +75,22 @@
         app:layout_constraintBottom_toTopOf="@+id/player_two_score"
         app:layout_constraintHorizontal_weight="3"
         tools:text="356"
-        android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
+        android:textAppearance="?attr/textAppearanceBody2"
+        style="@style/Widget.KingCalculator.TextView.Main"
         />
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/player_two_name"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        app:layout_constraintStart_toEndOf="@id/party_stat"
+        app:layout_constraintStart_toStartOf="@id/party_name"
         app:layout_constraintEnd_toStartOf="@+id/player_two_score"
         app:layout_constraintTop_toBottomOf="@+id/player_one_name"
         app:layout_constraintBottom_toTopOf="@+id/player_three_name"
         app:layout_constraintHorizontal_weight="7"
         tools:text="Donatello"
-        android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
+        android:textAppearance="?attr/textAppearanceBody2"
+        style="@style/Widget.KingCalculator.TextView.Main"
         />
 
     <com.google.android.material.textview.MaterialTextView
@@ -99,20 +103,22 @@
         app:layout_constraintBottom_toTopOf="@+id/player_three_score"
         app:layout_constraintHorizontal_weight="3"
         tools:text="-356"
-        android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
+        android:textAppearance="?attr/textAppearanceBody2"
+        style="@style/Widget.KingCalculator.TextView.Main"
         />
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/player_three_name"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        app:layout_constraintStart_toEndOf="@id/party_stat"
+        app:layout_constraintStart_toStartOf="@id/party_name"
         app:layout_constraintEnd_toStartOf="@+id/player_three_score"
         app:layout_constraintTop_toBottomOf="@+id/player_two_name"
         app:layout_constraintBottom_toTopOf="@+id/player_four_name"
         app:layout_constraintHorizontal_weight="7"
         tools:text="Michelangelo"
-        android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
+        android:textAppearance="?attr/textAppearanceBody2"
+        style="@style/Widget.KingCalculator.TextView.Main"
         />
 
     <com.google.android.material.textview.MaterialTextView
@@ -125,20 +131,22 @@
         app:layout_constraintBottom_toTopOf="@+id/player_four_score"
         app:layout_constraintHorizontal_weight="3"
         tools:text="56"
-        android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
+        android:textAppearance="?attr/textAppearanceBody2"
+        style="@style/Widget.KingCalculator.TextView.Main"
         />
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/player_four_name"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        app:layout_constraintStart_toEndOf="@id/party_stat"
+        app:layout_constraintStart_toStartOf="@id/party_name"
         app:layout_constraintEnd_toStartOf="@+id/player_four_score"
         app:layout_constraintTop_toBottomOf="@+id/player_three_name"
         app:layout_constraintBottom_toTopOf="@+id/party_start_time"
         app:layout_constraintHorizontal_weight="7"
         tools:text="Michelangelo"
-        android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
+        android:textAppearance="?attr/textAppearanceBody2"
+        style="@style/Widget.KingCalculator.TextView.Main"
         />
 
     <com.google.android.material.textview.MaterialTextView
@@ -151,34 +159,31 @@
         app:layout_constraintBottom_toTopOf="@id/party_end_time"
         app:layout_constraintHorizontal_weight="3"
         tools:text="-56"
-        android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
+        android:textAppearance="?attr/textAppearanceBody2"
+        style="@style/Widget.KingCalculator.TextView.Main"
         />
 
     <ImageView
         android:id="@+id/party_stat"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toTopOf="@id/party_del"
-        android:layout_marginStart="@dimen/big_margin"
-        android:layout_marginEnd="@dimen/main_margin"
-        android:layout_marginVertical="@dimen/main_margin"
+        app:layout_constraintEnd_toStartOf="@id/party_name"
+        style="@style/Widget.KingCalculator.ImageView"
         android:src="@drawable/ic_baseline_bar_chart_24"
-        android:contentDescription="@string/descr_party_stat" />
+        android:contentDescription="@string/descr_party_stat"
+        />
 
     <ImageView
         android:id="@+id/party_del"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/party_stat"
         app:layout_constraintBottom_toTopOf="@id/party_start_time"
-        android:layout_marginStart="@dimen/big_margin"
-        android:layout_marginEnd="@dimen/main_margin"
-        android:layout_marginVertical="@dimen/main_margin"
+        app:layout_constraintEnd_toStartOf="@id/player_three_name"
+        style="@style/Widget.KingCalculator.ImageView"
         android:src="@drawable/ic_baseline_delete_24"
-        android:contentDescription="@string/descr_party_del" />
+        android:contentDescription="@string/descr_party_del"
+        />
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/party_start_time"
@@ -190,7 +195,8 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintHorizontal_weight="5"
         tools:text="hh:mm:ss, MMM dd, yyyy"
-        android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
+        android:textAppearance="?attr/textAppearanceBody2"
+        style="@style/Widget.KingCalculator.TextView.Main"
         />
 
     <com.google.android.material.textview.MaterialTextView
@@ -203,7 +209,8 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintHorizontal_weight="5"
         tools:text="hh:mm:ss, MMM dd, yyyy"
-        android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
+        android:textAppearance="?attr/textAppearanceBody2"
+        style="@style/Widget.KingCalculator.TextView.Main"
         />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

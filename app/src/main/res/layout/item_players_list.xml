@@ -5,7 +5,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="3dp"
+    android:layout_margin="@dimen/small_margin"
     >
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -15,16 +15,15 @@
 
         <ImageView
             android:id="@+id/player_stat"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
+
             app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/player_name"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
-            android:layout_marginStart="@dimen/big_margin"
-            android:layout_marginEnd="@dimen/main_margin"
-            android:layout_marginVertical="@dimen/main_margin"
             android:src="@drawable/ic_baseline_bar_chart_24"
-            android:contentDescription="@string/descr_player_stat" />
+            android:contentDescription="@string/descr_player_stat"
+            style="@style/Widget.KingCalculator.ImageView"
+            />
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/player_name"
@@ -35,19 +34,21 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toTopOf="@+id/player_email"
             tools:text="Player #1"
-            android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
+            android:textAppearance="?attr/textAppearanceBody1"
+            style="@style/Widget.KingCalculator.TextView.Main"
             />
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/player_email"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            app:layout_constraintStart_toEndOf="@id/player_stat"
+            app:layout_constraintStart_toStartOf="@id/player_name"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/player_name"
             app:layout_constraintBottom_toBottomOf="parent"
             tools:text="player2021@gmail.com"
-            android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
+            android:textAppearance="?attr/textAppearanceBody2"
+            style="@style/Widget.KingCalculator.TextView.Main"
             />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </com.google.android.material.card.MaterialCardView>

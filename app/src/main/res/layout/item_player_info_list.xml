@@ -5,11 +5,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginHorizontal="@dimen/medium_margin"
-    app:strokeWidth="1dp"
-    app:strokeColor="@color/stroke_color"
-    app:cardElevation="0dp"
-    app:cardCornerRadius="0dp"
+    style="@style/ThemeOverlay.KingCalculator.TableInfoItemCardView.Player"
     >
 
 <androidx.constraintlayout.widget.ConstraintLayout
@@ -17,39 +13,33 @@
     android:layout_height="wrap_content"
     >
 
-    <TextView
+    <com.google.android.material.textview.MaterialTextView
         android:id="@+id/info_type"
         android:layout_width="0dp"
-        android:layout_height="56dp"
+        android:layout_height="@dimen/rule_min_item_height"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toStartOf="@id/info_value"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        android:layout_marginHorizontal="16dp"
-        tools:text="Games played:"
-        app:layout_constraintHorizontal_chainStyle="packed"
-        android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
-        android:textSize="16sp"
-        android:textColor="?android:attr/textColorSecondary"
-        android:textAlignment="textStart"
         app:layout_constraintHorizontal_weight="3"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        android:textAppearance="?attr/textAppearanceBody1"
+        style="@style/Widget.KingCalculator.TextView.Table.FirstColumn"
+        tools:text="Games played:"
         />
 
-    <TextView
+    <com.google.android.material.textview.MaterialTextView
         android:id="@+id/info_value"
         android:layout_width="0dp"
-        android:layout_height="56dp"
+        android:layout_height="@dimen/rule_min_item_height"
         app:layout_constraintStart_toEndOf="@id/info_type"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        android:layout_marginHorizontal="16dp"
-        tools:text="126"
-        android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
-        android:textSize="16sp"
-        android:textColor="?android:attr/textColorSecondary"
-        android:textAlignment="viewEnd"
         app:layout_constraintHorizontal_weight="1"
+        android:textAppearance="?attr/textAppearanceBody1"
+        style="@style/Widget.KingCalculator.TextView.Table.OtherColumn"
+        tools:text="126"
         />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

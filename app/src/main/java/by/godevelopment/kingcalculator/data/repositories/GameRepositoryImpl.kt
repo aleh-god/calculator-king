@@ -9,7 +9,6 @@ import by.godevelopment.kingcalculator.data.utils.toGameModel
 import by.godevelopment.kingcalculator.data.utils.toPlayerModel
 import by.godevelopment.kingcalculator.data.utils.toTricksNote
 import by.godevelopment.kingcalculator.di.IoDispatcher
-import by.godevelopment.kingcalculator.domain.commons.models.GameType
 import by.godevelopment.kingcalculator.domain.commons.models.ResultDataBase
 import by.godevelopment.kingcalculator.domain.commons.utils.flatMapResult
 import by.godevelopment.kingcalculator.domain.commons.utils.mapResult
@@ -17,7 +16,9 @@ import by.godevelopment.kingcalculator.domain.commons.utils.wrapResult
 import by.godevelopment.kingcalculator.domain.gamesdomain.models.GameModel
 import by.godevelopment.kingcalculator.domain.gamesdomain.models.Players
 import by.godevelopment.kingcalculator.domain.gamesdomain.models.TricksNoteModel
-import by.godevelopment.kingcalculator.domain.gamesdomain.repositories.GameRepository
+import by.godevelopment.kingcalculator.domain.gamesdomain.repositories.GetMultiItemModelsRepository
+import by.godevelopment.kingcalculator.domain.gamesdomain.repositories.SaveGameRepository
+import by.godevelopment.kingcalculator.domain.gamesdomain.repositories.GetPartyIdByGameIdRepository
 import by.godevelopment.kingcalculator.domain.playersdomain.models.PlayerModel
 import by.godevelopment.kingcalculator.domain.settingsdomain.repositories.DeleteGamesRepository
 import kotlinx.coroutines.CoroutineDispatcher
@@ -30,7 +31,12 @@ class GameRepositoryImpl @Inject constructor(
     private val tricksDataSource: TricksDataSource,
     private val playersDataSource: PlayersDataSource,
     @IoDispatcher private val ioDispatcher: CoroutineDispatcher
-): GameRepository, DeleteGamesRepository {
+):
+    DeleteGamesRepository,
+    GetPartyIdByGameIdRepository,
+    SaveGameRepository,
+    GetMultiItemModelsRepository
+{
 
     override suspend fun getPlayersByPartyId(partyId: Long): ResultDataBase<Map<Players, PlayerModel>> =
         withContext(ioDispatcher) {
@@ -52,9 +58,6 @@ class GameRepositoryImpl @Inject constructor(
             is ResultDataBase.Error -> ResultDataBase.Error(message = partyResult.message)
         }
     }
-
-    override suspend fun createGameNote(gameType: GameType, partyId: Long): ResultDataBase<Long> =
-        withContext(ioDispatcher) { gamesDataSource.createGameNote(gameType, partyId) }
 
     override suspend fun createTricksNote(tricksNoteModel: TricksNoteModel): ResultDataBase<Long> =
         withContext(ioDispatcher) {

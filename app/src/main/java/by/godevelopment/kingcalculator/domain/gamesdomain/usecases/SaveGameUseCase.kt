@@ -5,11 +5,11 @@ import by.godevelopment.kingcalculator.commons.BODY_ROW_TYPE
 import by.godevelopment.kingcalculator.domain.commons.models.ResultDataBase
 import by.godevelopment.kingcalculator.domain.gamesdomain.models.MultiItemModel
 import by.godevelopment.kingcalculator.domain.gamesdomain.models.TricksNoteModel
-import by.godevelopment.kingcalculator.domain.gamesdomain.repositories.GameRepository
+import by.godevelopment.kingcalculator.domain.gamesdomain.repositories.SaveGameRepository
 import javax.inject.Inject
 
 class SaveGameUseCase @Inject constructor(
-    private val gameRepository: GameRepository
+    private val saveGameRepository: SaveGameRepository
 ) {
 
     suspend operator fun invoke(gameId: Long, items: List<MultiItemModel>): ResultDataBase<Boolean> {
@@ -17,7 +17,7 @@ class SaveGameUseCase @Inject constructor(
             val notesResult = items
                 .filter { it.itemViewType == BODY_ROW_TYPE }
                 .map {
-                    gameRepository.createTricksNote(
+                    saveGameRepository.createTricksNote(
                         TricksNoteModel(
                             gameId = gameId,
                             playerId = it.player.id,
@@ -27,7 +27,7 @@ class SaveGameUseCase @Inject constructor(
                     )
                 }
             if (notesResult.any { it is ResultDataBase.Success }) {
-                return when (gameRepository.updatePartyStateByGameId(gameId)) {
+                return when (saveGameRepository.updatePartyStateByGameId(gameId)) {
                     is ResultDataBase.Error -> {
                         undoBadDbTransaction(gameId)
                         ResultDataBase.Error(message = R.string.message_error_data_save)
@@ -46,6 +46,6 @@ class SaveGameUseCase @Inject constructor(
     }
 
     private suspend fun undoBadDbTransaction(gameId: Long): ResultDataBase<Int> {
-        return gameRepository.undoBadDbTransaction(gameId)
+        return saveGameRepository.undoBadDbTransaction(gameId)
     }
 }
