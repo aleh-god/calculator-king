@@ -59,7 +59,7 @@
             app:popUpToInclusive="true"
             />
         <argument
-            android:name="idPlayer"
+            android:name="playerId"
             app:argType="long" />
     </fragment>
 
@@ -72,10 +72,9 @@
             android:id="@+id/action_playerInfoFragment_to_playersListFragment"
             app:destination="@id/playersListFragment"
             app:popUpTo="@+id/playersListFragment"
-            app:popUpToInclusive="true"
             />
         <argument
-            android:name="idPlayer"
+            android:name="playerId"
             app:argType="long" />
     </fragment>
 
@@ -100,10 +99,15 @@
         tools:layout="@layout/fragment_party_card" >
         <action
             android:id="@+id/action_partyCardFragment_to_partiesListFragment"
-            app:destination="@id/partiesListFragment" />
+            app:destination="@id/partiesListFragment"
+            app:popUpTo="@+id/partiesListFragment"
+            app:popUpToInclusive="true"
+            />
         <action
             android:id="@+id/action_partyCardFragment_to_gameAddFormFragment"
-            app:destination="@id/gameAddFormFragment" />
+            app:destination="@id/gameAddFormFragment"
+            app:popUpTo="@+id/partiesListFragment"
+            />
         <argument
             android:name="partyId"
             app:argType="long" />
@@ -116,7 +120,10 @@
         tools:layout="@layout/fragment_party_info" >
         <action
             android:id="@+id/action_partyInfoFragment_to_partiesListFragment"
-            app:destination="@id/partiesListFragment" />
+            app:destination="@id/partiesListFragment"
+            app:popUpTo="@+id/partiesListFragment"
+            app:popUpToInclusive="true"
+            />
         <argument
             android:name="partyId"
             app:argType="long" />
@@ -129,14 +136,17 @@
         tools:layout="@layout/fragment_party_add_form" >
         <action
             android:id="@+id/action_partyAddFormFragment_to_partiesListFragment"
-            app:destination="@id/partiesListFragment" />
+            app:destination="@id/partiesListFragment"
+            app:popUpTo="@+id/partiesListFragment"
+            app:popUpToInclusive="true"
+            />
         <action
             android:id="@+id/action_partyAddFormFragment_to_partyCardFragment"
             app:destination="@id/partyCardFragment"
             app:popUpTo="@+id/partiesListFragment"
-            app:popUpToInclusive="true"
             />
     </fragment>
+
     <fragment
         android:id="@+id/gameAddFormFragment"
         android:name="by.godevelopment.kingcalculator.presentation.gamepresentation.gameaddform.GameAddFormFragment"
@@ -148,13 +158,17 @@
         <action
             android:id="@+id/action_gameAddFormFragment_to_partyCardFragment"
             app:destination="@id/partyCardFragment"
-            app:popUpTo="@+id/partyCardFragment"
+            app:popUpTo="@+id/gameAddFormFragment"
             app:popUpToInclusive="true"
             />
         <action
             android:id="@+id/action_gameAddFormFragment_to_partiesListFragment"
-            app:destination="@id/partiesListFragment" />
+            app:destination="@id/partiesListFragment"
+            app:popUpTo="@+id/partiesListFragment"
+            app:popUpToInclusive="true"
+            />
     </fragment>
+
     <fragment
         android:id="@+id/settingsFragment"
         android:name="by.godevelopment.kingcalculator.presentation.settingsscreen.SettingsFragment"
@@ -162,7 +176,9 @@
         tools:layout="@layout/fragment_settings" >
         <action
             android:id="@+id/action_settingsFragment_to_partiesListFragment"
-            app:destination="@id/partiesListFragment" />
+            app:destination="@id/partiesListFragment"
+            app:popUpTo="@+id/partiesListFragment"
+            app:popUpToInclusive="true"
+            />
     </fragment>
-
 </navigation>
