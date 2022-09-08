@@ -31,7 +31,7 @@
     <dimen name="rule_min_item_height">56dp</dimen>
     <dimen name="rule_main_image_view_size">50dp</dimen>
     <dimen name="rule_main_stroke_width">1dp</dimen>
-    <dimen name="custom_button_stroke_width">3dp</dimen>
+    <dimen name="custom_button_stroke_width">2dp</dimen>
     <dimen name="rule_zero">0dp</dimen>
 
     <dimen name="rule_min_padding_icon">6dp</dimen>

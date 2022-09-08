@@ -52,7 +52,6 @@
         android:hint="@string/hint_text_player_one_email"
         style="@style/Widget.KingCalculator.ExposedDropdownMenu"
         >
-
         <AutoCompleteTextView
             android:id="@+id/player_one_input_menu"
             android:layout_width="match_parent"
@@ -74,7 +73,6 @@
         android:hint="@string/hint_text_player_two_email"
         style="@style/Widget.KingCalculator.ExposedDropdownMenu"
         >
-
         <AutoCompleteTextView
             android:id="@+id/player_two_input_menu"
             android:layout_width="match_parent"
@@ -96,7 +94,6 @@
         android:hint="@string/hint_text_player_three_email"
         style="@style/Widget.KingCalculator.ExposedDropdownMenu"
         >
-
         <AutoCompleteTextView
             android:id="@+id/player_three_input_menu"
             android:layout_width="match_parent"
@@ -118,7 +115,6 @@
         android:hint="@string/hint_text_player_four_email"
         style="@style/Widget.KingCalculator.ExposedDropdownMenu"
         >
-
         <AutoCompleteTextView
             android:id="@+id/player_four_input_menu"
             android:layout_width="match_parent"
