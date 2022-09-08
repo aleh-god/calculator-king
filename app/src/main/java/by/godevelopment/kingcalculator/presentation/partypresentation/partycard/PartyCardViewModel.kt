@@ -6,15 +6,14 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import by.godevelopment.kingcalculator.R
 import by.godevelopment.kingcalculator.commons.TAG
-import by.godevelopment.kingcalculator.di.IoDispatcher
 import by.godevelopment.kingcalculator.domain.commons.models.GameType
 import by.godevelopment.kingcalculator.domain.commons.models.ResultDataBase
 import by.godevelopment.kingcalculator.domain.partiesdomain.models.GamesTableItemModel
 import by.godevelopment.kingcalculator.domain.partiesdomain.models.PlayersInPartyModel
 import by.godevelopment.kingcalculator.domain.partiesdomain.usecases.*
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.async
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
@@ -40,10 +39,6 @@ class PartyCardViewModel @Inject constructor(
 
     private var fetchJob: Job? = null
     private var reloadsNumber = 0
-
-    init {
-        Log.i(TAG, "PartyCardViewModel: $partyId")
-    }
 
     fun checkUnfinishedGame() {
         fetchJob?.cancel()
@@ -81,14 +76,13 @@ class PartyCardViewModel @Inject constructor(
 
     private fun fetchDataModel() {
         fetchJob?.cancel()
-        try {
             fetchJob = viewModelScope.launch {
                 if (partyId != null) {
                     _uiState.update { it.copy(isFetchingData = true) }
-                    // TODO("rework to async await")
-                    launch { fetchContractorPlayer(partyId) }
-                    launch { fetchPlayers(partyId) }
-                    launch { fetchGamesList(partyId) }
+                    val contractorPlayer = async { getContractorPlayerByPartyIdUseCase(partyId) }
+                    val players = async { getPlayersByPartyIdUseCase(partyId) }
+                    val gamesList = async { getGamesByPartyIdUseCase(partyId) }
+                    updateUiState(contractorPlayer.await(), players.await(), gamesList.await())
                 }
                 else {
                     _uiState.update { it.copy(isFetchingData = false) }
@@ -101,73 +95,59 @@ class PartyCardViewModel @Inject constructor(
                     )
                 }
             }
-        }
-        catch (e: Exception) {
-            Log.i(TAG, "PartyCardViewModel fetchPlayers.catch ${e.message}")
-            viewModelScope.launch {
-                _uiState.update { it.copy(isFetchingData = false) }
+    }
+
+    private suspend fun updateUiState(
+        contractorPlayer: ResultDataBase<String>,
+        players: ResultDataBase<PlayersInPartyModel>,
+        gamesList: ResultDataBase<List<GamesTableItemModel>>
+    ) {
+        when(contractorPlayer) {
+            is ResultDataBase.Error -> {
                 _uiEvent.send(
                     PartyCardUiEvent.ShowMessage(
-                        message = R.string.message_error_data_load,
+                        message = contractorPlayer.message,
                         textAction = R.string.snackbar_btn_reload,
-                        onAction = ::reloadDataModel
+                        onAction = { reloadDataModel() }
                     )
                 )
             }
-        }
-    }
-
-    private suspend fun fetchGamesList(partyId: Long) {
-        val result = getGamesByPartyIdUseCase(partyId)
-        when(result) {
-            is ResultDataBase.Error -> {
-                _uiEvent.send(PartyCardUiEvent.ShowMessage(
-                    message = result.message,
-                    textAction = R.string.snackbar_btn_neutral_ok,
-                    onAction = { }
-                ))
-            }
             is ResultDataBase.Success -> {
-                _uiState.update {
-                    it.copy(
-                        isFetchingData = false,
-                        dataList = result.value
-                    )
+                when(gamesList) {
+                    is ResultDataBase.Error -> {
+                        _uiEvent.send(
+                            PartyCardUiEvent.ShowMessage(
+                                message = gamesList.message,
+                                textAction = R.string.snackbar_btn_reload,
+                                onAction = { reloadDataModel() }
+                            )
+                        )
+                    }
+                    is ResultDataBase.Success -> {
+                        when(players) {
+                            is ResultDataBase.Error -> {
+                                _uiEvent.send(
+                                    PartyCardUiEvent.ShowMessage(
+                                        message = players.message,
+                                        textAction = R.string.snackbar_btn_reload,
+                                        onAction = { reloadDataModel() }
+                                    )
+                                )
+                            }
+                            is ResultDataBase.Success -> {
+                                _uiState.update { it.copy(
+                                    isFetchingData = false,
+                                    playersInPartyModel = players.value,
+                                    contractorPlayer = contractorPlayer.value,
+                                    dataList = gamesList.value
+                                ) }
+                            }
+                        }
+                    }
                 }
             }
         }
-    }
-
-    private suspend fun fetchPlayers(partyId: Long) {
-        val result = getPlayersByPartyIdUseCase(partyId)
-        when(result) {
-            is ResultDataBase.Error -> {
-                _uiEvent.send(PartyCardUiEvent.ShowMessage(
-                    message = result.message,
-                    textAction = R.string.snackbar_btn_neutral_ok,
-                    onAction = { }
-                ))
-            }
-            is ResultDataBase.Success -> {
-                _uiState.update { it.copy(playersInPartyModel = result.value) }
-            }
-        }
-    }
-
-    private suspend fun fetchContractorPlayer(partyId: Long) {
-        val result = getContractorPlayerByPartyIdUseCase(partyId)
-        when(result) {
-            is ResultDataBase.Error -> {
-                _uiEvent.send(PartyCardUiEvent.ShowMessage(
-                    message = result.message,
-                    textAction = R.string.snackbar_btn_reload,
-                    onAction = ::reloadDataModel
-                ))
-            }
-            is ResultDataBase.Success -> {
-                _uiState.update { it.copy(contractorPlayer =result.value) }
-            }
-        }
+        _uiState.update { it.copy(isFetchingData = false) }
     }
 
     private fun reloadDataModel() {
@@ -185,7 +165,6 @@ class PartyCardViewModel @Inject constructor(
     }
 
     fun createGameNote(gameType: GameType) {
-        Log.i(TAG, "createGameNote: gameType = $gameType partyId = $partyId")
         fetchJob?.cancel()
         fetchJob = viewModelScope.launch {
             try {
