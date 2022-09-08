@@ -4,7 +4,6 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import by.godevelopment.kingcalculator.R
-import by.godevelopment.kingcalculator.di.IoDispatcher
 import by.godevelopment.kingcalculator.domain.commons.models.ResultDataBase
 import by.godevelopment.kingcalculator.domain.partiesdomain.models.PartyInfoItemModel
 import by.godevelopment.kingcalculator.domain.partiesdomain.models.PlayersInPartyModel
@@ -12,8 +11,8 @@ import by.godevelopment.kingcalculator.domain.partiesdomain.usecases.GetGamesSco
 import by.godevelopment.kingcalculator.domain.partiesdomain.usecases.GetPartyNameUseCase
 import by.godevelopment.kingcalculator.domain.partiesdomain.usecases.GetPlayersByPartyIdUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.async
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
@@ -58,86 +57,68 @@ class PartyInfoViewModel @Inject constructor(
 
     private fun fetchDataModel() {
         partyId?.let {
-
             fetchJob?.cancel()
             fetchJob = viewModelScope.launch {
                 _uiState.update { it.copy(isFetchingData = true) }
-                // TODO("rework to async await")
-                launch { fetchPartyName(partyId) }
-                launch { fetchPlayers(partyId) }
-                launch { fetchGamesList(partyId) }
+                val partyName = async { getPartyNameUseCase(partyId) }
+                val players = async { getPlayersByPartyIdUseCase(partyId) }
+                val gamesScore = async { getGamesScoreByPartyIdUseCase(partyId) }
+                updateUiState(partyName.await(), players.await(), gamesScore.await())
             }
         }
     }
 
-    private suspend fun fetchPartyName(partyId: Long) {
-        val result = getPartyNameUseCase(partyId)
-        when(result) {
+    private suspend fun updateUiState(
+        partyName: ResultDataBase<String>,
+        players: ResultDataBase<PlayersInPartyModel>,
+        gamesScore: ResultDataBase<List<PartyInfoItemModel>>
+    ) {
+        when(partyName) {
             is ResultDataBase.Error -> {
                 _uiEvent.send(
                     PartyInfoUiEvent.ShowMessage(
-                        message = result.message,
+                        message = partyName.message,
                         textAction = R.string.snackbar_btn_reload,
                         onAction = { reloadDataModel() }
                     )
                 )
-                _uiState.update { it.copy(isFetchingData = false) }
             }
             is ResultDataBase.Success -> {
-                _uiState.update {
-                    it.copy(
-                        isFetchingData = false,
-                        partyName = result.value
-                    )
+                when(gamesScore) {
+                    is ResultDataBase.Error -> {
+                        _uiEvent.send(
+                            PartyInfoUiEvent.ShowMessage(
+                                message = gamesScore.message,
+                                textAction = R.string.snackbar_btn_reload,
+                                onAction = { reloadDataModel() }
+                            )
+                        )
+                    }
+                    is ResultDataBase.Success -> {
+                        when(players) {
+                            is ResultDataBase.Error -> {
+                                _uiEvent.send(
+                                    PartyInfoUiEvent.ShowMessage(
+                                        message = players.message,
+                                        textAction = R.string.snackbar_btn_reload,
+                                        onAction = { reloadDataModel() }
+                                    )
+                                )
+                            }
+                            is ResultDataBase.Success -> {
+                                _uiState.update { it.copy(
+                                    isFetchingData = false,
+                                    playersInPartyModel = players.value,
+                                    partyName = partyName.value,
+                                    dataList = gamesScore.value
+                                ) }
+                            }
+                        }
+                    }
                 }
             }
         }
-    }
-
-    private suspend fun fetchGamesList(partyId: Long) {
-        val result = getGamesScoreByPartyIdUseCase(partyId)
-        when(result) {
-            is ResultDataBase.Error -> {
-                _uiEvent.send(
-                    PartyInfoUiEvent.ShowMessage(
-                        message = result.message,
-                        textAction = R.string.snackbar_btn_reload,
-                        onAction = { reloadDataModel() }
-                    )
-                )
-                _uiState.update { it.copy(isFetchingData = false) }
-            }
-            is ResultDataBase.Success -> {
-                _uiState.update {
-                    it.copy(
-                        isFetchingData = false,
-                        dataList = result.value
-                    )
-                }
-            }
-        }
-    }
-
-    private suspend fun fetchPlayers(partyId: Long) {
-        val result = getPlayersByPartyIdUseCase(partyId)
-        when(result) {
-            is ResultDataBase.Error -> {
-                _uiEvent.send(
-                    PartyInfoUiEvent.ShowMessage(
-                        message = result.message,
-                        textAction = R.string.snackbar_btn_reload,
-                        onAction = { reloadDataModel() }
-                    )
-                )
-                _uiState.update { it.copy(isFetchingData = false) }
-            }
-            is ResultDataBase.Success -> {
-                _uiState.update { it.copy(
-                    isFetchingData = false,
-                    playersInPartyModel = result.value
-                ) }
-            }
-        }
+        _uiState.update { it.copy(isFetchingData = false) }
     }
 
     data class UiState(

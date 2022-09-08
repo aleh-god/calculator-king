@@ -4,14 +4,12 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import by.godevelopment.kingcalculator.R
-import by.godevelopment.kingcalculator.di.IoDispatcher
 import by.godevelopment.kingcalculator.domain.commons.models.ResultDataBase
 import by.godevelopment.kingcalculator.domain.playersdomain.models.PlayerModel
 import by.godevelopment.kingcalculator.domain.playersdomain.repositories.PlayerCardRepository
 import by.godevelopment.kingcalculator.domain.playersdomain.usecases.GetActivePlayerByIdUseCase
 import by.godevelopment.kingcalculator.domain.playersdomain.usecases.ValidatePlayerNameUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.*
@@ -40,7 +38,7 @@ class PlayerCardViewModel @Inject constructor(
     private val _uiEvent  = Channel<PlayerCardUiEvent>()
     val uiEvent: Flow<PlayerCardUiEvent> = _uiEvent.receiveAsFlow()
 
-    private val idPlayer = state.get<Long>("idPlayer")
+    private val idPlayer = state.get<Long>("playerId")
     private var fetchJob: Job? = null
     private var reloadsNumber = 0
 
@@ -96,8 +94,7 @@ class PlayerCardViewModel @Inject constructor(
     fun onEvent(event: CardUserEvent) {
         when(event) {
             is CardUserEvent.PlayerNameChanged -> {
-                val playerNameResult = validatePlayerNameUseCase
-                    .execute(event.playerName)
+                val playerNameResult = validatePlayerNameUseCase(event.playerName)
                 _uiState.update { state ->
                     state.copy(
                         playerModel = state.playerModel.copy(name = event.playerName),
@@ -106,19 +103,21 @@ class PlayerCardViewModel @Inject constructor(
                 }
             }
             is CardUserEvent.PressSaveButton -> {
-                val playerNameResult =
-                    validatePlayerNameUseCase.execute(_uiState.value.playerModel.name)
-                if(playerNameResult.successful) {
-                    updatePlayerDataToRepository()
-                } else {
-                    viewModelScope.launch {
-                        _uiEvent.send(
-                            PlayerCardUiEvent.ShowMessage(
-                                message = R.string.message_error_player_info,
-                                textAction = R.string.snackbar_btn_reload,
-                                onAction = ::reloadDataModel
+                _uiState.value.playerModel.name.let {
+                    val playerNameResult =
+                        validatePlayerNameUseCase(it)
+                    if(it.isNotEmpty() && playerNameResult.successful) {
+                        updatePlayerDataToRepository()
+                    } else {
+                        viewModelScope.launch {
+                            _uiEvent.send(
+                                PlayerCardUiEvent.ShowMessage(
+                                    message = R.string.message_error_player_info,
+                                    textAction = R.string.snackbar_btn_reload,
+                                    onAction = ::reloadDataModel
+                                )
                             )
-                        )
+                        }
                     }
                 }
             }

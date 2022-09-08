@@ -10,7 +10,7 @@
         <item name="colorSecondaryVariant">@color/brandOrange500</item>
         <item name="colorOnSecondary">@color/black</item>
 
-        <item name="colorSurface">@color/brandBasilGreen100</item>
+        <item name="colorSurface">@color/brandBasilGreen50</item>
         <item name="colorOnSurface">@color/brandBasilOrange800</item>
 
         <item name="android:colorBackground">@color/brandBasilOrange50</item>
@@ -23,5 +23,4 @@
         <item name="colorPrimaryDark">?attr/colorPrimaryVariant</item>
 
     </style>
-
 </resources>

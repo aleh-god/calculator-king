@@ -134,6 +134,7 @@
 
     <style name="Widget.KingCalculator.OutlinedButton" parent="Widget.MaterialComponents.Button.OutlinedButton">
         <item name="android:textColor">?attr/colorOnSurface</item>
+        <item name="strokeColor">?attr/colorOnBackground</item>
         <item name="strokeWidth">@dimen/custom_button_stroke_width</item>
     </style>
 

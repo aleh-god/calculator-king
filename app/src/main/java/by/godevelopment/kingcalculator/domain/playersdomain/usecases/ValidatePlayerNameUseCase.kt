@@ -6,8 +6,8 @@ import javax.inject.Inject
 
 class ValidatePlayerNameUseCase @Inject constructor()  {
 
-    fun execute(playerName: String): ValidationResult {
-        if(playerName.length < 3) {
+    operator fun invoke(playerName: String): ValidationResult {
+        if(playerName.length in 1..3) {
             return ValidationResult(
                 successful = false,
                 errorMessage = R.string.message_error_validate_player_name_length

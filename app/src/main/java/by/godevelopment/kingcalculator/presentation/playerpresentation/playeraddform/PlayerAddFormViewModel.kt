@@ -3,14 +3,12 @@ package by.godevelopment.kingcalculator.presentation.playerpresentation.playerad
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import by.godevelopment.kingcalculator.R
-import by.godevelopment.kingcalculator.di.IoDispatcher
 import by.godevelopment.kingcalculator.domain.commons.models.ResultDataBase
 import by.godevelopment.kingcalculator.domain.playersdomain.models.PlayerModel
 import by.godevelopment.kingcalculator.domain.playersdomain.repositories.PlayerRepository
 import by.godevelopment.kingcalculator.domain.playersdomain.usecases.ValidateEmailUseCase
 import by.godevelopment.kingcalculator.domain.playersdomain.usecases.ValidatePlayerNameUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.*
@@ -44,8 +42,7 @@ class PlayerAddFormViewModel @Inject constructor(
                 }
             }
             is AddFormUserEvent.PlayerNameChanged -> {
-                val playerNameResult = validatePlayerNameUseCase
-                    .execute(event.playerName)
+                val playerNameResult = validatePlayerNameUseCase(event.playerName)
                 _uiState.update {
                     it.copy(
                         playerName = event.playerName,
@@ -73,8 +70,7 @@ class PlayerAddFormViewModel @Inject constructor(
 
     private fun checkErrorInFiledUiState(): Boolean {
         val emailResult = validateEmailUseCase.execute(_uiState.value.email)
-        val playerNameResult = validatePlayerNameUseCase
-            .execute(_uiState.value.playerName)
+        val playerNameResult = validatePlayerNameUseCase(_uiState.value.playerName)
         return listOf(emailResult, playerNameResult).any { !it.successful }
     }
 

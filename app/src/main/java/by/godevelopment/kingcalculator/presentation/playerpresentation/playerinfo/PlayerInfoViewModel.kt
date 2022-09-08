@@ -25,7 +25,7 @@ class PlayerInfoViewModel @Inject constructor(
     private val playerRepository: PlayerRepository
 ) : ViewModel() {
 
-    val playerId = state.get<Long>("idPlayer")
+    val playerId = state.get<Long>("playerId")
 
     private val _uiState: MutableStateFlow<UiState> = MutableStateFlow(UiState())
     val uiState: StateFlow<UiState> = _uiState.asStateFlow()
