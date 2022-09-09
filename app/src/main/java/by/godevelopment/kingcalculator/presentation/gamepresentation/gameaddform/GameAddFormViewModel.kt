@@ -239,7 +239,7 @@ class GameAddFormViewModel @Inject constructor(
                 }
                 _uiEvent.send(
                     GameAddFormUiEvent.ShowMessage(
-                        message = R.string.message_error_input_values,
+                        message = result.errorMessage ?: R.string.message_error_input_values,
                         textAction = R.string.snackbar_btn_neutral_ok,
                         onAction = { }
                     ))
