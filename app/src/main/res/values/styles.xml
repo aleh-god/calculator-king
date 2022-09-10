@@ -58,6 +58,8 @@
         <item name="android:layout_marginEnd">@dimen/composite_item_common_margin</item>
         <item name="android:paddingStart">@dimen/medium_padding</item>
         <item name="android:paddingEnd">@dimen/medium_padding</item>
+        <item name="android:paddingTop">@dimen/big_padding</item>
+        <item name="android:paddingBottom">@dimen/big_padding</item>
     </style>
 
     <style name="Widget.KingCalculator.TextView" parent="Widget.MaterialComponents.TextView">

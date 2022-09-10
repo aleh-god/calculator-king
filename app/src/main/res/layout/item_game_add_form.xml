@@ -6,8 +6,6 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     style="@style/ThemeOverlay.KingCalculator.Body"
-    android:paddingTop="@dimen/big_padding"
-    android:paddingBottom="@dimen/big_padding"
     >
 
     <com.google.android.material.textview.MaterialTextView
