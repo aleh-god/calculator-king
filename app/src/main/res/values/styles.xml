@@ -24,6 +24,12 @@
 
     </style>
 
+    <style name="ThemeOverlay.KingCalculator.EditLayout" parent="">
+        <item name="android:paddingTop">@dimen/ultra_padding</item>
+        <item name="android:layout_gravity">center</item>
+        <item name="android:background">?attr/colorSurface</item>
+    </style>
+
     <style name="ThemeOverlay.KingCalculator.TableInfoItemCardView" parent="">
         <item name="cardElevation">@dimen/rule_zero</item>
         <item name="cardCornerRadius">@dimen/rule_zero</item>

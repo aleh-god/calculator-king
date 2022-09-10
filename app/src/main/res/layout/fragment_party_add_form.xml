@@ -6,8 +6,7 @@
     tools:context=".presentation.partypresentation.partyaddform.PartyAddFormFragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingVertical="@dimen/ultra_padding"
-    android:layout_gravity="center"
+    style="@style/ThemeOverlay.KingCalculator.EditLayout"
     >
 
     <com.google.android.material.textfield.TextInputLayout
