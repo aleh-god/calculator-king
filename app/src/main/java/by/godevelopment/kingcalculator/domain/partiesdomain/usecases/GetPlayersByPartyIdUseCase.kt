@@ -1,13 +1,11 @@
 package by.godevelopment.kingcalculator.domain.partiesdomain.usecases
 
 import by.godevelopment.kingcalculator.R
-import by.godevelopment.kingcalculator.commons.DELETED_STRING_VALUE
 import by.godevelopment.kingcalculator.domain.commons.helpers.StringHelper
+import by.godevelopment.kingcalculator.domain.commons.models.Players
 import by.godevelopment.kingcalculator.domain.commons.models.ResultDataBase
-import by.godevelopment.kingcalculator.domain.gamesdomain.models.Players
 import by.godevelopment.kingcalculator.domain.partiesdomain.models.PlayersInPartyModel
 import by.godevelopment.kingcalculator.domain.partiesdomain.repositories.PartyRepository
-import by.godevelopment.kingcalculator.domain.playersdomain.models.PlayerModel
 import javax.inject.Inject
 
 class GetPlayersByPartyIdUseCase @Inject constructor(
@@ -16,9 +14,8 @@ class GetPlayersByPartyIdUseCase @Inject constructor(
 ) {
 
     suspend operator fun invoke(partyId: Long): ResultDataBase<PlayersInPartyModel> {
-
         val result = partyRepository.getPlayersByPartyId(partyId)
-        return when(result) {
+        return when (result) {
             is ResultDataBase.Error -> { ResultDataBase.Error(message = result.message) }
             is ResultDataBase.Success -> {
                 val map = result.value

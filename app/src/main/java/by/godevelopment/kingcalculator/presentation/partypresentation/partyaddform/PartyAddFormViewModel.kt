@@ -4,14 +4,12 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import by.godevelopment.kingcalculator.R
 import by.godevelopment.kingcalculator.data.entities.PartyNote
-import by.godevelopment.kingcalculator.di.IoDispatcher
 import by.godevelopment.kingcalculator.domain.commons.models.ResultDataBase
 import by.godevelopment.kingcalculator.domain.commons.models.ValidationResult
 import by.godevelopment.kingcalculator.domain.partiesdomain.repositories.PartyRepository
 import by.godevelopment.kingcalculator.domain.partiesdomain.usecases.ValidatePartyNameUseCase
 import by.godevelopment.kingcalculator.domain.playersdomain.usecases.ValidatePlayersChoiceUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.*
@@ -22,13 +20,13 @@ import javax.inject.Inject
 class PartyAddFormViewModel @Inject constructor(
     private val partyRepository: PartyRepository,
     private val validatePartyNameUseCase: ValidatePartyNameUseCase,
-    private val validatePlayersChoiceUseCase: ValidatePlayersChoiceUseCase,
+    private val validatePlayersChoiceUseCase: ValidatePlayersChoiceUseCase
 ) : ViewModel() {
 
     private val _uiState: MutableStateFlow<AddPartyFormState> = MutableStateFlow(AddPartyFormState())
     val uiState: StateFlow<AddPartyFormState> = _uiState.asStateFlow()
 
-    private val _uiEvent  = Channel<PartyAddFormUiEvent>()
+    private val _uiEvent = Channel<PartyAddFormUiEvent>()
     val uiEvent: Flow<PartyAddFormUiEvent> = _uiEvent.receiveAsFlow()
 
     private var suspendJob: Job? = null
@@ -42,13 +40,15 @@ class PartyAddFormViewModel @Inject constructor(
     }
 
     fun onEvent(event: AddPartyFormUserEvent) {
-        when(event) {
+        when (event) {
             is AddPartyFormUserEvent.PartyNameChanged -> {
                 val result = validatePartyNameUseCase.execute(event.partyName)
-                _uiState.update { it.copy(
-                    partyName = event.partyName,
-                    partyNameError = result.errorMessage
-                ) }
+                _uiState.update {
+                    it.copy(
+                        partyName = event.partyName,
+                        partyNameError = result.errorMessage
+                    )
+                }
             }
             is AddPartyFormUserEvent.PlayerOneNameChanged -> {
                 _uiState.update { it.copy(playerOneName = event.playerOneName) }
@@ -76,7 +76,7 @@ class PartyAddFormViewModel @Inject constructor(
         suspendJob?.cancel()
         suspendJob = viewModelScope.launch {
             _uiState.update { it.copy(showsProgress = true) }
-            if(checkInputFieldsUiState()) {
+            if (checkInputFieldsUiState()) {
                 val newParty = uiState.value.let {
                     PartyNote(
                         partyName = it.partyName,
@@ -90,27 +90,31 @@ class PartyAddFormViewModel @Inject constructor(
                 }
                 val createResult = partyRepository
                     .createNewPartyAndReturnId(newParty)
-                when(createResult) {
+                when (createResult) {
                     is ResultDataBase.Error -> {
-                        _uiEvent.send(PartyAddFormUiEvent.ShowMessage(
-                            R.string.message_error_data_save,
-                            textAction = R.string.snackbar_btn_neutral_ok,
-                            onAction = { }
-                        ))
-                    }
-                    is ResultDataBase.Success -> {
-                        if (createResult.value < 0) {
-                            _uiEvent.send(PartyAddFormUiEvent.ShowMessage(
+                        _uiEvent.send(
+                            PartyAddFormUiEvent.ShowMessage(
                                 R.string.message_error_data_save,
                                 textAction = R.string.snackbar_btn_neutral_ok,
                                 onAction = { }
-                            ))
+                            )
+                        )
+                    }
+                    is ResultDataBase.Success -> {
+                        if (createResult.value < 0) {
+                            _uiEvent.send(
+                                PartyAddFormUiEvent.ShowMessage(
+                                    R.string.message_error_data_save,
+                                    textAction = R.string.snackbar_btn_neutral_ok,
+                                    onAction = { }
+                                )
+                            )
+                        } else {
+                            _uiEvent.send(PartyAddFormUiEvent.NavigateToList(createResult.value))
                         }
-                        else { _uiEvent.send(PartyAddFormUiEvent.NavigateToList(createResult.value)) }
                     }
                 }
-            }
-            else {
+            } else {
                 _uiEvent.send(
                     PartyAddFormUiEvent.ShowMessage(
                         R.string.message_error_players_info_empty,
@@ -136,7 +140,7 @@ class PartyAddFormViewModel @Inject constructor(
                     playerOneError = it,
                     playerTwoError = it,
                     playerThreeError = it,
-                    playerFourError = it,
+                    playerFourError = it
                 )
             }
         }

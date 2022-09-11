@@ -34,7 +34,8 @@ class PartyAddFormFragment : Fragment() {
     private var snackbar: Snackbar? = null
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentPartyAddFormBinding.inflate(inflater, container, false)
@@ -53,16 +54,12 @@ class PartyAddFormFragment : Fragment() {
                 .collect { uiState ->
                     showProgressUi(uiState.showsProgress)
                     binding.apply {
-                        partyName.error = if (uiState.partyNameError != null) getString(uiState.partyNameError)
-                        else null
-                        playerOneMenu.error = if (uiState.playerOneError != null)  getString(uiState.playerOneError)
-                        else null
-                        playerTwoMenu.error = if (uiState.playerTwoError != null)  getString(uiState.playerTwoError)
-                        else null
-                        playerThreeMenu.error = if (uiState.playerThreeError != null)  getString(uiState.playerThreeError)
-                        else null
-                        playerFourMenu.error = if (uiState.playerFourError != null) getString(uiState.playerFourError)
-                        else null
+                        // if (uiState.partyNameError != null) getString(uiState.partyNameError) else null
+                        partyName.error = uiState.partyNameError?.let { getString(it) }
+                        playerOneMenu.error = uiState.playerOneError?.let { getString(it) }
+                        playerTwoMenu.error = uiState.playerTwoError?.let { getString(it) }
+                        playerThreeMenu.error = uiState.playerThreeError?.let { getString(it) }
+                        playerFourMenu.error = uiState.playerFourError?.let { getString(it) }
 
                         ArrayAdapter(
                             requireContext(),
@@ -84,7 +81,7 @@ class PartyAddFormFragment : Fragment() {
             .flowWithLifecycle(lifecycle)
             .onEach { event ->
 
-                when(event) {
+                when (event) {
                     is PartyAddFormUiEvent.NavigateToBackScreen -> {
                         findNavController().navigate(
                             PartyAddFormFragmentDirections
@@ -95,13 +92,10 @@ class PartyAddFormFragment : Fragment() {
                         snackbar?.dismiss()
                         snackbar = Snackbar
                             .make(binding.root, event.message, Snackbar.LENGTH_INDEFINITE)
-                            .setAction(event.textAction)
-                            { event.onAction() }
+                            .setAction(event.textAction) { event.onAction() }
                         snackbar?.show()
                     }
-                    is PartyAddFormUiEvent.NavigateToList -> {
-                        navigateToPartyCard(event.idParty)
-                    }
+                    is PartyAddFormUiEvent.NavigateToList -> { navigateToPartyCard(event.idParty) }
                 }
             }
             .launchIn(lifecycle.coroutineScope)

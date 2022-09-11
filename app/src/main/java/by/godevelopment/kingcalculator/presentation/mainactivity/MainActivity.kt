@@ -1,7 +1,6 @@
 package by.godevelopment.kingcalculator.presentation.mainactivity
 
 import android.os.Bundle
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
@@ -10,7 +9,6 @@ import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
 import by.godevelopment.kingcalculator.R
-import by.godevelopment.kingcalculator.commons.TAG
 import by.godevelopment.kingcalculator.databinding.ActivityMainBinding
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
@@ -26,9 +24,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private val listener by lazy {
-        Log.i(TAG, "listener by lazy: ${binding.toolbar.menu} ")
         NavController.OnDestinationChangedListener { _, destination, _ ->
-            Log.i(TAG, "listener by destination: $destination")
             binding.toolbar.menu.findItem(R.id.menu_players)?.isVisible =
                 destination.id == R.id.partiesListFragment
             binding.toolbar.menu.findItem(R.id.menu_delete_all)?.isVisible =
@@ -41,17 +37,14 @@ class MainActivity : AppCompatActivity() {
         _binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         setSupportActionBar(binding.toolbar)
-        Log.i(TAG, "onCreate: ")
         val appBarConfiguration = AppBarConfiguration(navController.graph)
         binding.toolbar.setupWithNavController(navController, appBarConfiguration)
-
         setupListeners()
-
     }
 
     private fun setupListeners() {
         navController.addOnDestinationChangedListener(listener)
-        binding.toolbar.setNavigationOnClickListener { onBackPressed() }    // For Game Add Form Screen
+        binding.toolbar.setNavigationOnClickListener { onBackPressed() } // For Game Add Form Screen navigation logic
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -89,13 +82,13 @@ class MainActivity : AppCompatActivity() {
             R.id.settingsFragment -> R.string.help_text_data_settings
             else -> R.string.message_error_data_null
         }
-        //  TODO("Rework to DialogFragment")
+
         Snackbar.make(
             binding.root,
             helpText,
-            Snackbar.LENGTH_LONG
+            Snackbar.LENGTH_INDEFINITE
         )
-            .setAction(R.string.snackbar_btn_neutral_ok, null)
+            .setAction(R.string.snackbar_btn_neutral_ok) {}
             .show()
     }
 

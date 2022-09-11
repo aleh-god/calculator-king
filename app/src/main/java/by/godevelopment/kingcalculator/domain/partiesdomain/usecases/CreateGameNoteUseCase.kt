@@ -8,6 +8,7 @@ import javax.inject.Inject
 class CreateGameNoteUseCase @Inject constructor(
     private val partyRepository: PartyRepository
 ) {
+
     suspend operator fun invoke(partyId: Long, gameType: GameType): ResultDataBase<Long> =
         partyRepository.createGameNote(
             partyId = partyId,

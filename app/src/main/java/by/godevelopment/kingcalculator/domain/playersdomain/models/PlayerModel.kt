@@ -8,8 +8,8 @@ data class PlayerModel(
     val name: String,
     val email: String,
     val isActive: Boolean,
-    @ColorRes
-    val avatar: Int? = null,
     @DrawableRes
+    val avatar: Int? = null,
+    @ColorRes
     val color: Int? = null
 )

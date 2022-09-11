@@ -12,7 +12,7 @@ class GetGamesByPartyIdUseCase @Inject constructor(
 
     suspend operator fun invoke(partyId: Long): ResultDataBase<List<GamesTableItemModel>> {
         val listResult = partyRepository.getAllGamesNotesByPartyId(partyId)
-        return when(listResult) {
+        return when (listResult) {
             is ResultDataBase.Error -> ResultDataBase.Error(message = listResult.message)
             is ResultDataBase.Success -> {
                 val gamesNotes = listResult

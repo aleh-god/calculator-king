@@ -24,9 +24,10 @@ class GamesDataSource @Inject constructor(
         val gameId = gamesDao.insertGamesNote(
             GameNote(
                 partyId = partyId,
-                gameType = gameType)
+                gameType = gameType
+            )
         )
-        return if (gameId != ROWS_NOT_INSERTED) { ResultDataBase.Success(value = gameId) }
+        return if (gameId != ROWS_NOT_INSERTED) ResultDataBase.Success(value = gameId)
         else ResultDataBase.Error(message = R.string.message_error_bad_database)
     }
 
@@ -35,9 +36,9 @@ class GamesDataSource @Inject constructor(
 
     suspend fun updateTimeInGameNoteByGameId(gameId: Long): ResultDataBase<Int> {
         gamesDao.getGameNoteById(gameId)?.let {
-            val resultUpdate = gamesDao.updateGamesNote(it.copy(
-                finishedAt = Calendar.getInstance().timeInMillis
-            ))
+            val resultUpdate = gamesDao.updateGamesNote(
+                it.copy(finishedAt = Calendar.getInstance().timeInMillis)
+            )
             return ResultDataBase.Success(value = resultUpdate)
         }
         return ResultDataBase.Error(message = R.string.message_error_bad_database)

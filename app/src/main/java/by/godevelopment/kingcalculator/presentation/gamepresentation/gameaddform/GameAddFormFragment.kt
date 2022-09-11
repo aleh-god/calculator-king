@@ -32,7 +32,8 @@ class GameAddFormFragment : Fragment() {
     private val binding get() = _binding!!
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentGameAddFormBinding.inflate(inflater, container, false)
@@ -43,12 +44,13 @@ class GameAddFormFragment : Fragment() {
         requireActivity().onBackPressedDispatcher.addCallback(
             viewLifecycleOwner,
             object : OnBackPressedCallback(true) {
-            override fun handleOnBackPressed() {
-                findNavController().navigate(
-                    GameAddFormFragmentDirections.actionGameAddFormFragmentToPartiesListFragment()
-                )
+                override fun handleOnBackPressed() {
+                    findNavController().navigate(
+                        GameAddFormFragmentDirections.actionGameAddFormFragmentToPartiesListFragment()
+                    )
+                }
             }
-        })
+        )
         return binding.root
     }
 
@@ -90,8 +92,7 @@ class GameAddFormFragment : Fragment() {
                     is GameAddFormUiEvent.ShowMessage -> {
                         Snackbar
                             .make(binding.root, event.message, Snackbar.LENGTH_INDEFINITE)
-                            .setAction(event.textAction)
-                            { event.onAction() }
+                            .setAction(event.textAction) { event.onAction() }
                             .show()
                     }
                     is GameAddFormUiEvent.NavigateToPartyCard -> navigateToPartyCard(event.navArg)

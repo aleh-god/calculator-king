@@ -24,6 +24,12 @@
 
     </style>
 
+    <style name="ThemeOverlay.KingCalculator.EditLayout" parent="">
+        <item name="android:paddingTop">@dimen/ultra_padding</item>
+        <item name="android:layout_gravity">center</item>
+        <item name="android:background">?attr/colorSurface</item>
+    </style>
+
     <style name="ThemeOverlay.KingCalculator.TableInfoItemCardView" parent="">
         <item name="cardElevation">@dimen/rule_zero</item>
         <item name="cardCornerRadius">@dimen/rule_zero</item>
@@ -58,6 +64,8 @@
         <item name="android:layout_marginEnd">@dimen/composite_item_common_margin</item>
         <item name="android:paddingStart">@dimen/medium_padding</item>
         <item name="android:paddingEnd">@dimen/medium_padding</item>
+        <item name="android:paddingTop">@dimen/big_padding</item>
+        <item name="android:paddingBottom">@dimen/big_padding</item>
     </style>
 
     <style name="Widget.KingCalculator.TextView" parent="Widget.MaterialComponents.TextView">

@@ -22,7 +22,7 @@ class PlayersListViewModel @Inject constructor(
     private val _uiState: MutableStateFlow<UiState> = MutableStateFlow(UiState())
     val uiState: StateFlow<UiState> = _uiState.asStateFlow()
 
-    private val _uiEvent  = Channel<PlayersListUiEvent>()
+    private val _uiEvent = Channel<PlayersListUiEvent>()
     val uiEvent: Flow<PlayersListUiEvent> = _uiEvent.receiveAsFlow()
 
     private var fetchJob: Job? = null
@@ -40,11 +40,13 @@ class PlayersListViewModel @Inject constructor(
                 .catch { exception ->
                     Log.i(TAG, "viewModelScope.catch ${exception.message}")
                     _uiState.update { it.copy(isFetchingData = false) }
-                    _uiEvent.send(PlayersListUiEvent.ShowMessage(
-                        message = R.string.message_error_data_load,
-                        textAction = R.string.snackbar_btn_reload,
-                        onAction = ::reloadDataModel
-                    ))
+                    _uiEvent.send(
+                        PlayersListUiEvent.ShowMessage(
+                            message = R.string.message_error_data_load,
+                            textAction = R.string.snackbar_btn_reload,
+                            onAction = ::reloadDataModel
+                        )
+                    )
                 }
                 .collect { list ->
                     _uiState.update { it.copy(isFetchingData = false, dataList = list) }
@@ -59,8 +61,7 @@ class PlayersListViewModel @Inject constructor(
                 reloadsNumber = 0
                 _uiEvent.send(PlayersListUiEvent.NavigateToBackScreen)
             }
-        }
-        else {
+        } else {
             reloadsNumber++
             fetchDataModel()
         }

@@ -13,37 +13,36 @@ class GetPlayerInfoListUseCase @Inject constructor(
 ) {
     suspend operator fun invoke(playerId: Long): ResultDataBase<List<ItemPlayerInfoModel>> {
         val partiesResult = playerRepository.getAllPartiesByPlayerId(playerId)
-        return when(partiesResult) {
+        return when (partiesResult) {
             is ResultDataBase.Error -> ResultDataBase.Error(message = partiesResult.message)
             is ResultDataBase.Success -> {
-
                 val parties = partiesResult.value
                 val gamesResult = playerRepository.getAllGamesByPartyId(parties.map { it.id })
-                when(gamesResult) {
+                when (gamesResult) {
                     is ResultDataBase.Error -> ResultDataBase.Error(message = gamesResult.message)
                     is ResultDataBase.Success -> {
-
                         val games = gamesResult.value
                         val tricksResult = playerRepository.getAllTricksByPlayerId(playerId)
-                        when(tricksResult) {
+                        when (tricksResult) {
                             is ResultDataBase.Error -> ResultDataBase.Error(message = tricksResult.message)
                             is ResultDataBase.Success -> {
-
                                 val tricks = tricksResult.value
-                                ResultDataBase.Success(value = listOf(
-                                    ItemPlayerInfoModel(
-                                        type = getPlayerTotalPartiesUseCase.TYPE_NAME,
-                                        value = getPlayerTotalPartiesUseCase(parties)
-                                    ),
-                                    ItemPlayerInfoModel(
-                                        type = getPlayerTotalGamesUseCase.TYPE_NAME,
-                                        value = getPlayerTotalGamesUseCase(games)
-                                    ),
-                                    ItemPlayerInfoModel(
-                                        type = getPlayerTotalScoreUseCase.TYPE_NAME,
-                                        value = getPlayerTotalScoreUseCase(tricks)
+                                ResultDataBase.Success(
+                                    value = listOf(
+                                        ItemPlayerInfoModel(
+                                            type = getPlayerTotalPartiesUseCase.partiesRes,
+                                            value = getPlayerTotalPartiesUseCase(parties)
+                                        ),
+                                        ItemPlayerInfoModel(
+                                            type = getPlayerTotalGamesUseCase.gamesRes,
+                                            value = getPlayerTotalGamesUseCase(games)
+                                        ),
+                                        ItemPlayerInfoModel(
+                                            type = getPlayerTotalScoreUseCase.scoreRes,
+                                            value = getPlayerTotalScoreUseCase(tricks)
+                                        )
                                     )
-                                ))
+                                )
                             }
                         }
                     }

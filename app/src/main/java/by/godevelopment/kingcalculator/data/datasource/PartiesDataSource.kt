@@ -23,9 +23,9 @@ class PartiesDataSource @Inject constructor(
 
     suspend fun updateTimeInPartyNoteByPartyId(partyId: Long): ResultDataBase<Int> {
         partiesDao.getPartyNoteById(partyId)?.let {
-            val resultUpdate = partiesDao.updatePartyNote(it.copy(
-                partyLastTime = Calendar.getInstance().timeInMillis
-            ))
+            val resultUpdate = partiesDao.updatePartyNote(
+                it.copy(partyLastTime = Calendar.getInstance().timeInMillis)
+            )
             return ResultDataBase.Success(value = resultUpdate)
         }
         return ResultDataBase.Error(message = R.string.message_error_data_save)

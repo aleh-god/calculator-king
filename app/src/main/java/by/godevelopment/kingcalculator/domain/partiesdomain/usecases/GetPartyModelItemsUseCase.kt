@@ -29,23 +29,23 @@ class GetPartyModelItemsUseCase @Inject constructor(
                 list
                     .sortedByDescending { it.partyLastTime }
                     .map {
-                    ItemPartyModel(
-                        id = it.id,
-                        partyName = it.partyName,
-                        partyStartTime = it.startedAt.toDataString(),
-                        partyLastTime = it.partyLastTime.toDataString(),
-                        isComplete = it.partyGamesCount < NUMBER_OF_ALL_KING_GAMES,
-                        partyGamesCount = it.partyGamesCount.toString(),
-                        player_one = it.player_one ?: deletedPlayer,
-                        player_one_score = kingHelper.calculateScoreToString(it.player_one_tricks),
-                        player_two = it.player_two ?: deletedPlayer,
-                        player_two_score = kingHelper.calculateScoreToString(it.player_two_tricks),
-                        player_three = it.player_three ?: deletedPlayer,
-                        player_three_score = kingHelper.calculateScoreToString(it.player_three_tricks),
-                        player_four = it.player_four ?: deletedPlayer,
-                        player_four_score = kingHelper.calculateScoreToString(it.player_four_tricks)
-                    )
-                }
+                        ItemPartyModel(
+                            id = it.id,
+                            partyName = it.partyName,
+                            partyStartTime = it.startedAt.toDataString(),
+                            partyLastTime = it.partyLastTime.toDataString(),
+                            isComplete = it.partyGamesCount < NUMBER_OF_ALL_KING_GAMES,
+                            partyGamesCount = it.partyGamesCount.toString(),
+                            player_one = it.player_one ?: deletedPlayer,
+                            player_one_score = kingHelper.calculateScoreToString(it.player_one_tricks),
+                            player_two = it.player_two ?: deletedPlayer,
+                            player_two_score = kingHelper.calculateScoreToString(it.player_two_tricks),
+                            player_three = it.player_three ?: deletedPlayer,
+                            player_three_score = kingHelper.calculateScoreToString(it.player_three_tricks),
+                            player_four = it.player_four ?: deletedPlayer,
+                            player_four_score = kingHelper.calculateScoreToString(it.player_four_tricks)
+                        )
+                    }
             }
     }
 }

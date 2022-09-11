@@ -31,7 +31,8 @@ class PlayerAddFormFragment : Fragment() {
     private var snackbar: Snackbar? = null
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentPlayerAddFormBinding.inflate(inflater, container, false)
@@ -50,10 +51,8 @@ class PlayerAddFormFragment : Fragment() {
                     .flowWithLifecycle(lifecycle)
                     .collect { uiState ->
                         showProgressUi(uiState.showsProgress)
-                        playerName.error = if (uiState.playerNameError != null) getString(uiState.playerNameError)
-                        else null
-                        playerEmail.error = if (uiState.emailError != null) getString(uiState.emailError)
-                        else null
+                        playerName.error = uiState.playerNameError?.let { getString(it) }
+                        playerEmail.error = uiState.emailError?.let { getString(it) }
                     }
             }
         }
@@ -77,7 +76,7 @@ class PlayerAddFormFragment : Fragment() {
         viewModel.uiEvent
             .flowWithLifecycle(lifecycle)
             .onEach { event ->
-                when(event) {
+                when (event) {
                     is PlayerAddFormUiEvent.NavigateToBackScreen -> {
                         findNavController().navigate(
                             PlayerAddFormFragmentDirections
@@ -88,8 +87,7 @@ class PlayerAddFormFragment : Fragment() {
                         snackbar?.dismiss()
                         snackbar = Snackbar
                             .make(binding.root, event.message, Snackbar.LENGTH_INDEFINITE)
-                            .setAction(event.textAction)
-                            { event.onAction() }
+                            .setAction(event.textAction) { event.onAction() }
                         snackbar?.show()
                     }
                 }

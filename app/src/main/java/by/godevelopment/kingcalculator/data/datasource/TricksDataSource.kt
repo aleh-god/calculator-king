@@ -17,7 +17,7 @@ class TricksDataSource @Inject constructor(
 
     suspend fun createTricksNote(tricksNote: TricksNote): ResultDataBase<Long> {
         val noteId = tricksDao.insertTricksNote(tricksNote)
-        return if (noteId != ROWS_NOT_INSERTED) { ResultDataBase.Success(value = noteId) }
+        return if (noteId != ROWS_NOT_INSERTED) ResultDataBase.Success(value = noteId)
         else ResultDataBase.Error(message = R.string.message_error_bad_database)
     }
 

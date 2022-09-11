@@ -2,9 +2,9 @@ package by.godevelopment.kingcalculator.domain.partiesdomain.repositories
 
 import by.godevelopment.kingcalculator.data.entities.PartyNote
 import by.godevelopment.kingcalculator.domain.commons.models.GameType
+import by.godevelopment.kingcalculator.domain.commons.models.Players
 import by.godevelopment.kingcalculator.domain.commons.models.ResultDataBase
 import by.godevelopment.kingcalculator.domain.gamesdomain.models.GameModel
-import by.godevelopment.kingcalculator.domain.gamesdomain.models.Players
 import by.godevelopment.kingcalculator.domain.gamesdomain.models.TricksNoteModel
 import by.godevelopment.kingcalculator.domain.partiesdomain.models.RawItemPartyModel
 import by.godevelopment.kingcalculator.domain.playersdomain.models.PartyModel
@@ -27,7 +27,7 @@ interface PartyRepository {
 
     suspend fun getAllTricksNotesByGameId(gameId: Long): List<TricksNoteModel>
 
-    suspend fun createGameNote(partyId: Long, gameType: GameType) : ResultDataBase<Long>
+    suspend fun createGameNote(partyId: Long, gameType: GameType): ResultDataBase<Long>
 
     suspend fun getPartyModelById(partyId: Long): ResultDataBase<PartyModel>
 

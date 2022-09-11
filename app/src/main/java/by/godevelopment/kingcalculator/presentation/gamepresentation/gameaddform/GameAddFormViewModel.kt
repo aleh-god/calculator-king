@@ -7,11 +7,12 @@ import androidx.lifecycle.viewModelScope
 import by.godevelopment.kingcalculator.R
 import by.godevelopment.kingcalculator.commons.BODY_ROW_TYPE
 import by.godevelopment.kingcalculator.commons.TAG
+import by.godevelopment.kingcalculator.commons.ZERO
+import by.godevelopment.kingcalculator.domain.commons.models.Players
 import by.godevelopment.kingcalculator.domain.commons.models.ResultDataBase
 import by.godevelopment.kingcalculator.domain.gamesdomain.models.MultiItemModel
-import by.godevelopment.kingcalculator.domain.gamesdomain.models.Players
-import by.godevelopment.kingcalculator.domain.gamesdomain.usecases.GetMultiItemModelsUseCase
 import by.godevelopment.kingcalculator.domain.gamesdomain.repositories.GetPartyIdByGameIdRepository
+import by.godevelopment.kingcalculator.domain.gamesdomain.usecases.GetMultiItemModelsUseCase
 import by.godevelopment.kingcalculator.domain.gamesdomain.usecases.SaveGameUseCase
 import by.godevelopment.kingcalculator.domain.gamesdomain.usecases.ValidatePlayersScoreUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -35,7 +36,7 @@ class GameAddFormViewModel @Inject constructor(
     private val _uiState: MutableStateFlow<UiState> = MutableStateFlow(UiState())
     val uiState: StateFlow<UiState> = _uiState.asStateFlow()
 
-    private val _uiEvent  = Channel<GameAddFormUiEvent>()
+    private val _uiEvent = Channel<GameAddFormUiEvent>()
     val uiEvent: Flow<GameAddFormUiEvent> = _uiEvent.receiveAsFlow()
 
     private var fetchJob: Job? = null
@@ -52,21 +53,21 @@ class GameAddFormViewModel @Inject constructor(
             try {
                 _uiState.update { it.copy(isFetchingData = true) }
                 val listResult = getMultiItemModels(gameId = gameId ?: throw NullPointerException())
-                when(listResult) {
+                when (listResult) {
                     is ResultDataBase.Error -> {
                         _uiEvent.send(
                             GameAddFormUiEvent.ShowMessage(
                                 message = listResult.message,
                                 textAction = R.string.snackbar_btn_reload,
                                 onAction = { reloadDataModel() }
-                            ))
+                            )
+                        )
                     }
                     is ResultDataBase.Success -> {
                         _uiState.update { it.copy(listMultiItems = listResult.value) }
                     }
                 }
-            }
-            catch (e: Exception) {
+            } catch (e: Exception) {
                 Log.i(TAG, "fetchDataModel.catch: ${e.message}")
                 _uiEvent.send(
                     GameAddFormUiEvent.ShowMessage(
@@ -75,8 +76,7 @@ class GameAddFormViewModel @Inject constructor(
                         onAction = { reloadDataModel() }
                     )
                 )
-            }
-            finally { _uiState.update { it.copy(isFetchingData = false) } }
+            } finally { _uiState.update { it.copy(isFetchingData = false) } }
         }
     }
 
@@ -87,8 +87,7 @@ class GameAddFormViewModel @Inject constructor(
                 reloadsNumber = 0
                 _uiEvent.send(GameAddFormUiEvent.NavigateToBackScreen)
             }
-        }
-        else {
+        } else {
             reloadsNumber++
             fetchDataModel()
         }
@@ -125,18 +124,18 @@ class GameAddFormViewModel @Inject constructor(
             var newList = state.listMultiItems
                 .map { multiItemModel ->
                     when {
-                        multiItemModel.gameType == currentGameType
-                                && multiItemModel.rowId == rowId -> {
-                            currentModel.copy(
-                                tricks = newCount,
-                                score = newScore,
-                                hasError = false
-                            )
-                        }
-                        multiItemModel.gameType == currentGameType
-                                && multiItemModel.rowId != rowId -> {
-                            multiItemModel.copy(hasError = false)
-                        }
+                        multiItemModel.gameType == currentGameType &&
+                                multiItemModel.rowId == rowId -> {
+                                    currentModel.copy(
+                                        tricks = newCount,
+                                        score = newScore,
+                                        hasError = false
+                                    )
+                                }
+                        multiItemModel.gameType == currentGameType &&
+                                multiItemModel.rowId != rowId -> {
+                                    multiItemModel.copy(hasError = false)
+                                }
                         else -> multiItemModel
                     }
                 }
@@ -146,13 +145,13 @@ class GameAddFormViewModel @Inject constructor(
                 .sortedBy { it.id }
                 .map {
                     newList.sumOf { item ->
-                        if(item.itemViewType == BODY_ROW_TYPE && item.playerNumber == it) item.score
-                        else 0
+                        if (item.itemViewType == BODY_ROW_TYPE && item.playerNumber == it) item.score
+                        else ZERO
                     }
                 }
 
             newList = newList.map {
-                when(it.playerNumber) {
+                when (it.playerNumber) {
                     Players.PlayerOne -> {
                         it.copy(totalPlayerScore = scoreList[0])
                     }
@@ -196,18 +195,20 @@ class GameAddFormViewModel @Inject constructor(
                                     message = R.string.message_error_data_save,
                                     textAction = R.string.snackbar_btn_neutral_ok,
                                     onAction = { }
-                                ))
+                                )
+                            )
                         }
                         is ResultDataBase.Success -> {
                             val partyIdResult = getPartyIdByGameIdRepository.getPartyIdByGameId(gameId)
-                            when(partyIdResult) {
+                            when (partyIdResult) {
                                 is ResultDataBase.Error -> {
                                     _uiEvent.send(
                                         GameAddFormUiEvent.ShowMessage(
                                             message = partyIdResult.message,
                                             textAction = R.string.snackbar_btn_neutral_ok,
                                             onAction = { }
-                                        ))
+                                        )
+                                    )
                                 }
                                 is ResultDataBase.Success -> {
                                     _uiEvent.send(
@@ -219,17 +220,16 @@ class GameAddFormViewModel @Inject constructor(
                             }
                         }
                     }
-                }
-                catch (e: Exception) {
+                } catch (e: Exception) {
                     Log.i(TAG, "saveGameData.catch: ${e.message}")
                     _uiEvent.send(
                         GameAddFormUiEvent.ShowMessage(
                             message = R.string.message_error_data_save,
                             textAction = R.string.snackbar_btn_neutral_ok,
                             onAction = { }
-                        ))
-                }
-                finally { _uiState.update { it.copy(isFetchingData = false) } }
+                        )
+                    )
+                } finally { _uiState.update { it.copy(isFetchingData = false) } }
             } else {
                 _uiState.update {
                     it.copy(
@@ -239,10 +239,11 @@ class GameAddFormViewModel @Inject constructor(
                 }
                 _uiEvent.send(
                     GameAddFormUiEvent.ShowMessage(
-                        message = R.string.message_error_input_values,
+                        message = result.errorMessage ?: R.string.message_error_input_values,
                         textAction = R.string.snackbar_btn_neutral_ok,
                         onAction = { }
-                    ))
+                    )
+                )
             }
         }
     }

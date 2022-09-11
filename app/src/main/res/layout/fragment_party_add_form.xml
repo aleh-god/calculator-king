@@ -6,8 +6,7 @@
     tools:context=".presentation.partypresentation.partyaddform.PartyAddFormFragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingVertical="@dimen/ultra_padding"
-    android:layout_gravity="center"
+    style="@style/ThemeOverlay.KingCalculator.EditLayout"
     >
 
     <com.google.android.material.textfield.TextInputLayout
@@ -49,7 +48,7 @@
         app:layout_constraintTop_toBottomOf="@id/party_name"
         app:layout_constraintBottom_toTopOf="@id/player_two_menu"
         android:layout_margin="@dimen/small_margin"
-        android:hint="@string/hint_text_player_one_email"
+        android:hint="@string/hint_text_player_one"
         style="@style/Widget.KingCalculator.ExposedDropdownMenu"
         >
         <AutoCompleteTextView
@@ -70,7 +69,7 @@
         app:layout_constraintTop_toBottomOf="@id/player_one_menu"
         app:layout_constraintBottom_toTopOf="@id/player_three_menu"
         android:layout_margin="@dimen/small_margin"
-        android:hint="@string/hint_text_player_two_email"
+        android:hint="@string/hint_text_player_two"
         style="@style/Widget.KingCalculator.ExposedDropdownMenu"
         >
         <AutoCompleteTextView
@@ -91,7 +90,7 @@
         app:layout_constraintTop_toBottomOf="@id/player_two_menu"
         app:layout_constraintBottom_toTopOf="@id/player_four_menu"
         android:layout_margin="@dimen/small_margin"
-        android:hint="@string/hint_text_player_three_email"
+        android:hint="@string/hint_text_player_three"
         style="@style/Widget.KingCalculator.ExposedDropdownMenu"
         >
         <AutoCompleteTextView
@@ -112,7 +111,7 @@
         app:layout_constraintTop_toBottomOf="@id/player_three_menu"
         app:layout_constraintBottom_toTopOf="@id/bttn_start"
         android:layout_margin="@dimen/small_margin"
-        android:hint="@string/hint_text_player_four_email"
+        android:hint="@string/hint_text_player_four"
         style="@style/Widget.KingCalculator.ExposedDropdownMenu"
         >
         <AutoCompleteTextView

@@ -8,7 +8,7 @@ import by.godevelopment.kingcalculator.data.entities.PlayerProfile
 import by.godevelopment.kingcalculator.data.entities.TricksNote
 
 @Database(entities = [PlayerProfile::class, GameNote::class, PartyNote::class, TricksNote::class], version = 1, exportSchema = false)
-abstract class KingDatabase: RoomDatabase() {
+abstract class KingDatabase : RoomDatabase() {
 
     abstract fun playersDao(): PlayersDao
 

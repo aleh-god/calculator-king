@@ -31,7 +31,8 @@ class PlayerCardFragment : Fragment() {
     private var snackbar: Snackbar? = null
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentPlayerCardBinding.inflate(inflater, container, false)
@@ -65,12 +66,9 @@ class PlayerCardFragment : Fragment() {
                     .collect { uiState ->
                         showProgress(uiState.showsProgress)
                         playerNameEdit.text.apply {
-                            if(this.isNullOrEmpty())
-                                playerNameEdit.setText(uiState.playerModel.name)
+                            if (this.isNullOrEmpty()) playerNameEdit.setText(uiState.playerModel.name)
                         }
-                        playerName.error =
-                            if (uiState.playerNameError != null) getString(uiState.playerNameError)
-                            else null
+                        playerName.error = uiState.playerNameError?.let { getString(it) }
                     }
             }
         }
@@ -80,7 +78,7 @@ class PlayerCardFragment : Fragment() {
         viewModel.uiEvent
             .flowWithLifecycle(lifecycle)
             .onEach { event ->
-                when(event) {
+                when (event) {
                     is PlayerCardUiEvent.NavigateToBackScreen -> {
                         findNavController().navigate(
                             PlayerCardFragmentDirections
@@ -91,8 +89,7 @@ class PlayerCardFragment : Fragment() {
                         snackbar?.dismiss()
                         snackbar = Snackbar
                             .make(binding.root, event.message, Snackbar.LENGTH_INDEFINITE)
-                            .setAction(event.textAction)
-                            { event.onAction() }
+                            .setAction(event.textAction) { event.onAction() }
                         snackbar?.show()
                     }
                 }

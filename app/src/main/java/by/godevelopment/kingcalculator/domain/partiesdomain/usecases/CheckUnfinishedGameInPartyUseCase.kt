@@ -8,6 +8,7 @@ import javax.inject.Inject
 class CheckUnfinishedGameInPartyUseCase @Inject constructor(
     private val partyRepository: PartyRepository
 ) {
+
     suspend operator fun invoke(partyId: Long): ResultDataBase<Long?> =
         partyRepository
             .getAllGamesNotesByPartyId(partyId)

@@ -24,7 +24,8 @@ class InfoAdapter(
             ItemPlayerInfoListBinding.inflate(
                 LayoutInflater.from(parent.context),
                 parent,
-                false)
+                false
+            )
         )
     }
 

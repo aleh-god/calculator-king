@@ -19,19 +19,19 @@ import javax.inject.Inject
 class PlayerAddFormViewModel @Inject constructor(
     private val playerRepository: PlayerRepository,
     private val validateEmailUseCase: ValidateEmailUseCase,
-    private val validatePlayerNameUseCase: ValidatePlayerNameUseCase,
-): ViewModel() {
+    private val validatePlayerNameUseCase: ValidatePlayerNameUseCase
+) : ViewModel() {
 
     private val _uiState: MutableStateFlow<AddFormState> = MutableStateFlow(AddFormState())
     val uiState: StateFlow<AddFormState> = _uiState.asStateFlow()
 
-    private val _uiEvent  = Channel<PlayerAddFormUiEvent>()
+    private val _uiEvent = Channel<PlayerAddFormUiEvent>()
     val uiEvent: Flow<PlayerAddFormUiEvent> = _uiEvent.receiveAsFlow()
 
     private var suspendJob: Job? = null
 
     fun onEvent(event: AddFormUserEvent) {
-        when(event) {
+        when (event) {
             is AddFormUserEvent.EmailChanged -> {
                 val emailResult = validateEmailUseCase.execute(event.email)
                 _uiState.update {
@@ -51,7 +51,7 @@ class PlayerAddFormViewModel @Inject constructor(
                 }
             }
             is AddFormUserEvent.PressSaveButton -> {
-                if(!checkErrorInFiledUiState()) {
+                if (!checkErrorInFiledUiState()) {
                     savePlayerDataToRepository()
                 } else {
                     viewModelScope.launch {
@@ -86,12 +86,14 @@ class PlayerAddFormViewModel @Inject constructor(
                 )
             )
             when (result) {
-                is ResultDataBase.Error -> { _uiEvent.send(
-                    PlayerAddFormUiEvent.ShowMessage(
-                        message = result.message,
-                        textAction = R.string.snackbar_btn_neutral_ok,
-                        onAction = { }
-                    ))
+                is ResultDataBase.Error -> {
+                    _uiEvent.send(
+                        PlayerAddFormUiEvent.ShowMessage(
+                            message = result.message,
+                            textAction = R.string.snackbar_btn_neutral_ok,
+                            onAction = { }
+                        )
+                    )
                 }
                 is ResultDataBase.Success -> { _uiEvent.send(PlayerAddFormUiEvent.NavigateToBackScreen) }
             }
