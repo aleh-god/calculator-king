@@ -13,7 +13,6 @@ import by.godevelopment.kingcalculator.R
 class InputValueDialogFragment : DialogFragment() {
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-
         val editText = EditText(requireContext()).apply {
             inputType = InputType.TYPE_CLASS_NUMBER
         }
@@ -35,9 +34,12 @@ class InputValueDialogFragment : DialogFragment() {
     }
 
     companion object {
-        @JvmStatic val TAG = InputValueDialogFragment::class.java.simpleName
-        @JvmStatic val REQUEST_KEY = "$TAG:defaultRequestKey"
-        @JvmStatic val KEY_RESPONSE = "NEW VALUE"
+        @JvmStatic
+        val TAG = InputValueDialogFragment::class.java.simpleName
+        @JvmStatic
+        val REQUEST_KEY = "$TAG:defaultRequestKey"
+        @JvmStatic
+        val KEY_RESPONSE = "NEW VALUE"
 
         fun newFragmentInstance(): InputValueDialogFragment = InputValueDialogFragment()
     }

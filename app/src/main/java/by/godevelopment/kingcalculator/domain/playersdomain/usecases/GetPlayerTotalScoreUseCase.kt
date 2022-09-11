@@ -6,7 +6,7 @@ import javax.inject.Inject
 
 class GetPlayerTotalScoreUseCase @Inject constructor() {
 
-    val TYPE_NAME = R.string.use_case_type_score
+    val scoreRes = R.string.use_case_type_score
 
     operator fun invoke(parties: List<TricksNoteModel>): String {
         return parties.sumOf { it.gameType.getTotalGameScore(it.tricksCount) }.toString()

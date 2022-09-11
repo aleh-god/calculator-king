@@ -11,10 +11,7 @@ import by.godevelopment.kingcalculator.R
 class ConfirmDialogFragment() : DialogFragment() {
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-
-        val gameTypeName =arguments?.getString(KEY_ARG)
-
-
+        val gameTypeName = arguments?.getString(KEY_ARG)
         val listener = DialogInterface.OnClickListener { _, which ->
             parentFragmentManager.setFragmentResult(REQUEST_KEY, bundleOf(KEY_RESPONSE to which))
         }
@@ -29,10 +26,14 @@ class ConfirmDialogFragment() : DialogFragment() {
     }
 
     companion object {
-        @JvmStatic val TAG = ConfirmDialogFragment::class.java.simpleName
-        @JvmStatic val REQUEST_KEY = "$TAG:defaultRequestKey"
-        @JvmStatic val KEY_RESPONSE = "RESPONSE"
-        @JvmStatic val KEY_ARG = "RESPONSE"
+        @JvmStatic
+        val TAG = ConfirmDialogFragment::class.java.simpleName
+        @JvmStatic
+        val REQUEST_KEY = "$TAG:defaultRequestKey"
+        @JvmStatic
+        val KEY_RESPONSE = "RESPONSE"
+        @JvmStatic
+        val KEY_ARG = "RESPONSE"
 
         fun newFragmentInstance(gameTypeName: String): ConfirmDialogFragment {
             val dialogFragment = ConfirmDialogFragment()

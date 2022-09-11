@@ -35,10 +35,9 @@ class BodyViewHolder(
                 onClickInc.invoke(item.rowId)
             }
 
-            if(item.hasError) {
+            if (item.hasError) {
                 gameScore.text = root.resources.getString(R.string.rv_body_text_error)
-            }
-            else {
+            } else {
                 gameScore.text = root.resources.getString(R.string.rv_body_text_score, item.score)
             }
         }

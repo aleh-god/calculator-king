@@ -11,7 +11,6 @@ import by.godevelopment.kingcalculator.R
 class DeleteConfirmDialogFragment() : DialogFragment() {
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-
         val listener = DialogInterface.OnClickListener { _, which ->
             parentFragmentManager.setFragmentResult(REQUEST_KEY, bundleOf(KEY_RESPONSE to which))
         }
@@ -26,8 +25,11 @@ class DeleteConfirmDialogFragment() : DialogFragment() {
     }
 
     companion object {
-        @JvmStatic val TAG = DeleteConfirmDialogFragment::class.java.simpleName
-        @JvmStatic val REQUEST_KEY = "$TAG:defaultRequestKey"
-        @JvmStatic val KEY_RESPONSE = "RESPONSE"
+        @JvmStatic
+        val TAG = DeleteConfirmDialogFragment::class.java.simpleName
+        @JvmStatic
+        val REQUEST_KEY = "$TAG:defaultRequestKey"
+        @JvmStatic
+        val KEY_RESPONSE = "RESPONSE"
     }
 }

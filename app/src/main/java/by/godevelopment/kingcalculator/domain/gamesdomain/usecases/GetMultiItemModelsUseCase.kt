@@ -14,27 +14,25 @@ class GetMultiItemModelsUseCase @Inject constructor(
     private val getMultiItemModelsRepository: GetMultiItemModelsRepository,
     private val getPartyIdByGameIdRepository: GetPartyIdByGameIdRepository
 ) {
+
     suspend operator fun invoke(gameId: Long): ResultDataBase<List<MultiItemModel>> {
-        return when(val partyId = getPartyIdByGameIdRepository.getPartyIdByGameId(gameId)) {
+        return when (val partyId = getPartyIdByGameIdRepository.getPartyIdByGameId(gameId)) {
             is ResultDataBase.Error -> { ResultDataBase.Error(message = partyId.message) }
             is ResultDataBase.Success -> {
                 val playersResult = getMultiItemModelsRepository.getPlayersByPartyId(partyId.value)
                 when (playersResult) {
                     is ResultDataBase.Error -> { ResultDataBase.Error(message = playersResult.message) }
                     is ResultDataBase.Success -> {
-
                         val players = playersResult.value
                             .toList()
                             .sortedBy { it.first.id }
 
                         val gameNoteResult = getMultiItemModelsRepository.getGameNoteById(gameId)
-                        when(gameNoteResult) {
+                        when (gameNoteResult) {
                             is ResultDataBase.Error -> { ResultDataBase.Error(message = gameNoteResult.message) }
                             is ResultDataBase.Success -> {
-
                                 val gameType = gameNoteResult.value.gameType
-                                val multiItems = when(gameType) {
-
+                                val multiItems = when (gameType) {
                                     GameType.TakeBFG -> {
                                         var countId = 0
                                         val listItems = mutableListOf<MultiItemModel>()

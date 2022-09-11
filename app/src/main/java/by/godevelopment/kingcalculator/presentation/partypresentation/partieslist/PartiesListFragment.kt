@@ -32,7 +32,8 @@ class PartiesListFragment : Fragment() {
     private var snackbar: Snackbar? = null
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentPartiesListBinding.inflate(inflater, container, false)
@@ -69,7 +70,7 @@ class PartiesListFragment : Fragment() {
         viewModel.uiEvent
             .flowWithLifecycle(lifecycle)
             .onEach { event ->
-                when(event){
+                when (event) {
                     is PartiesListUiEvent.NavigateToPartyAddForm -> navigateToPartyAddForm()
                     is PartiesListUiEvent.NavigateToPartyCard -> navigateToPartyCard(event.navArgs)
                     is PartiesListUiEvent.NavigateToPartyInfo -> navigateToPartyInfo(event.navArgs)
@@ -77,12 +78,10 @@ class PartiesListFragment : Fragment() {
                         snackbar?.dismiss()
                         snackbar = Snackbar
                             .make(binding.root, event.message, Snackbar.LENGTH_LONG)
-                            .setAction(event.textAction)
-                            { event.onAction() }
+                            .setAction(event.textAction) { event.onAction() }
                         snackbar?.show()
                     }
                 }
-
             }
             .launchIn(lifecycle.coroutineScope)
     }

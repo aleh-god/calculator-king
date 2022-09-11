@@ -36,13 +36,14 @@ class SaveGameUseCase @Inject constructor(
                 }
             } else {
                 val undoResult = undoBadDbTransaction(gameId)
-                when(undoResult) {
+                when (undoResult) {
                     is ResultDataBase.Error -> ResultDataBase.Error(message = undoResult.message)
                     is ResultDataBase.Success -> ResultDataBase.Error(message = R.string.message_error_data_save)
                 }
             }
+        } else {
+            ResultDataBase.Error(message = R.string.message_error_data_unknown)
         }
-        else ResultDataBase.Error(message = R.string.message_error_data_unknown)
     }
 
     private suspend fun undoBadDbTransaction(gameId: Long): ResultDataBase<Int> {

@@ -2,8 +2,8 @@ package by.godevelopment.kingcalculator.di
 
 import by.godevelopment.kingcalculator.data.repositories.GameRepositoryImpl
 import by.godevelopment.kingcalculator.domain.gamesdomain.repositories.GetMultiItemModelsRepository
-import by.godevelopment.kingcalculator.domain.gamesdomain.repositories.SaveGameRepository
 import by.godevelopment.kingcalculator.domain.gamesdomain.repositories.GetPartyIdByGameIdRepository
+import by.godevelopment.kingcalculator.domain.gamesdomain.repositories.SaveGameRepository
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn

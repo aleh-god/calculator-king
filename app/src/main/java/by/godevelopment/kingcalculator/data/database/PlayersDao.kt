@@ -33,5 +33,4 @@ interface PlayersDao {
 
     @Query("DELETE FROM players")
     suspend fun deleteAll(): Int
-
 }

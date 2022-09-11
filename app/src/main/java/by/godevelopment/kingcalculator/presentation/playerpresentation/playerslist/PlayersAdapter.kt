@@ -10,7 +10,7 @@ import by.godevelopment.kingcalculator.domain.playersdomain.models.PlayerModel
 
 class PlayersAdapter(
     private val onClickItem: (Long) -> Unit,
-    private val onClickImage: (Long) -> Unit,
+    private val onClickImage: (Long) -> Unit
 ) : RecyclerView.Adapter<PlayersAdapter.ItemViewHolder>() {
 
     private val diffCallback = object : DiffUtil.ItemCallback<PlayerModel>() {
@@ -48,9 +48,10 @@ class PlayersAdapter(
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemViewHolder {
         return ItemViewHolder(
             ItemPlayersListBinding.inflate(
-            LayoutInflater.from(parent.context),
-            parent,
-            false)
+                LayoutInflater.from(parent.context),
+                parent,
+                false
+            )
         )
     }
 

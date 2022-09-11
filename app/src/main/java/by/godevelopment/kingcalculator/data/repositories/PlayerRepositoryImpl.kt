@@ -90,15 +90,15 @@ class PlayerRepositoryImpl @Inject constructor(
 
     override suspend fun getAllGamesByPartyId(parties: List<Long>): ResultDataBase<List<GameModel>> =
         withContext(ioDispatcher) {
-            val gameModels = parties.map { partyId  ->
+            val gameModels = parties.map { partyId ->
                 val notesResult = gamesDataSource.getGameNotesByPartyId(partyId)
-                when(notesResult) {
+                when (notesResult) {
                     is ResultDataBase.Error -> emptyList()
                     is ResultDataBase.Success -> notesResult.value.map { it.toGameModel() }
                 }
             }.flatten()
 
-            if(gameModels.isEmpty()) ResultDataBase.Error(message = R.string.message_error_data_load)
+            if (gameModels.isEmpty()) ResultDataBase.Error(message = R.string.message_error_data_load)
             else ResultDataBase.Success(value = gameModels)
         }
 }

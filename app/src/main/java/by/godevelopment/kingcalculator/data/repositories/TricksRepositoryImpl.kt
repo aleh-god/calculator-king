@@ -11,7 +11,7 @@ import javax.inject.Inject
 class TricksRepositoryImpl @Inject constructor(
     private val tricksDataSource: TricksDataSource,
     @IoDispatcher private val ioDispatcher: CoroutineDispatcher
-): DeleteTricksRepository {
+) : DeleteTricksRepository {
 
     override suspend fun deleteAllTricks(): ResultDataBase<Int> = withContext(ioDispatcher) {
         tricksDataSource.deleteAllTricks()

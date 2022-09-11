@@ -32,7 +32,8 @@ class PlayerInfoFragment : Fragment() {
     private var snackbar: Snackbar? = null
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentPlayerInfoBinding.inflate(inflater, container, false)
@@ -63,7 +64,7 @@ class PlayerInfoFragment : Fragment() {
         viewModel.uiEvent
             .flowWithLifecycle(lifecycle)
             .onEach { event ->
-                when(event) {
+                when (event) {
                     is PlayerInfoUiEvent.NavigateToBackScreen -> {
                         findNavController().navigate(
                             PartyInfoFragmentDirections
@@ -74,8 +75,7 @@ class PlayerInfoFragment : Fragment() {
                         snackbar?.dismiss()
                         snackbar = Snackbar
                             .make(binding.root, event.message, Snackbar.LENGTH_INDEFINITE)
-                            .setAction(event.textAction)
-                            { event.onAction() }
+                            .setAction(event.textAction) { event.onAction() }
                         snackbar?.show()
                     }
                 }

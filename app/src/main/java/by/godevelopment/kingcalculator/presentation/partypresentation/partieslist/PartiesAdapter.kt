@@ -12,7 +12,7 @@ import by.godevelopment.kingcalculator.domain.partiesdomain.models.ItemPartyMode
 class PartiesAdapter(
     private val onItemClick: (Long) -> Unit,
     private val onStatClick: (Long) -> Unit,
-    private val onDelClick: (Long) -> Unit,
+    private val onDelClick: (Long) -> Unit
 ) : RecyclerView.Adapter<PartiesAdapter.ItemViewHolder>() {
 
     private val diffCallback = object : DiffUtil.ItemCallback<ItemPartyModel>() {

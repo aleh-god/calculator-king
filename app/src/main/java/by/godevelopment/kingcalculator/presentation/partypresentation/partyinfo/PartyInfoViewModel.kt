@@ -31,7 +31,7 @@ class PartyInfoViewModel @Inject constructor(
     private val _uiState: MutableStateFlow<UiState> = MutableStateFlow(UiState())
     val uiState: StateFlow<UiState> = _uiState.asStateFlow()
 
-    private val _uiEvent  = Channel<PartyInfoUiEvent>()
+    private val _uiEvent = Channel<PartyInfoUiEvent>()
     val uiEvent: Flow<PartyInfoUiEvent> = _uiEvent.receiveAsFlow()
 
     private var fetchJob: Job? = null
@@ -48,8 +48,7 @@ class PartyInfoViewModel @Inject constructor(
                 reloadsNumber = 0
                 _uiEvent.send(PartyInfoUiEvent.NavigateToBackScreen)
             }
-        }
-        else {
+        } else {
             reloadsNumber++
             fetchDataModel()
         }
@@ -73,7 +72,7 @@ class PartyInfoViewModel @Inject constructor(
         players: ResultDataBase<PlayersInPartyModel>,
         gamesScore: ResultDataBase<List<PartyInfoItemModel>>
     ) {
-        when(partyName) {
+        when (partyName) {
             is ResultDataBase.Error -> {
                 _uiEvent.send(
                     PartyInfoUiEvent.ShowMessage(
@@ -84,7 +83,7 @@ class PartyInfoViewModel @Inject constructor(
                 )
             }
             is ResultDataBase.Success -> {
-                when(gamesScore) {
+                when (gamesScore) {
                     is ResultDataBase.Error -> {
                         _uiEvent.send(
                             PartyInfoUiEvent.ShowMessage(
@@ -95,7 +94,7 @@ class PartyInfoViewModel @Inject constructor(
                         )
                     }
                     is ResultDataBase.Success -> {
-                        when(players) {
+                        when (players) {
                             is ResultDataBase.Error -> {
                                 _uiEvent.send(
                                     PartyInfoUiEvent.ShowMessage(
@@ -106,12 +105,14 @@ class PartyInfoViewModel @Inject constructor(
                                 )
                             }
                             is ResultDataBase.Success -> {
-                                _uiState.update { it.copy(
-                                    isFetchingData = false,
-                                    playersInPartyModel = players.value,
-                                    partyName = partyName.value,
-                                    dataList = gamesScore.value
-                                ) }
+                                _uiState.update {
+                                    it.copy(
+                                        isFetchingData = false,
+                                        playersInPartyModel = players.value,
+                                        partyName = partyName.value,
+                                        dataList = gamesScore.value
+                                    )
+                                }
                             }
                         }
                     }

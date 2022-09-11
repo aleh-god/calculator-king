@@ -10,9 +10,9 @@ import javax.inject.Inject
 class GetActivePlayerByIdUseCase @Inject constructor(
     private val playerRepository: PlayerRepository
 ) {
-    suspend operator fun invoke(idPlayer: Long): ResultDataBase<PlayerModel>
-        = playerRepository.getPlayerById(idPlayer).flatMapResult {
-        if (it.isActive) ResultDataBase.Success(value = it)
-        else ResultDataBase.Error(message = R.string.message_error_player_id)
-    }
+    suspend operator fun invoke(idPlayer: Long): ResultDataBase<PlayerModel> =
+        playerRepository.getPlayerById(idPlayer).flatMapResult {
+            if (it.isActive) ResultDataBase.Success(value = it)
+            else ResultDataBase.Error(message = R.string.message_error_player_id)
+        }
 }

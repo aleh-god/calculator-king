@@ -5,6 +5,7 @@ const val DB_NAME = "king_database.db"
 const val DELETED_STRING_VALUE = "Anonymous"
 const val DATE_FORMAT_TEMPLATE = "hh:mm, MMM dd, yyyy"
 const val EMPTY_STRING = ""
+const val ZERO = 0
 const val ROWS_NOT_INSERTED = -1L
 const val ROWS_NOT_UPDATED = -1
 const val NUMBER_OF_ALL_KING_GAMES = 58

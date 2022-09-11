@@ -2,6 +2,6 @@ package by.godevelopment.kingcalculator.presentation.playerpresentation.playerca
 
 sealed interface CardUserEvent {
     data class PlayerNameChanged(val playerName: String) : CardUserEvent
-    object PressSaveButton: CardUserEvent
-    object PressDeleteButton: CardUserEvent
+    object PressSaveButton : CardUserEvent
+    object PressDeleteButton : CardUserEvent
 }

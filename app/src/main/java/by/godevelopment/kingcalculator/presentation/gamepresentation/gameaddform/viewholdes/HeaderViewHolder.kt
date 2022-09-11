@@ -10,7 +10,7 @@ import by.godevelopment.kingcalculator.domain.gamesdomain.models.MultiItemModel
 
 class HeaderViewHolder(
     private val binding: HeaderGameAddFormBinding
-    ) : RecyclerView.ViewHolder(binding.root), MultiViewHolder {
+) : RecyclerView.ViewHolder(binding.root), MultiViewHolder {
 
     override fun bind(item: MultiItemModel, position: Int) {
         binding.headerText.text = binding.root.resources.run {

@@ -28,11 +28,12 @@ class SettingsFragment : Fragment() {
     private val viewModel: SettingsViewModel by viewModels()
     private var _binding: FragmentSettingsBinding? = null
     private val binding: FragmentSettingsBinding get() = _binding!!
-    private var onActionForDialog: (()-> Unit)? = null
+    private var onActionForDialog: (() -> Unit)? = null
     private var snackbar: Snackbar? = null
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentSettingsBinding.inflate(inflater, container, false)
@@ -78,7 +79,7 @@ class SettingsFragment : Fragment() {
             DeleteConfirmDialogFragment.REQUEST_KEY,
             this,
             FragmentResultListener { _, result ->
-                when(result.getInt(DeleteConfirmDialogFragment.KEY_RESPONSE)) {
+                when (result.getInt(DeleteConfirmDialogFragment.KEY_RESPONSE)) {
                     DialogInterface.BUTTON_POSITIVE -> {
                         onActionForDialog?.invoke()
                         onActionForDialog = null
@@ -98,7 +99,7 @@ class SettingsFragment : Fragment() {
         viewModel.uiEvent
             .flowWithLifecycle(lifecycle)
             .onEach { event ->
-                when(event){
+                when (event) {
                     is SettingsUiEvent.NavigateToSystemSettings -> {
                         // ("Impl intent to next time")
                     }
@@ -109,17 +110,15 @@ class SettingsFragment : Fragment() {
                                 .make(
                                     binding.root,
                                     getString(event.message, event.valueForText),
-                                    Snackbar.LENGTH_LONG)
-                                .setAction(event.textAction)
-                                { event.onAction() }
+                                    Snackbar.LENGTH_LONG
+                                )
+                                .setAction(event.textAction) { event.onAction() }
                             snackbar?.show()
-                        }
-                        else {
+                        } else {
                             snackbar?.dismiss()
                             snackbar = Snackbar
                                 .make(binding.root, event.message, Snackbar.LENGTH_LONG)
-                                .setAction(event.textAction)
-                                { event.onAction() }
+                                .setAction(event.textAction) { event.onAction() }
                             snackbar?.show()
                         }
                     }

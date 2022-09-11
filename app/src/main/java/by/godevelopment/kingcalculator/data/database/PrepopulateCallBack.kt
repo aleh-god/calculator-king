@@ -3,8 +3,8 @@ package by.godevelopment.kingcalculator.data.database
 import android.util.Log
 import androidx.room.RoomDatabase
 import androidx.sqlite.db.SupportSQLiteDatabase
-import by.godevelopment.kingcalculator.commons.TAG
 import by.godevelopment.kingcalculator.commons.KingDataTest
+import by.godevelopment.kingcalculator.commons.TAG
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch

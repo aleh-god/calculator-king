@@ -31,7 +31,8 @@ class PartyInfoFragment : Fragment() {
     private var snackbar: Snackbar? = null
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentPartyInfoBinding.inflate(inflater, container, false)
@@ -56,7 +57,6 @@ class PartyInfoFragment : Fragment() {
                         gameCollumTwo.text = uiState.playersInPartyModel.playerTwo
                         gameCollumThree.text = uiState.playersInPartyModel.playerThree
                         gameCollumFour.text = uiState.playersInPartyModel.playerFour
-
                         infoList.adapter = PartyInfoAdapter(uiState.dataList)
                     }
             }
@@ -67,7 +67,7 @@ class PartyInfoFragment : Fragment() {
         viewModel.uiEvent
             .flowWithLifecycle(lifecycle)
             .onEach { event ->
-                when(event) {
+                when (event) {
                     is PartyInfoUiEvent.NavigateToBackScreen -> {
                         findNavController().navigate(
                             PartyInfoFragmentDirections
@@ -78,8 +78,7 @@ class PartyInfoFragment : Fragment() {
                         snackbar?.dismiss()
                         snackbar = Snackbar
                             .make(binding.root, event.message, Snackbar.LENGTH_INDEFINITE)
-                            .setAction(event.textAction)
-                            { event.onAction() }
+                            .setAction(event.textAction) { event.onAction() }
                         snackbar?.show()
                     }
                 }

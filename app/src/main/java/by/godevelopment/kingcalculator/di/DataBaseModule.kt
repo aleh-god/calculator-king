@@ -48,13 +48,15 @@ object DataBaseModule {
         KingDatabase::class.java,
         DB_NAME
     )
-        .addCallback(PrepopulateCallBack(
-            providerPlayers = providerPlayers,
-            providerParties = providerParties,
-            providerGames = providerGames,
-            providerTricks = providerTricks,
-            applicationScope = applicationScope,
-            dispatcher = dispatcher
-        ))
+        .addCallback(
+            PrepopulateCallBack(
+                providerPlayers = providerPlayers,
+                providerParties = providerParties,
+                providerGames = providerGames,
+                providerTricks = providerTricks,
+                applicationScope = applicationScope,
+                dispatcher = dispatcher
+            )
+        )
         .build()
 }

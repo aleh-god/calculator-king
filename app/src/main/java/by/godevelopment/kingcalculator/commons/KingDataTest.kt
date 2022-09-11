@@ -4,27 +4,10 @@ import by.godevelopment.kingcalculator.data.entities.GameNote
 import by.godevelopment.kingcalculator.data.entities.PartyNote
 import by.godevelopment.kingcalculator.data.entities.PlayerProfile
 import by.godevelopment.kingcalculator.data.entities.TricksNote
-import by.godevelopment.kingcalculator.domain.commons.models.*
+import by.godevelopment.kingcalculator.domain.commons.models.GameType
 import java.util.*
 
 object KingDataTest {
-
-    private val gameTypes: List<King> = listOf(
-        TakeTricks(),
-        TakeBoys(),
-        TakeGirls(),
-        TakeHearts(),
-        TakeKing(),
-        TakeLastTwo(),
-        TakeBFG(),
-        DoNotTakeTricks(),
-        DoNotTakeBoys(),
-        DoNotTakeGirls(),
-        DoNotTakeHearts(),
-        DoNotTakeKing(),
-        DoNotTakeLastTwo(),
-        DoNotTakeBFG()
-    )
 
     val player_leo_name: String = "Leonardo"
     val player_raph_name: String = "Raphael"
@@ -169,7 +152,7 @@ object KingDataTest {
             randomValue,
             randomValue,
             randomValue,
-            randomValue,
+            randomValue
         )
     }
 }

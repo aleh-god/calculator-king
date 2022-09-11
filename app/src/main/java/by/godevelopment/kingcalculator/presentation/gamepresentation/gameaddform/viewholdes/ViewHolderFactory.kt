@@ -17,7 +17,7 @@ class ViewHolderFactory(
 ) {
 
     fun buildHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder =
-        when(viewType) {
+        when (viewType) {
             HEADER_ROW_TYPE -> {
                 HeaderViewHolder(
                     HeaderGameAddFormBinding.inflate(

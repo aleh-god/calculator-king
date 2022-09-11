@@ -30,8 +30,9 @@ class MultiAdapter(
 
             override fun getChangePayload(oldItem: MultiItemModel, newItem: MultiItemModel): Any? {
                 if (oldItem.rowId == newItem.rowId) {
-                    if (oldItem == newItem) super.getChangePayload(oldItem, newItem)
-                    else {
+                    if (oldItem == newItem) {
+                        super.getChangePayload(oldItem, newItem)
+                    } else {
                         return Bundle().apply {
                             putInt(ARG_SCORE, newItem.score)
                             putInt(ARG_TRICKS, newItem.tricks)

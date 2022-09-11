@@ -6,7 +6,7 @@ import javax.inject.Inject
 
 class GetPlayerTotalPartiesUseCase @Inject constructor() {
 
-    val TYPE_NAME = R.string.use_case_type_parties
+    val partiesRes = R.string.use_case_type_parties
 
     operator fun invoke(parties: List<PartyModel>): String {
         return parties.size.toString()

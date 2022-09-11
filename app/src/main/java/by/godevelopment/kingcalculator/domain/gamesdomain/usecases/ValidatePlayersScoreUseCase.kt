@@ -7,7 +7,7 @@ import by.godevelopment.kingcalculator.domain.gamesdomain.models.MultiItemModel
 import javax.inject.Inject
 
 class ValidatePlayersScoreUseCase @Inject constructor(
-    private val validateTotalScoreUseCase: ValidateTotalScoreUseCase,
+    private val validateTotalScoreUseCase: ValidateTotalScoreUseCase
 ) {
 
     operator fun invoke(items: List<MultiItemModel>): ListValidationResult {
@@ -16,10 +16,10 @@ class ValidatePlayersScoreUseCase @Inject constructor(
             val result = items.toMutableList()
             val body = items.filter { it.itemViewType == BODY_ROW_TYPE }
 
-            body.forEach {  model ->
+            body.forEach { model ->
                 val game = model.gameType
                 val sumTricks = body.filter { it.gameType == game }.sumOf { it.tricks }
-                val check =  (sumTricks != 0 && sumTricks != game.tricksCount)
+                val check = (sumTricks != 0 && sumTricks != game.tricksCount)
                 result[model.rowId] = result[model.rowId].copy(hasError = check)
             }
             result.firstOrNull { it.hasError }?.let {
@@ -31,10 +31,9 @@ class ValidatePlayersScoreUseCase @Inject constructor(
             }
             ListValidationResult(
                 successful = true,
-                errorList = result,
+                errorList = result
             )
-        }
-        else {
+        } else {
             ListValidationResult(
                 successful = false,
                 errorMessage = R.string.message_error_game_validate_not_equal_sum

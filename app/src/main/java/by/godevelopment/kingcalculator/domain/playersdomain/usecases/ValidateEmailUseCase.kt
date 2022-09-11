@@ -8,13 +8,13 @@ import javax.inject.Inject
 class ValidateEmailUseCase @Inject constructor() {
 
     fun execute(email: String): ValidationResult {
-        if(email.isBlank()) {
+        if (email.isBlank()) {
             return ValidationResult(
                 successful = false,
                 errorMessage = R.string.message_error_validate_email_blank
             )
         }
-        if(!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+        if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
             return ValidationResult(
                 successful = false,
                 errorMessage = R.string.message_error_validate_email

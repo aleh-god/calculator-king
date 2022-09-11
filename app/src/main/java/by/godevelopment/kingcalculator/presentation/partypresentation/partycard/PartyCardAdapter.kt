@@ -73,7 +73,7 @@ class PartyCardAdapter(
                     }
                     3 -> {
                         if (item.isFinishedFourGame) setCompleteFrame(gameCollumFour)
-                        else setOpenFrame(gameCollumFour,item.gameType)
+                        else setOpenFrame(gameCollumFour, item.gameType)
                         if (item.isFinishedOneGame) setCompleteFrame(gameCollumOne)
                         else setCloseFrame(gameCollumOne)
                         if (item.isFinishedTwoGame) setCompleteFrame(gameCollumTwo)
@@ -88,7 +88,7 @@ class PartyCardAdapter(
         private fun setCompleteFrame(view: MaterialTextView) {
             view.text = "X"
             view.setBackgroundResource(R.drawable.frame_complete)
-            view.setOnClickListener {  }
+            view.setOnClickListener { }
         }
         private fun setOpenFrame(view: MaterialTextView, gameType: GameType) {
             view.setBackgroundResource(R.drawable.frame_open)
@@ -98,7 +98,7 @@ class PartyCardAdapter(
         private fun setCloseFrame(view: MaterialTextView) {
             view.setBackgroundResource(R.drawable.frame_close)
             view.text = EMPTY_STRING
-            view.setOnClickListener {  }
+            view.setOnClickListener { }
         }
     }
 

@@ -1,4 +1,4 @@
-package by.godevelopment.kingcalculator.domain.gamesdomain.models
+package by.godevelopment.kingcalculator.domain.commons.models
 
 import androidx.annotation.StringRes
 import by.godevelopment.kingcalculator.R

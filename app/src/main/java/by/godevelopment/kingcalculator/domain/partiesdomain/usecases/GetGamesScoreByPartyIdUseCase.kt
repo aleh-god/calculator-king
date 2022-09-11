@@ -10,12 +10,10 @@ class GetGamesScoreByPartyIdUseCase @Inject constructor(
 ) {
 
     suspend operator fun invoke(partyId: Long): ResultDataBase<List<PartyInfoItemModel>> {
-
         val partyResult = partyRepository.getPartyModelById(partyId)
         return when (partyResult) {
             is ResultDataBase.Error -> ResultDataBase.Error<List<PartyInfoItemModel>>(message = partyResult.message)
             is ResultDataBase.Success -> {
-
                 val party = partyResult.value
                 val gamesResult = partyRepository.getAllGamesNotesByPartyId(partyId)
                 when (gamesResult) {

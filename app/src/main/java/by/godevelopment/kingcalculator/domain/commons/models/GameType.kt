@@ -4,13 +4,13 @@ import android.content.Context
 import androidx.annotation.StringRes
 import by.godevelopment.kingcalculator.R
 
-enum class GameType (
+enum class GameType(
     val id: Int,
     val trickScores: Int,
     val tricksCount: Int,
     @StringRes
     val res: Int
-    ) {
+) {
     TakeTricks(1, 5, 8, R.string.game_type_tt),
     TakeBoys(2, 5, 8, R.string.game_type_tb),
     TakeGirls(3, 10, 4, R.string.game_type_tg),
@@ -20,11 +20,11 @@ enum class GameType (
     TakeBFG(7, 240, 31, R.string.game_type_tfg),
     DoNotTakeTricks(11, -5, 8, R.string.game_type_ntt),
     DoNotTakeBoys(12, -5, 8, R.string.game_type_ntb),
-    DoNotTakeGirls(13, -10,4, R.string.game_type_ntg),
-    DoNotTakeHearts(14, -5,8, R.string.game_type_nth),
-    DoNotTakeKing(15, -40,1, R.string.game_type_ntk),
-    DoNotTakeLastTwo(16, -20,2, R.string.game_type_ntl),
-    DoNotTakeBFG(17, -240,31, R.string.game_type_ntfg);
+    DoNotTakeGirls(13, -10, 4, R.string.game_type_ntg),
+    DoNotTakeHearts(14, -5, 8, R.string.game_type_nth),
+    DoNotTakeKing(15, -40, 1, R.string.game_type_ntk),
+    DoNotTakeLastTwo(16, -20, 2, R.string.game_type_ntl),
+    DoNotTakeBFG(17, -240, 31, R.string.game_type_ntfg);
 
     fun getTotalGameScore(countTricks: Int): Int {
         return countTricks * this.trickScores
@@ -38,6 +38,4 @@ enum class GameType (
         fun getGameTypeByIdOrNull(key: Int): GameType? =
             GameType.values().firstOrNull { key == it.id }
     }
-
-    // Every enum has both a name() and a valueOf(String) method. The former returns the string name of the enum, and the latter gives the enum value whose name is the string.
 }

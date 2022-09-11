@@ -1,7 +1,6 @@
 package by.godevelopment.kingcalculator.presentation.mainactivity
 
 import android.os.Bundle
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
@@ -10,7 +9,6 @@ import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
 import by.godevelopment.kingcalculator.R
-import by.godevelopment.kingcalculator.commons.TAG
 import by.godevelopment.kingcalculator.databinding.ActivityMainBinding
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
@@ -41,14 +39,12 @@ class MainActivity : AppCompatActivity() {
         setSupportActionBar(binding.toolbar)
         val appBarConfiguration = AppBarConfiguration(navController.graph)
         binding.toolbar.setupWithNavController(navController, appBarConfiguration)
-
         setupListeners()
-
     }
 
     private fun setupListeners() {
         navController.addOnDestinationChangedListener(listener)
-        binding.toolbar.setNavigationOnClickListener { onBackPressed() }    // For Game Add Form Screen
+        binding.toolbar.setNavigationOnClickListener { onBackPressed() } // For Game Add Form Screen navigation logic
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {

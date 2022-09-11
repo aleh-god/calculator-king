@@ -31,7 +31,7 @@ class PlayersDataSource @Inject constructor(
     suspend fun createPlayer(params: PlayerProfile): ResultDataBase<Long> {
         return try {
             val result = playersDao.insertPlayerProfile(params)
-            if (result != ROWS_NOT_INSERTED) { ResultDataBase.Success(value = result) }
+            if (result != ROWS_NOT_INSERTED) ResultDataBase.Success(value = result)
             else ResultDataBase.Error(message = R.string.message_error_data_save)
         } catch (e: Exception) {
             Log.i(TAG, "createPlayer: catch ${e.message}")
@@ -42,7 +42,7 @@ class PlayersDataSource @Inject constructor(
     suspend fun updatePlayerById(params: PlayerProfile): ResultDataBase<Int> {
         return try {
             val result = playersDao.updatePlayerProfile(params)
-            if (result != ROWS_NOT_UPDATED) { ResultDataBase.Success(value = result) }
+            if (result != ROWS_NOT_UPDATED) ResultDataBase.Success(value = result)
             else ResultDataBase.Error(message = R.string.message_error_data_save)
         } catch (e: Exception) {
             Log.i(TAG, "updatePlayerById: catch ${e.message}")
@@ -53,7 +53,7 @@ class PlayersDataSource @Inject constructor(
     suspend fun disablePlayerById(params: PlayerProfile): ResultDataBase<Int> {
         return try {
             val disableResult = playersDao.updatePlayerProfile(params.copy(isActive = false))
-            if (disableResult != ROWS_NOT_UPDATED) { ResultDataBase.Success(value = disableResult) }
+            if (disableResult != ROWS_NOT_UPDATED) ResultDataBase.Success(value = disableResult)
             else ResultDataBase.Error(message = R.string.message_error_data_save)
         } catch (e: Exception) {
             Log.i(TAG, "deletePlayerById: catch ${e.message}")

@@ -21,7 +21,7 @@ class PlayerCardViewModel @Inject constructor(
     state: SavedStateHandle,
     private val getActivePlayerByIdUseCase: GetActivePlayerByIdUseCase,
     private val validatePlayerNameUseCase: ValidatePlayerNameUseCase,
-    private val playerCardRepository: PlayerCardRepository,
+    private val playerCardRepository: PlayerCardRepository
 ) : ViewModel() {
 
     private val _uiState: MutableStateFlow<CardUiState> = MutableStateFlow(
@@ -35,7 +35,7 @@ class PlayerCardViewModel @Inject constructor(
     )
     val uiState: StateFlow<CardUiState> = _uiState.asStateFlow()
 
-    private val _uiEvent  = Channel<PlayerCardUiEvent>()
+    private val _uiEvent = Channel<PlayerCardUiEvent>()
     val uiEvent: Flow<PlayerCardUiEvent> = _uiEvent.receiveAsFlow()
 
     private val idPlayer = state.get<Long>("playerId")
@@ -53,8 +53,7 @@ class PlayerCardViewModel @Inject constructor(
                 reloadsNumber = 0
                 _uiEvent.send(PlayerCardUiEvent.NavigateToBackScreen)
             }
-        }
-        else {
+        } else {
             reloadsNumber++
             fetchDataModel(idPlayer)
         }
@@ -66,7 +65,7 @@ class PlayerCardViewModel @Inject constructor(
             if (idPlayer != null) {
                 _uiState.update { it.copy(showsProgress = true) }
                 val playerResult = getActivePlayerByIdUseCase(idPlayer)
-                when(playerResult) {
+                when (playerResult) {
                     is ResultDataBase.Error -> _uiEvent.send(
                         PlayerCardUiEvent.ShowMessage(
                             message = playerResult.message,
@@ -92,7 +91,7 @@ class PlayerCardViewModel @Inject constructor(
     }
 
     fun onEvent(event: CardUserEvent) {
-        when(event) {
+        when (event) {
             is CardUserEvent.PlayerNameChanged -> {
                 val playerNameResult = validatePlayerNameUseCase(event.playerName)
                 _uiState.update { state ->
@@ -106,7 +105,7 @@ class PlayerCardViewModel @Inject constructor(
                 _uiState.value.playerModel.name.let {
                     val playerNameResult =
                         validatePlayerNameUseCase(it)
-                    if(it.isNotEmpty() && playerNameResult.successful) {
+                    if (it.isNotEmpty() && playerNameResult.successful) {
                         updatePlayerDataToRepository()
                     } else {
                         viewModelScope.launch {
@@ -137,7 +136,7 @@ class PlayerCardViewModel @Inject constructor(
                     PlayerCardUiEvent.ShowMessage(
                         message = result.message,
                         textAction = R.string.snackbar_btn_neutral_ok,
-                        onAction = {  }
+                        onAction = { }
                     )
                 )
                 is ResultDataBase.Success -> _uiEvent.send(PlayerCardUiEvent.NavigateToBackScreen)
@@ -156,7 +155,7 @@ class PlayerCardViewModel @Inject constructor(
                     PlayerCardUiEvent.ShowMessage(
                         message = result.message,
                         textAction = R.string.snackbar_btn_neutral_ok,
-                        onAction = {  }
+                        onAction = { }
                     )
                 )
                 is ResultDataBase.Success -> _uiEvent.send(PlayerCardUiEvent.NavigateToBackScreen)
