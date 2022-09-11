@@ -140,4 +140,8 @@
     <string name="rv_body_text_score">Очки: %1$d</string>
     <string name="fragment_header">Итого очков за игру = %1$d</string>
     <string name="ui_settings_text_delete_games">Все записи партий, игр, взяток будут удалены. Данные игроков не будут затронуты. Начните свои партии сначало.</string>
+    <string name="hint_text_player_one">первый игрок</string>
+    <string name="hint_text_player_two">второй игрок</string>
+    <string name="hint_text_player_three">третий игрок</string>
+    <string name="hint_text_player_four">четвертый игрок</string>
 </resources>

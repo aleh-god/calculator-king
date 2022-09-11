@@ -127,6 +127,11 @@
     <string name="hint_text_player_three_email">player three email</string>
     <string name="hint_text_player_four_email">player four email</string>
 
+    <string name="hint_text_player_one">player one</string>
+    <string name="hint_text_player_two">player two</string>
+    <string name="hint_text_player_three">player three</string>
+    <string name="hint_text_player_four">player four</string>
+
     <string name="ui_text_contacts">\ contracts the game</string>
     <string name="ui_text_total_games">\ in 56</string>
     <string name="ui_text_header_party_info">Game type</string>
