@@ -60,16 +60,16 @@
     <string name="nav_label_game_add_form">Game add form</string>
     <string name="nav_label_data_settings">Data settings</string>
 
-    <string name="help_text_parties_list">Help text for Parties list</string>
-    <string name="help_text_players_list">Help text for Players list</string>
-    <string name="help_text_player_card">Help text for Player card</string>
-    <string name="help_text_player_info">Help text for Player info</string>
-    <string name="help_text_player_add_form">Help text for Player add Form</string>
-    <string name="help_text_party_card">Help text for Party card</string>
-    <string name="help_text_party_add_form">Help text for Party add form</string>
-    <string name="help_text_party_info">Help text for Party info</string>
-    <string name="help_text_game_add_form">Help text for Game add form</string>
-    <string name="help_text_data_settings">Help text for Data settings</string>
+    <string name="help_text_parties_list">Here you can manage parties: View game statistics, delete old or create new competitions.</string>
+    <string name="help_text_players_list">Here you can manage players: View personal statistics, delete a player or create a new character.list</string>
+    <string name="help_text_player_card">Here you can change the name of the player. Email cannot be changed, but you can delete your account and create a new one.</string>
+    <string name="help_text_player_info">Here you can see the player\'s personal statistics. New types of statistics will be added in the next version.</string>
+    <string name="help_text_player_add_form">Here you can create a new player. Player name and email must be unique.</string>
+    <string name="help_text_party_card">Here you can see the status of the party and bet the next game.</string>
+    <string name="help_text_party_add_form">Here you can select four players and create a party.</string>
+    <string name="help_text_party_info">Here you can see the games played in the party and the points scored.</string>
+    <string name="help_text_game_add_form">Here you can enter the results of the game played and calculate the points for the game.</string>
+    <string name="help_text_data_settings">Here you can delete game data to get rid of application errors.</string>
 
     <string name="snackbar_btn_return">Return to table</string>
     <string name="snackbar_btn_reload">Reload</string>
@@ -157,20 +157,4 @@
     <string name="rv_body_text_error">ERROR!!!</string>
     <string name="rv_body_text_score">Score: %1$d</string>
     <string name="fragment_header">Total Game Score = %1$d</string>
-
-    <!-- Preference Titles -->
-    <string name="messages_header">Messages</string>
-    <string name="sync_header">Sync</string>
-
-    <!-- Messages Preferences -->
-    <string name="signature_title">Your signature</string>
-    <string name="reply_title">Default reply action</string>
-
-    <!-- Sync Preferences -->
-    <string name="sync_title">Sync email periodically</string>
-    <string name="attachment_title">Download incoming attachments</string>
-    <string name="attachment_summary_on">Automatically download attachments for incoming emails
-    </string>
-    <string name="attachment_summary_off">Only download attachments when manually requested</string>
-
 </resources>
