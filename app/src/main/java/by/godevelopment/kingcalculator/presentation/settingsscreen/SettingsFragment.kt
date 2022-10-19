@@ -8,7 +8,6 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentResultListener
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.coroutineScope
 import androidx.lifecycle.flowWithLifecycle
 import by.godevelopment.kingcalculator.databinding.FragmentSettingsBinding
@@ -16,7 +15,6 @@ import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class SettingsFragment : Fragment() {
@@ -38,24 +36,19 @@ class SettingsFragment : Fragment() {
     ): View {
         _binding = FragmentSettingsBinding.inflate(inflater, container, false)
         setupListeners()
-        viewLifecycleOwner.lifecycle.also {
-            setupUi(it)
-            setupEvent(it)
-        }
+        setupUi()
+        setupEvent()
         return binding.root
     }
 
-    private fun setupUi(lifecycle: Lifecycle) {
-        binding.apply {
-            lifecycle.coroutineScope.launch {
-                viewModel.uiState
-                    .flowWithLifecycle(lifecycle)
-                    .collect { uiState ->
-                        if (!uiState.isProgress) progress.visibility = View.GONE
-                        else progress.visibility = View.VISIBLE
-                    }
+    private fun setupUi() = with(binding) {
+        viewModel.uiState
+            .flowWithLifecycle(lifecycle)
+            .onEach { uiState ->
+                if (!uiState.isProgress) progress.visibility = View.GONE
+                else progress.visibility = View.VISIBLE
             }
-        }
+            .launchIn(lifecycle.coroutineScope)
     }
 
     private fun setupListeners() {
@@ -95,7 +88,7 @@ class SettingsFragment : Fragment() {
         dialogFragment.show(parentFragmentManager, DeleteConfirmDialogFragment.TAG)
     }
 
-    private fun setupEvent(lifecycle: Lifecycle) {
+    private fun setupEvent() {
         viewModel.uiEvent
             .flowWithLifecycle(lifecycle)
             .onEach { event ->

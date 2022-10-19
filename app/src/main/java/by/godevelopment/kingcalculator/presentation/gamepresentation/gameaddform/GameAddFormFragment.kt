@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.coroutineScope
 import androidx.lifecycle.flowWithLifecycle
 import androidx.navigation.fragment.findNavController
@@ -18,7 +17,6 @@ import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class GameAddFormFragment : Fragment() {
@@ -37,10 +35,8 @@ class GameAddFormFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentGameAddFormBinding.inflate(inflater, container, false)
-        viewLifecycleOwner.lifecycle.also {
-            setupUi(it)
-            setupEvent(it)
-        }
+        setupUi()
+        setupEvent()
         requireActivity().onBackPressedDispatcher.addCallback(
             viewLifecycleOwner,
             object : OnBackPressedCallback(true) {
@@ -54,31 +50,30 @@ class GameAddFormFragment : Fragment() {
         return binding.root
     }
 
-    private fun setupUi(lifecycle: Lifecycle) {
+    private fun setupUi() {
         val multiAdapter = MultiAdapter(
             onClickDec = viewModel::onClickDec,
             onClickInc = viewModel::onClickInc,
             onClickEdit = ::showInputDialog
         )
-        binding.apply {
+        with(binding) {
             tricksTable.adapter = multiAdapter
             tricksTable.layoutManager = LinearLayoutManager(requireContext())
-            lifecycle.coroutineScope.launch {
-                viewModel.uiState
-                    .flowWithLifecycle(lifecycle)
-                    .collect { uiState ->
-                        if (!uiState.isFetchingData) progress.visibility = View.GONE
-                        else binding.progress.visibility = View.VISIBLE
-                        headerGameAddForm.text =
-                            getString(R.string.fragment_header, uiState.gameTotalScore)
-                        multiAdapter.multiList = uiState.listMultiItems
-                        buttonSaveResult.setOnClickListener { viewModel.saveGameData() }
-                    }
-            }
+            viewModel.uiState
+                .flowWithLifecycle(lifecycle)
+                .onEach { uiState ->
+                    if (!uiState.isFetchingData) progress.visibility = View.GONE
+                    else binding.progress.visibility = View.VISIBLE
+                    headerGameAddForm.text =
+                        getString(R.string.fragment_header, uiState.gameTotalScore)
+                    multiAdapter.multiList = uiState.listMultiItems
+                    buttonSaveResult.setOnClickListener { viewModel.saveGameData() }
+                }
+                .launchIn(lifecycle.coroutineScope)
         }
     }
 
-    private fun setupEvent(lifecycle: Lifecycle) {
+    private fun setupEvent() {
         viewModel.uiEvent
             .flowWithLifecycle(lifecycle)
             .onEach { event ->

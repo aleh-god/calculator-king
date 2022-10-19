@@ -1,10 +1,8 @@
 package by.godevelopment.kingcalculator.presentation.gamepresentation.gameaddform.viewholdes
 
 import android.os.Bundle
-import android.util.Log
 import androidx.recyclerview.widget.RecyclerView
 import by.godevelopment.kingcalculator.R
-import by.godevelopment.kingcalculator.commons.TAG
 import by.godevelopment.kingcalculator.databinding.HeaderGameAddFormBinding
 import by.godevelopment.kingcalculator.domain.gamesdomain.models.MultiItemModel
 
@@ -23,6 +21,5 @@ class HeaderViewHolder(
     }
 
     override fun update(bundle: Bundle) {
-        Log.i(TAG, "HeaderViewHolder update")
     }
 }

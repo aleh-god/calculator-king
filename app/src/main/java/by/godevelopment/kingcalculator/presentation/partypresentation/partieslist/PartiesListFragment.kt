@@ -6,7 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.coroutineScope
 import androidx.lifecycle.flowWithLifecycle
 import androidx.navigation.fragment.findNavController
@@ -17,7 +16,6 @@ import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class PartiesListFragment : Fragment() {
@@ -37,36 +35,34 @@ class PartiesListFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentPartiesListBinding.inflate(inflater, container, false)
-        viewLifecycleOwner.lifecycle.also {
-            setupUi(it)
-            setupEvent(it)
-        }
+        setupUi()
+        setupEvent()
         setupListeners()
         return binding.root
     }
 
-    private fun setupUi(lifecycle: Lifecycle) {
+    private fun setupUi() {
         val rvAdapter = PartiesAdapter(
             onItemClick = ::checkPayersIsActiveAndNavigateToPartyCard,
             onStatClick = ::navigateToPartyInfo,
             onDelClick = ::deleteParty
         )
-        binding.apply {
+        with(binding) {
             rv.adapter = rvAdapter
             rv.layoutManager = LinearLayoutManager(requireContext())
-            lifecycle.coroutineScope.launch {
-                viewModel.uiState
-                    .flowWithLifecycle(lifecycle)
-                    .collect { uiState ->
-                        if (!uiState.isFetchingData) progress.visibility = View.GONE
-                        else progress.visibility = View.VISIBLE
-                        rvAdapter.items = uiState.dataList
-                    }
-            }
+
+            viewModel.uiState
+                .flowWithLifecycle(lifecycle)
+                .onEach { uiState ->
+                    if (!uiState.isFetchingData) progress.visibility = View.GONE
+                    else progress.visibility = View.VISIBLE
+                    rvAdapter.items = uiState.dataList
+                }
+                .launchIn(lifecycle.coroutineScope)
         }
     }
 
-    private fun setupEvent(lifecycle: Lifecycle) {
+    private fun setupEvent() {
         viewModel.uiEvent
             .flowWithLifecycle(lifecycle)
             .onEach { event ->

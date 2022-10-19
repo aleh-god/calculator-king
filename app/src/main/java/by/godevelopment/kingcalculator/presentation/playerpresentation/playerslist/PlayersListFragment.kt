@@ -56,7 +56,7 @@ class PlayersListFragment : Fragment() {
             onClickItem = ::navigateToPlayerCard,
             onClickImage = ::navigateToPlayerInfo
         )
-        binding.apply {
+        with(binding) {
             rv.adapter = rvAdapter
             rv.layoutManager = LinearLayoutManager(requireContext())
             lifecycle.coroutineScope.launch {

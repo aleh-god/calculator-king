@@ -10,15 +10,6 @@ class InfoAdapter(
     private val itemList: List<ItemPlayerInfoModel>
 ) : RecyclerView.Adapter<InfoAdapter.ItemViewHolder>() {
 
-    inner class ItemViewHolder(private val binding: ItemPlayerInfoListBinding) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(itemInfoModel: ItemPlayerInfoModel) {
-            binding.apply {
-                infoType.text = root.resources.getString(itemInfoModel.type)
-                infoValue.text = itemInfoModel.value
-            }
-        }
-    }
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemViewHolder {
         return ItemViewHolder(
             ItemPlayerInfoListBinding.inflate(
@@ -34,4 +25,14 @@ class InfoAdapter(
     }
 
     override fun getItemCount(): Int = itemList.size
+
+    inner class ItemViewHolder(
+        private val binding: ItemPlayerInfoListBinding
+    ) : RecyclerView.ViewHolder(binding.root) {
+
+        fun bind(itemInfoModel: ItemPlayerInfoModel) = with(binding) {
+            infoType.text = root.resources.getString(itemInfoModel.type)
+            infoValue.text = itemInfoModel.value
+        }
+    }
 }

@@ -33,37 +33,6 @@ class PartiesAdapter(
             differ.submitList(value)
         }
 
-    inner class ItemViewHolder(private val binding: ItemPartiesListBinding) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(itemPartyModel: ItemPartyModel) {
-            binding.apply {
-                partyName.text = itemPartyModel.partyName
-                partyGamesCount.text = buildString {
-                    append(itemPartyModel.partyGamesCount)
-                    append(root.resources.getString(R.string.ui_text_total_games))
-                }
-                playerOneName.text = itemPartyModel.player_one.name
-                playerOneScore.text = itemPartyModel.player_one_score
-                playerTwoName.text = itemPartyModel.player_two.name
-                playerTwoScore.text = itemPartyModel.player_two_score
-                playerThreeName.text = itemPartyModel.player_three.name
-                playerThreeScore.text = itemPartyModel.player_three_score
-                playerFourName.text = itemPartyModel.player_four.name
-                playerFourScore.text = itemPartyModel.player_four_score
-                partyStartTime.text = itemPartyModel.partyStartTime
-                partyEndTime.text = itemPartyModel.partyLastTime
-                root.setOnClickListener {
-                    onItemClick(itemPartyModel.id)
-                }
-                partyStat.setOnClickListener {
-                    onStatClick(itemPartyModel.id)
-                }
-                partyDel.setOnClickListener {
-                    onDelClick(itemPartyModel.id)
-                }
-            }
-        }
-    }
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemViewHolder {
         return ItemViewHolder(
             ItemPartiesListBinding.inflate(
@@ -79,4 +48,42 @@ class PartiesAdapter(
     }
 
     override fun getItemCount(): Int = items.size
+
+    inner class ItemViewHolder(private val binding: ItemPartiesListBinding) : RecyclerView.ViewHolder(binding.root) {
+
+        private var itemId: Long? = null
+
+        init {
+            with(binding) {
+                root.setOnClickListener { _ ->
+                    itemId?.let { onItemClick(it) }
+                }
+                partyStat.setOnClickListener { _ ->
+                    itemId?.let { onStatClick(it) }
+                }
+                partyDel.setOnClickListener { _ ->
+                    itemId?.let { onDelClick(it) }
+                }
+            }
+        }
+
+        fun bind(itemPartyModel: ItemPartyModel) = with(binding) {
+            itemId = itemPartyModel.id
+            partyName.text = itemPartyModel.partyName
+            partyGamesCount.text = buildString {
+                append(itemPartyModel.partyGamesCount)
+                append(root.resources.getString(R.string.ui_text_total_games))
+            }
+            playerOneName.text = itemPartyModel.player_one.name
+            playerOneScore.text = itemPartyModel.player_one_score
+            playerTwoName.text = itemPartyModel.player_two.name
+            playerTwoScore.text = itemPartyModel.player_two_score
+            playerThreeName.text = itemPartyModel.player_three.name
+            playerThreeScore.text = itemPartyModel.player_three_score
+            playerFourName.text = itemPartyModel.player_four.name
+            playerFourScore.text = itemPartyModel.player_four_score
+            partyStartTime.text = itemPartyModel.partyStartTime
+            partyEndTime.text = itemPartyModel.partyLastTime
+        }
+    }
 }

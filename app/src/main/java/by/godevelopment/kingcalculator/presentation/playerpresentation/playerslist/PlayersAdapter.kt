@@ -30,21 +30,6 @@ class PlayersAdapter(
             differ.submitList(value)
         }
 
-    inner class ItemViewHolder(private val binding: ItemPlayersListBinding) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(itemPlayerModel: PlayerModel) {
-            binding.apply {
-                playerName.text = itemPlayerModel.name
-                playerEmail.text = itemPlayerModel.email
-                root.setOnClickListener {
-                    onClickItem.invoke(itemPlayerModel.id)
-                }
-                playerStat.setOnClickListener {
-                    onClickImage.invoke(itemPlayerModel.id)
-                }
-            }
-        }
-    }
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemViewHolder {
         return ItemViewHolder(
             ItemPlayersListBinding.inflate(
@@ -60,4 +45,28 @@ class PlayersAdapter(
     }
 
     override fun getItemCount(): Int = itemList.size
+
+    inner class ItemViewHolder(
+        private val binding: ItemPlayersListBinding
+    ) : RecyclerView.ViewHolder(binding.root) {
+
+        private var itemId: Long? = null
+
+        init {
+            with(binding) {
+                root.setOnClickListener { _ ->
+                    itemId?.let { onClickItem.invoke(it) }
+                }
+                playerStat.setOnClickListener { _ ->
+                    itemId?.let { onClickImage.invoke(it) }
+                }
+            }
+        }
+
+        fun bind(itemPlayerModel: PlayerModel) = with(binding) {
+            itemId = itemPlayerModel.id
+            playerName.text = itemPlayerModel.name
+            playerEmail.text = itemPlayerModel.email
+        }
+    }
 }

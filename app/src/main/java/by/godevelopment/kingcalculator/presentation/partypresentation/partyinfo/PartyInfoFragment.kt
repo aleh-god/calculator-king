@@ -6,17 +6,14 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.coroutineScope
 import androidx.lifecycle.flowWithLifecycle
 import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.LinearLayoutManager
 import by.godevelopment.kingcalculator.databinding.FragmentPartyInfoBinding
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class PartyInfoFragment : Fragment() {
@@ -36,34 +33,28 @@ class PartyInfoFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentPartyInfoBinding.inflate(inflater, container, false)
-        viewLifecycleOwner.lifecycle.also {
-            setupUi(it)
-            setupEvent(it)
-        }
+        setupUi()
+        setupEvent()
         return binding.root
     }
 
-    private fun setupUi(lifecycle: Lifecycle) {
-        binding.apply {
-            infoList.layoutManager = LinearLayoutManager(requireContext())
-            lifecycle.coroutineScope.launch {
-                viewModel.uiState
-                    .flowWithLifecycle(lifecycle)
-                    .collect { uiState ->
-                        if (!uiState.isFetchingData) progress.visibility = View.GONE
-                        else binding.progress.visibility = View.VISIBLE
-                        partyName.text = uiState.partyName
-                        gameCollumOne.text = uiState.playersInPartyModel.playerOne
-                        gameCollumTwo.text = uiState.playersInPartyModel.playerTwo
-                        gameCollumThree.text = uiState.playersInPartyModel.playerThree
-                        gameCollumFour.text = uiState.playersInPartyModel.playerFour
-                        infoList.adapter = PartyInfoAdapter(uiState.dataList)
-                    }
+    private fun setupUi() = with(binding) {
+        viewModel.uiState
+            .flowWithLifecycle(lifecycle)
+            .onEach { uiState ->
+                if (!uiState.isFetchingData) progress.visibility = View.GONE
+                else binding.progress.visibility = View.VISIBLE
+                partyName.text = uiState.partyName
+                gameCollumOne.text = uiState.playersInPartyModel.playerOne
+                gameCollumTwo.text = uiState.playersInPartyModel.playerTwo
+                gameCollumThree.text = uiState.playersInPartyModel.playerThree
+                gameCollumFour.text = uiState.playersInPartyModel.playerFour
+                infoList.adapter = PartyInfoAdapter(uiState.dataList)
             }
-        }
+            .launchIn(lifecycle.coroutineScope)
     }
 
-    private fun setupEvent(lifecycle: Lifecycle) {
+    private fun setupEvent() {
         viewModel.uiEvent
             .flowWithLifecycle(lifecycle)
             .onEach { event ->
