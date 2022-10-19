@@ -10,19 +10,6 @@ class PartyInfoAdapter(
     private val items: List<PartyInfoItemModel>
 ) : RecyclerView.Adapter<PartyInfoAdapter.ViewHolder>() {
 
-    inner class ViewHolder(private val binding: ItemPartyInfoListBinding) : RecyclerView.ViewHolder(binding.root) {
-
-        fun bind(item: PartyInfoItemModel) {
-            binding.apply {
-                gameName.text = root.resources.getString(item.gameType.res)
-                gameCollumOne.text = item.oneGameScore?.toString()
-                gameCollumTwo.text = item.twoGameScore?.toString()
-                gameCollumThree.text = item.threeGameScore?.toString()
-                gameCollumFour.text = item.fourGameScore?.toString()
-            }
-        }
-    }
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(
             ItemPartyInfoListBinding.inflate(
@@ -38,4 +25,15 @@ class PartyInfoAdapter(
     }
 
     override fun getItemCount(): Int = items.size
+
+    inner class ViewHolder(private val binding: ItemPartyInfoListBinding) : RecyclerView.ViewHolder(binding.root) {
+
+        fun bind(item: PartyInfoItemModel) = with(binding) {
+            gameName.text = root.resources.getString(item.gameType.res)
+            gameCollumOne.text = item.oneGameScore?.toString()
+            gameCollumTwo.text = item.twoGameScore?.toString()
+            gameCollumThree.text = item.threeGameScore?.toString()
+            gameCollumFour.text = item.fourGameScore?.toString()
+        }
+    }
 }

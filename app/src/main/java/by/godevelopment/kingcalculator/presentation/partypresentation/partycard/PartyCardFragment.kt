@@ -7,7 +7,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.coroutineScope
 import androidx.lifecycle.flowWithLifecycle
 import androidx.navigation.fragment.findNavController
@@ -19,7 +18,6 @@ import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class PartyCardFragment : Fragment() {
@@ -46,41 +44,38 @@ class PartyCardFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentPartyCardBinding.inflate(inflater, container, false)
-        viewLifecycleOwner.lifecycle.also {
-            setupEvent(it)
-            viewModel.checkUnfinishedGame()
-            setupUi(it)
-        }
+        setupEvent()
+        viewModel.checkUnfinishedGame()
+        setupUi()
         setupConfirmDialogListener()
         return binding.root
     }
 
-    private fun setupUi(lifecycle: Lifecycle) {
+    private fun setupUi() {
         val gamesTableAdapter = PartyCardAdapter(onClick)
-        binding.apply {
+        with(binding) {
             gamesTable.adapter = gamesTableAdapter
             gamesTable.layoutManager = LinearLayoutManager(requireContext())
-            lifecycle.coroutineScope.launch {
-                viewModel.uiState
-                    .flowWithLifecycle(lifecycle)
-                    .collect { uiState ->
-                        if (!uiState.isFetchingData) progress.visibility = View.GONE
-                        else progress.visibility = View.VISIBLE
-                        gamesTableAdapter.items = uiState.dataList
-                        playerNameHeader.text = buildString {
-                            append(uiState.contractorPlayer)
-                            append(getString(R.string.ui_text_contacts))
-                        }
-                        playerOneName.text = uiState.playersInPartyModel.playerOne
-                        playerTwoName.text = uiState.playersInPartyModel.playerTwo
-                        playerThreeName.text = uiState.playersInPartyModel.playerThree
-                        playerFourName.text = uiState.playersInPartyModel.playerFour
+            viewModel.uiState
+                .flowWithLifecycle(lifecycle)
+                .onEach { uiState ->
+                    if (!uiState.isFetchingData) progress.visibility = View.GONE
+                    else progress.visibility = View.VISIBLE
+                    gamesTableAdapter.items = uiState.dataList
+                    playerNameHeader.text = buildString {
+                        append(uiState.contractorPlayer)
+                        append(getString(R.string.ui_text_contacts))
                     }
-            }
+                    playerOneName.text = uiState.playersInPartyModel.playerOne
+                    playerTwoName.text = uiState.playersInPartyModel.playerTwo
+                    playerThreeName.text = uiState.playersInPartyModel.playerThree
+                    playerFourName.text = uiState.playersInPartyModel.playerFour
+                }
+                .launchIn(lifecycle.coroutineScope)
         }
     }
 
-    private fun setupEvent(lifecycle: Lifecycle) {
+    private fun setupEvent() {
         viewModel.uiEvent
             .flowWithLifecycle(lifecycle)
             .onEach { event ->

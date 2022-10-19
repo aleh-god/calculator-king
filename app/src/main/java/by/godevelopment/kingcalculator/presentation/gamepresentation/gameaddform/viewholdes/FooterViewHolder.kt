@@ -1,10 +1,8 @@
 package by.godevelopment.kingcalculator.presentation.gamepresentation.gameaddform.viewholdes
 
 import android.os.Bundle
-import android.util.Log
 import androidx.recyclerview.widget.RecyclerView
 import by.godevelopment.kingcalculator.R
-import by.godevelopment.kingcalculator.commons.TAG
 import by.godevelopment.kingcalculator.databinding.FooterGameAddFormBinding
 import by.godevelopment.kingcalculator.domain.gamesdomain.models.MultiItemModel
 
@@ -20,6 +18,5 @@ class FooterViewHolder(
     }
 
     override fun update(bundle: Bundle) {
-        Log.i(TAG, "FooterViewHolder update")
     }
 }

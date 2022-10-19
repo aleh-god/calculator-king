@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.coroutineScope
 import androidx.lifecycle.flowWithLifecycle
 import androidx.navigation.fragment.findNavController
@@ -16,7 +15,6 @@ import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class PlayerAddFormFragment : Fragment() {
@@ -36,43 +34,36 @@ class PlayerAddFormFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentPlayerAddFormBinding.inflate(inflater, container, false)
-        viewLifecycleOwner.lifecycle.also {
-            setupUi(it)
-            setupEvent(it)
-        }
+        setupUi()
+        setupEvent()
         setupListeners()
         return binding.root
     }
 
-    private fun setupUi(lifecycle: Lifecycle) {
-        binding.apply {
-            lifecycle.coroutineScope.launch {
-                viewModel.uiState
-                    .flowWithLifecycle(lifecycle)
-                    .collect { uiState ->
-                        showProgressUi(uiState.showsProgress)
-                        playerName.error = uiState.playerNameError?.let { getString(it) }
-                        playerEmail.error = uiState.emailError?.let { getString(it) }
-                    }
+    private fun setupUi() = with(binding) {
+        viewModel.uiState
+            .flowWithLifecycle(lifecycle)
+            .onEach { uiState ->
+                showProgressUi(uiState.showsProgress)
+                playerName.error = uiState.playerNameError?.let { getString(it) }
+                playerEmail.error = uiState.emailError?.let { getString(it) }
             }
+            .launchIn(lifecycle.coroutineScope)
+    }
+
+    private fun setupListeners() = with(binding) {
+        bttnSave.setOnClickListener {
+            viewModel.onEvent(AddFormUserEvent.PressSaveButton)
+        }
+        playerNameEdit.doAfterTextChanged {
+            viewModel.onEvent(AddFormUserEvent.PlayerNameChanged(it.toString()))
+        }
+        playerEmailEdit.doAfterTextChanged {
+            viewModel.onEvent(AddFormUserEvent.EmailChanged(it.toString()))
         }
     }
 
-    private fun setupListeners() {
-        binding.apply {
-            bttnSave.setOnClickListener {
-                viewModel.onEvent(AddFormUserEvent.PressSaveButton)
-            }
-            playerNameEdit.doAfterTextChanged {
-                viewModel.onEvent(AddFormUserEvent.PlayerNameChanged(it.toString()))
-            }
-            playerEmailEdit.doAfterTextChanged {
-                viewModel.onEvent(AddFormUserEvent.EmailChanged(it.toString()))
-            }
-        }
-    }
-
-    private fun setupEvent(lifecycle: Lifecycle) {
+    private fun setupEvent() {
         viewModel.uiEvent
             .flowWithLifecycle(lifecycle)
             .onEach { event ->
@@ -95,15 +86,13 @@ class PlayerAddFormFragment : Fragment() {
             .launchIn(lifecycle.coroutineScope)
     }
 
-    private fun showProgressUi(key: Boolean) {
-        binding.apply {
-            if (key) {
-                progress.visibility = View.VISIBLE
-                bttnSave.visibility = View.GONE
-            } else {
-                progress.visibility = View.GONE
-                bttnSave.visibility = View.VISIBLE
-            }
+    private fun showProgressUi(key: Boolean) = with(binding) {
+        if (key) {
+            progress.visibility = View.VISIBLE
+            bttnSave.visibility = View.GONE
+        } else {
+            progress.visibility = View.GONE
+            bttnSave.visibility = View.VISIBLE
         }
     }
 

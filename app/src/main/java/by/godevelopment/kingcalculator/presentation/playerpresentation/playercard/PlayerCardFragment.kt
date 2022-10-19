@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.coroutineScope
 import androidx.lifecycle.flowWithLifecycle
 import androidx.navigation.fragment.findNavController
@@ -16,7 +15,6 @@ import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class PlayerCardFragment : Fragment() {
@@ -36,45 +34,38 @@ class PlayerCardFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentPlayerCardBinding.inflate(inflater, container, false)
-        viewLifecycleOwner.lifecycle.also {
-            setupUi(it)
-            setupEvent(it)
-        }
+        setupUi()
+        setupEvent()
         setupListeners()
         return binding.root
     }
 
-    private fun setupListeners() {
-        binding.apply {
-            bttnDelete.setOnClickListener {
-                viewModel.onEvent(CardUserEvent.PressDeleteButton)
-            }
-            bttnSave.setOnClickListener {
-                viewModel.onEvent(CardUserEvent.PressSaveButton)
-            }
-            playerNameEdit.doAfterTextChanged {
-                viewModel.onEvent(CardUserEvent.PlayerNameChanged(it.toString()))
-            }
+    private fun setupListeners() = with(binding) {
+        bttnDelete.setOnClickListener {
+            viewModel.onEvent(CardUserEvent.PressDeleteButton)
+        }
+        bttnSave.setOnClickListener {
+            viewModel.onEvent(CardUserEvent.PressSaveButton)
+        }
+        playerNameEdit.doAfterTextChanged {
+            viewModel.onEvent(CardUserEvent.PlayerNameChanged(it.toString()))
         }
     }
 
-    private fun setupUi(lifecycle: Lifecycle) {
-        binding.apply {
-            lifecycle.coroutineScope.launch {
-                viewModel.uiState
-                    .flowWithLifecycle(lifecycle)
-                    .collect { uiState ->
-                        showProgress(uiState.showsProgress)
-                        playerNameEdit.text.apply {
-                            if (this.isNullOrEmpty()) playerNameEdit.setText(uiState.playerModel.name)
-                        }
-                        playerName.error = uiState.playerNameError?.let { getString(it) }
-                    }
+    private fun setupUi() = with(binding) {
+        viewModel.uiState
+            .flowWithLifecycle(lifecycle)
+            .onEach { uiState ->
+                showProgress(uiState.showsProgress)
+                playerNameEdit.text.apply {
+                    if (this.isNullOrEmpty()) playerNameEdit.setText(uiState.playerModel.name)
+                }
+                playerName.error = uiState.playerNameError?.let { getString(it) }
             }
-        }
+            .launchIn(lifecycle.coroutineScope)
     }
 
-    private fun setupEvent(lifecycle: Lifecycle) {
+    private fun setupEvent() {
         viewModel.uiEvent
             .flowWithLifecycle(lifecycle)
             .onEach { event ->
@@ -97,17 +88,15 @@ class PlayerCardFragment : Fragment() {
             .launchIn(lifecycle.coroutineScope)
     }
 
-    private fun showProgress(key: Boolean) {
-        binding.apply {
-            if (key) {
-                progress.visibility = View.VISIBLE
-                bttnSave.visibility = View.GONE
-                bttnDelete.visibility = View.GONE
-            } else {
-                progress.visibility = View.GONE
-                bttnSave.visibility = View.VISIBLE
-                bttnDelete.visibility = View.VISIBLE
-            }
+    private fun showProgress(key: Boolean) = with(binding) {
+        if (key) {
+            progress.visibility = View.VISIBLE
+            bttnSave.visibility = View.GONE
+            bttnDelete.visibility = View.GONE
+        } else {
+            progress.visibility = View.GONE
+            bttnSave.visibility = View.VISIBLE
+            bttnDelete.visibility = View.VISIBLE
         }
     }
 

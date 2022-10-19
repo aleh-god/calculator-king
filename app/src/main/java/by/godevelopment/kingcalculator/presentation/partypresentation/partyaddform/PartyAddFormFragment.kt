@@ -8,7 +8,6 @@ import android.widget.ArrayAdapter
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.coroutineScope
 import androidx.lifecycle.flowWithLifecycle
 import androidx.navigation.fragment.findNavController
@@ -18,7 +17,6 @@ import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class PartyAddFormFragment : Fragment() {
@@ -39,48 +37,42 @@ class PartyAddFormFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentPartyAddFormBinding.inflate(inflater, container, false)
-        viewLifecycleOwner.lifecycle.also {
-            setupUi(it)
-            setupEvent(it)
-        }
+        setupUi()
+        setupEvent()
         setupListeners()
         return binding.root
     }
 
-    private fun setupUi(lifecycle: Lifecycle) {
-        lifecycle.coroutineScope.launch {
-            viewModel.uiState
-                .flowWithLifecycle(lifecycle)
-                .collect { uiState ->
-                    showProgressUi(uiState.showsProgress)
-                    binding.apply {
-                        // if (uiState.partyNameError != null) getString(uiState.partyNameError) else null
-                        partyName.error = uiState.partyNameError?.let { getString(it) }
-                        playerOneMenu.error = uiState.playerOneError?.let { getString(it) }
-                        playerTwoMenu.error = uiState.playerTwoError?.let { getString(it) }
-                        playerThreeMenu.error = uiState.playerThreeError?.let { getString(it) }
-                        playerFourMenu.error = uiState.playerFourError?.let { getString(it) }
+    private fun setupUi() = with(binding) {
+        viewModel.uiState
+            .flowWithLifecycle(lifecycle)
+            .onEach { uiState ->
+                showProgressUi(uiState.showsProgress)
 
-                        ArrayAdapter(
-                            requireContext(),
-                            R.layout.menu_item,
-                            uiState.players.keys.toTypedArray()
-                        ).also {
-                            playerTwoInputMenu.setAdapter(it)
-                            playerOneInputMenu.setAdapter(it)
-                            playerThreeInputMenu.setAdapter(it)
-                            playerFourInputMenu.setAdapter(it)
-                        }
-                    }
+                partyName.error = uiState.partyNameError?.let { getString(it) }
+                playerOneMenu.error = uiState.playerOneError?.let { getString(it) }
+                playerTwoMenu.error = uiState.playerTwoError?.let { getString(it) }
+                playerThreeMenu.error = uiState.playerThreeError?.let { getString(it) }
+                playerFourMenu.error = uiState.playerFourError?.let { getString(it) }
+
+                ArrayAdapter(
+                    requireContext(),
+                    R.layout.menu_item,
+                    uiState.players.keys.toTypedArray()
+                ).also {
+                    playerTwoInputMenu.setAdapter(it)
+                    playerOneInputMenu.setAdapter(it)
+                    playerThreeInputMenu.setAdapter(it)
+                    playerFourInputMenu.setAdapter(it)
                 }
-        }
+            }
+            .launchIn(lifecycle.coroutineScope)
     }
 
-    private fun setupEvent(lifecycle: Lifecycle) {
+    private fun setupEvent() {
         viewModel.uiEvent
             .flowWithLifecycle(lifecycle)
             .onEach { event ->
-
                 when (event) {
                     is PartyAddFormUiEvent.NavigateToBackScreen -> {
                         findNavController().navigate(
@@ -95,42 +87,42 @@ class PartyAddFormFragment : Fragment() {
                             .setAction(event.textAction) { event.onAction() }
                         snackbar?.show()
                     }
-                    is PartyAddFormUiEvent.NavigateToList -> { navigateToPartyCard(event.idParty) }
+                    is PartyAddFormUiEvent.NavigateToList -> {
+                        navigateToPartyCard(event.idParty)
+                    }
                 }
             }
             .launchIn(lifecycle.coroutineScope)
     }
 
-    private fun setupListeners() {
-        binding.bttnStart.setOnClickListener {
+    private fun setupListeners() = with(binding) {
+        bttnStart.setOnClickListener {
             viewModel.onEvent(AddPartyFormUserEvent.PressStartButton)
         }
-        binding.partyNameEdit.doAfterTextChanged {
+        partyNameEdit.doAfterTextChanged {
             viewModel.onEvent(AddPartyFormUserEvent.PartyNameChanged(it.toString()))
         }
-        binding.playerOneInputMenu.doAfterTextChanged {
+        playerOneInputMenu.doAfterTextChanged {
             viewModel.onEvent(AddPartyFormUserEvent.PlayerOneNameChanged(it.toString()))
         }
-        binding.playerTwoInputMenu.doAfterTextChanged {
+        playerTwoInputMenu.doAfterTextChanged {
             viewModel.onEvent(AddPartyFormUserEvent.PlayerTwoNameChanged(it.toString()))
         }
-        binding.playerThreeInputMenu.doAfterTextChanged {
+        playerThreeInputMenu.doAfterTextChanged {
             viewModel.onEvent(AddPartyFormUserEvent.PlayerThreeNameChanged(it.toString()))
         }
-        binding.playerFourInputMenu.doAfterTextChanged {
+        playerFourInputMenu.doAfterTextChanged {
             viewModel.onEvent(AddPartyFormUserEvent.PlayerFourNameChanged(it.toString()))
         }
     }
 
-    private fun showProgressUi(key: Boolean) {
-        binding.apply {
-            if (key) {
-                progress.visibility = View.VISIBLE
-                bttnStart.visibility = View.GONE
-            } else {
-                progress.visibility = View.GONE
-                bttnStart.visibility = View.VISIBLE
-            }
+    private fun showProgressUi(key: Boolean) = with(binding) {
+        if (key) {
+            progress.visibility = View.VISIBLE
+            bttnStart.visibility = View.GONE
+        } else {
+            progress.visibility = View.GONE
+            bttnStart.visibility = View.VISIBLE
         }
     }
 
