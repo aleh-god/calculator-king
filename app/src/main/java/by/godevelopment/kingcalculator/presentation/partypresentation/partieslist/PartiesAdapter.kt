@@ -17,7 +17,7 @@ class PartiesAdapter(
 
     private val diffCallback = object : DiffUtil.ItemCallback<ItemPartyModel>() {
         override fun areItemsTheSame(oldItem: ItemPartyModel, newItem: ItemPartyModel): Boolean {
-            return oldItem == newItem
+            return oldItem.id == newItem.id
         }
 
         override fun areContentsTheSame(oldItem: ItemPartyModel, newItem: ItemPartyModel): Boolean {

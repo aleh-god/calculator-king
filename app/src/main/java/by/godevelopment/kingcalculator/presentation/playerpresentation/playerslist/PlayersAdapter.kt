@@ -15,7 +15,7 @@ class PlayersAdapter(
 
     private val diffCallback = object : DiffUtil.ItemCallback<PlayerModel>() {
         override fun areItemsTheSame(oldItem: PlayerModel, newItem: PlayerModel): Boolean {
-            return oldItem == newItem
+            return oldItem.id == newItem.id
         }
 
         override fun areContentsTheSame(oldItem: PlayerModel, newItem: PlayerModel): Boolean {
