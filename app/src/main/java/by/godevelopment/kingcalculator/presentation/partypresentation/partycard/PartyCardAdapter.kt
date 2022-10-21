@@ -18,7 +18,7 @@ class PartyCardAdapter(
 
     private val diffCallback = object : DiffUtil.ItemCallback<GamesTableItemModel>() {
         override fun areItemsTheSame(oldItem: GamesTableItemModel, newItem: GamesTableItemModel): Boolean {
-            return oldItem == newItem
+            return oldItem.id == newItem.id
         }
 
         override fun areContentsTheSame(oldItem: GamesTableItemModel, newItem: GamesTableItemModel): Boolean {
