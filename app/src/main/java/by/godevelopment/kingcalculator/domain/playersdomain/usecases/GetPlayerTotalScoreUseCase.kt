@@ -8,7 +8,7 @@ class GetPlayerTotalScoreUseCase @Inject constructor() {
 
     val scoreRes = R.string.use_case_type_score
 
-    operator fun invoke(parties: List<TricksNoteModel>): String {
-        return parties.sumOf { it.gameType.getTotalGameScore(it.tricksCount) }.toString()
+    operator fun invoke(tricks: List<TricksNoteModel>): String {
+        return tricks.sumOf { it.gameType.getGameScore(it.tricksCount) }.toString()
     }
 }

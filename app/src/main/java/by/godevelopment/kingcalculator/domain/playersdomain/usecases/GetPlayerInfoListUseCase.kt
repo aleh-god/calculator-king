@@ -9,7 +9,9 @@ class GetPlayerInfoListUseCase @Inject constructor(
     private val playerRepository: PlayerRepository,
     private val getPlayerTotalPartiesUseCase: GetPlayerTotalPartiesUseCase,
     private val getPlayerTotalGamesUseCase: GetPlayerTotalGamesUseCase,
-    private val getPlayerTotalScoreUseCase: GetPlayerTotalScoreUseCase
+    private val getPlayerTotalScoreUseCase: GetPlayerTotalScoreUseCase,
+    private val getPlayerGameWinPercentListUseCase: GetPlayerGameWinPercentListUseCase,
+    private val getPlayerGamesScoreListUseCase: GetPlayerGamesScoreListUseCase
 ) {
     suspend operator fun invoke(playerId: Long): ResultDataBase<List<ItemPlayerInfoModel>> {
         val partiesResult = playerRepository.getAllPartiesByPlayerId(playerId)
@@ -41,6 +43,12 @@ class GetPlayerInfoListUseCase @Inject constructor(
                                             type = getPlayerTotalScoreUseCase.scoreRes,
                                             value = getPlayerTotalScoreUseCase(tricks)
                                         )
+                                    ) + getPlayerGameWinPercentListUseCase(
+                                        tricks = tricks,
+                                        games = games
+                                    ) + getPlayerGamesScoreListUseCase(
+                                        tricks = tricks,
+                                        games = games
                                     )
                                 )
                             }

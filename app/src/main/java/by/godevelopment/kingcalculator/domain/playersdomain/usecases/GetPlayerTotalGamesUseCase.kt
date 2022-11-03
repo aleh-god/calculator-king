@@ -8,7 +8,7 @@ class GetPlayerTotalGamesUseCase @Inject constructor() {
 
     val gamesRes = R.string.use_case_type_games
 
-    operator fun invoke(parties: List<GameModel>): String {
-        return parties.map { it.gameType }.size.toString()
+    operator fun invoke(games: List<GameModel>): String {
+        return games.map { it.gameType }.size.toString()
     }
 }

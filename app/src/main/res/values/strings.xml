@@ -95,6 +95,8 @@
     <string name="use_case_type_parties">Player total parties</string>
     <string name="use_case_type_games">Player total games</string>
     <string name="use_case_type_score">Player total score</string>
+    <string name="use_case_type_percent">Average percentage by game type</string>
+    <string name="use_case_score_by_type">Total score by game type</string>
 
     <string name="message_data_load">Data load successfully</string>
     <string name="message_data_save">Data save successfully</string>

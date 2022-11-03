@@ -145,4 +145,6 @@
     <string name="hint_text_player_three">третий игрок</string>
     <string name="hint_text_player_four">четвертый игрок</string>
     <string name="alert_help_text_title">Справка</string>
+    <string name="use_case_score_by_type">Общий балл по типу игры</string>
+    <string name="use_case_type_percent">Средний процент по типу игры</string>
 </resources>
