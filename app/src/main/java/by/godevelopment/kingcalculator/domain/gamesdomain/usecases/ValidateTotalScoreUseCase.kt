@@ -21,7 +21,7 @@ class ValidateTotalScoreUseCase @Inject constructor() {
         val sumGame = listItems
             .filter { it.itemViewType == BODY_ROW_TYPE }
             .sumOf {
-                it.gameType.getTotalGameScore(it.tricks)
+                it.gameType.getGameScore(it.tricks)
             }
 
         fun checkSumByTypeGame(trickScores: Int): Boolean {
@@ -32,7 +32,7 @@ class ValidateTotalScoreUseCase @Inject constructor() {
             if (gameType.trickScores > 0) checkSumByTypeGame(GameType.TakeBFG.trickScores)
             else checkSumByTypeGame(GameType.DoNotTakeBFG.trickScores)
         } else {
-            checkSumByTypeGame(gameType.getTotalGameScore(gameType.tricksCount))
+            checkSumByTypeGame(gameType.getGameScore(gameType.tricksCount))
         }
     }
 }

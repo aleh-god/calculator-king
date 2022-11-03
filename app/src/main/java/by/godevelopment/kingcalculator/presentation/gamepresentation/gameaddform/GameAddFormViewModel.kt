@@ -119,7 +119,7 @@ class GameAddFormViewModel @Inject constructor(
 
     private fun updateTricksStateById(rowId: Int, newCount: Int, currentModel: MultiItemModel) {
         val currentGameType = currentModel.gameType
-        val newScore = currentGameType.getTotalGameScore(newCount)
+        val newScore = currentGameType.getGameScore(newCount)
         _uiState.update { state ->
             var newList = state.listMultiItems
                 .map { multiItemModel ->

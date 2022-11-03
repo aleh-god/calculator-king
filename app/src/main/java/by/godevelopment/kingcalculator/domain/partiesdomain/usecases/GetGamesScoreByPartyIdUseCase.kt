@@ -30,16 +30,16 @@ class GetGamesScoreByPartyIdUseCase @Inject constructor(
                                     gameType = game.gameType,
                                     oneGameScore = tricksResult
                                         .filter { it.playerId == party.playerOneId }
-                                        .sumOf { it.gameType.getTotalGameScore(it.tricksCount) },
+                                        .sumOf { it.gameType.getGameScore(it.tricksCount) },
                                     twoGameScore = tricksResult
                                         .filter { it.playerId == party.playerTwoId }
-                                        .sumOf { it.gameType.getTotalGameScore(it.tricksCount) },
+                                        .sumOf { it.gameType.getGameScore(it.tricksCount) },
                                     threeGameScore = tricksResult
                                         .filter { it.playerId == party.playerThreeId }
-                                        .sumOf { it.gameType.getTotalGameScore(it.tricksCount) },
+                                        .sumOf { it.gameType.getGameScore(it.tricksCount) },
                                     fourGameScore = tricksResult
                                         .filter { it.playerId == party.playerFourId }
-                                        .sumOf { it.gameType.getTotalGameScore(it.tricksCount) }
+                                        .sumOf { it.gameType.getGameScore(it.tricksCount) }
                                 )
                             }
                         ResultDataBase.Success(value = scoresList)
