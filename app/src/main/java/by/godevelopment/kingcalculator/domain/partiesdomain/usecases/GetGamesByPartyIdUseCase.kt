@@ -10,33 +10,39 @@ class GetGamesByPartyIdUseCase @Inject constructor(
     private val partyRepository: PartyRepository
 ) {
 
+    private val NUMBER_OF_PLAYERS = 4
+    private val MOD_PLAYER1 = 0
+    private val MOD_PLAYER2 = 1
+    private val MOD_PLAYER3 = 2
+    private val MOD_PLAYER4 = 3
+
     suspend operator fun invoke(partyId: Long): ResultDataBase<List<GamesTableItemModel>> {
         val listResult = partyRepository.getAllGamesNotesByPartyId(partyId)
         return when (listResult) {
             is ResultDataBase.Error -> ResultDataBase.Error(message = listResult.message)
             is ResultDataBase.Success -> {
+
                 val gamesNotes = listResult
                     .value
-                    .sortedBy { it.gameType.id }
                     .mapIndexed { index: Int, model -> model to index }
 
-                val openedGamePosition = gamesNotes.size % 4
-                var index: Int = 0
+                val openedGamePosition = gamesNotes.size % NUMBER_OF_PLAYERS
+
                 val itemModels: List<GamesTableItemModel> = GameType
                     .values()
-                    .map { type ->
+                    .mapIndexed { index, gameType ->
 
                         val players = gamesNotes
-                            .filter { type == it.first.gameType }
-                            .map { it.second % 4 }
+                            .filter { gameType == it.first.gameType }
+                            .map { it.second % NUMBER_OF_PLAYERS }
 
                         GamesTableItemModel(
-                            id = index++,
-                            gameType = type,
-                            isFinishedOneGame = players.contains(0),
-                            isFinishedTwoGame = players.contains(1),
-                            isFinishedThreeGame = players.contains(2),
-                            isFinishedFourGame = players.contains(3),
+                            id = index,
+                            gameType = gameType,
+                            isFinishedOneGame = players.contains(MOD_PLAYER1),
+                            isFinishedTwoGame = players.contains(MOD_PLAYER2),
+                            isFinishedThreeGame = players.contains(MOD_PLAYER3),
+                            isFinishedFourGame = players.contains(MOD_PLAYER4),
                             openedColumnIndex = openedGamePosition
                         )
                     }

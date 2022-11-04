@@ -13,6 +13,8 @@ class GetPlayersByPartyIdUseCase @Inject constructor(
     private val stringHelper: StringHelper
 ) {
 
+    private val SHORT_NAME_LENGTH = 4
+
     suspend operator fun invoke(partyId: Long): ResultDataBase<PlayersInPartyModel> {
         val result = partyRepository.getPlayersByPartyId(partyId)
         return when (result) {
@@ -25,7 +27,7 @@ class GetPlayersByPartyIdUseCase @Inject constructor(
                     val name =
                         if (player != null && player.isActive) player.name
                         else stringHelper.getString(R.string.player_null)
-                    return name.take(4)
+                    return name.take(SHORT_NAME_LENGTH)
                 }
 
                 ResultDataBase.Success(

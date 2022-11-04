@@ -1,22 +1,20 @@
 package by.godevelopment.kingcalculator.data.datasource
 
-import android.util.Log
 import by.godevelopment.kingcalculator.R
 import by.godevelopment.kingcalculator.commons.ROWS_NOT_INSERTED
 import by.godevelopment.kingcalculator.commons.ROWS_NOT_UPDATED
-import by.godevelopment.kingcalculator.commons.TAG
 import by.godevelopment.kingcalculator.data.database.PlayersDao
 import by.godevelopment.kingcalculator.data.entities.PlayerProfile
 import by.godevelopment.kingcalculator.domain.commons.models.ResultDataBase
 import by.godevelopment.kingcalculator.domain.commons.utils.wrapResult
 import by.godevelopment.kingcalculator.domain.commons.utils.wrapResultBy
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 class PlayersDataSource @Inject constructor(
     private val playersDao: PlayersDao
 ) {
+
     fun getAllPlayers(): Flow<List<PlayerProfile>> = playersDao.getAllPlayerProfiles()
 
     suspend fun getPlayerProfileByIdRaw(playerId: Long): PlayerProfile? =
@@ -34,7 +32,6 @@ class PlayersDataSource @Inject constructor(
             if (result != ROWS_NOT_INSERTED) ResultDataBase.Success(value = result)
             else ResultDataBase.Error(message = R.string.message_error_data_save)
         } catch (e: Exception) {
-            Log.i(TAG, "createPlayer: catch ${e.message}")
             ResultDataBase.Error(message = R.string.message_error_data_save)
         }
     }
@@ -45,7 +42,6 @@ class PlayersDataSource @Inject constructor(
             if (result != ROWS_NOT_UPDATED) ResultDataBase.Success(value = result)
             else ResultDataBase.Error(message = R.string.message_error_data_save)
         } catch (e: Exception) {
-            Log.i(TAG, "updatePlayerById: catch ${e.message}")
             ResultDataBase.Error(message = R.string.message_error_data_save)
         }
     }
@@ -56,7 +52,6 @@ class PlayersDataSource @Inject constructor(
             if (disableResult != ROWS_NOT_UPDATED) ResultDataBase.Success(value = disableResult)
             else ResultDataBase.Error(message = R.string.message_error_data_save)
         } catch (e: Exception) {
-            Log.i(TAG, "deletePlayerById: catch ${e.message}")
             ResultDataBase.Error(message = R.string.message_error_data_save)
         }
     }

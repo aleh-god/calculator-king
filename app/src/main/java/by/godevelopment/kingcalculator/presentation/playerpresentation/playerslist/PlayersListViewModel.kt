@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import by.godevelopment.kingcalculator.R
+import by.godevelopment.kingcalculator.commons.RELOAD_MAX_LIMIT
 import by.godevelopment.kingcalculator.commons.TAG
 import by.godevelopment.kingcalculator.domain.playersdomain.models.PlayerModel
 import by.godevelopment.kingcalculator.domain.playersdomain.usecases.GetListPlayerModelUseCase
@@ -26,7 +27,7 @@ class PlayersListViewModel @Inject constructor(
     val uiEvent: Flow<PlayersListUiEvent> = _uiEvent.receiveAsFlow()
 
     private var fetchJob: Job? = null
-    private var reloadsNumber = 0
+    private var reloadsCount = 0
 
     init {
         fetchDataModel()
@@ -55,14 +56,14 @@ class PlayersListViewModel @Inject constructor(
     }
 
     private fun reloadDataModel() {
-        if (reloadsNumber > 3) {
+        if (reloadsCount > RELOAD_MAX_LIMIT) {
             fetchJob?.cancel()
             fetchJob = viewModelScope.launch {
-                reloadsNumber = 0
+                reloadsCount = 0
                 _uiEvent.send(PlayersListUiEvent.NavigateToBackScreen)
             }
         } else {
-            reloadsNumber++
+            reloadsCount++
             fetchDataModel()
         }
     }

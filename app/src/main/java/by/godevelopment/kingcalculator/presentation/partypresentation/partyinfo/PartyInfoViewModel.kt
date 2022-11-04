@@ -4,6 +4,9 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import by.godevelopment.kingcalculator.R
+import by.godevelopment.kingcalculator.commons.EMPTY_STRING
+import by.godevelopment.kingcalculator.commons.PARTY_ID_NAVIGATION_ARGUMENT
+import by.godevelopment.kingcalculator.commons.RELOAD_MAX_LIMIT
 import by.godevelopment.kingcalculator.domain.commons.models.ResultDataBase
 import by.godevelopment.kingcalculator.domain.partiesdomain.models.PartyInfoItemModel
 import by.godevelopment.kingcalculator.domain.partiesdomain.models.PlayersInPartyModel
@@ -26,7 +29,7 @@ class PartyInfoViewModel @Inject constructor(
     private val getPartyNameUseCase: GetPartyNameUseCase
 ) : ViewModel() {
 
-    val partyId = state.get<Long>("partyId")
+    val partyId = state.get<Long>(PARTY_ID_NAVIGATION_ARGUMENT)
 
     private val _uiState: MutableStateFlow<UiState> = MutableStateFlow(UiState())
     val uiState: StateFlow<UiState> = _uiState.asStateFlow()
@@ -35,21 +38,21 @@ class PartyInfoViewModel @Inject constructor(
     val uiEvent: Flow<PartyInfoUiEvent> = _uiEvent.receiveAsFlow()
 
     private var fetchJob: Job? = null
-    private var reloadsNumber = 0
+    private var reloadsCount = 0
 
     init {
         fetchDataModel()
     }
 
     private fun reloadDataModel() {
-        if (reloadsNumber > 3) {
+        if (reloadsCount > RELOAD_MAX_LIMIT) {
             fetchJob?.cancel()
             fetchJob = viewModelScope.launch {
-                reloadsNumber = 0
+                reloadsCount = 0
                 _uiEvent.send(PartyInfoUiEvent.NavigateToBackScreen)
             }
         } else {
-            reloadsNumber++
+            reloadsCount++
             fetchDataModel()
         }
     }
@@ -124,7 +127,7 @@ class PartyInfoViewModel @Inject constructor(
 
     data class UiState(
         val isFetchingData: Boolean = false,
-        val partyName: String = "",
+        val partyName: String = EMPTY_STRING,
         val playersInPartyModel: PlayersInPartyModel = PlayersInPartyModel(),
         val dataList: List<PartyInfoItemModel> = emptyList()
     )

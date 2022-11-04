@@ -37,6 +37,12 @@ class PartyRepositoryImpl @Inject constructor(
     @IoDispatcher private val ioDispatcher: CoroutineDispatcher
 ) : PartyRepository, DeletePartiesRepository {
 
+    private val NUMBER_OF_PLAYERS = 4
+    private val MOD_PLAYER1 = 0
+    private val MOD_PLAYER2 = 1
+    private val MOD_PLAYER3 = 2
+    private val MOD_PLAYER4 = 3
+
     override fun getAllParties(): Flow<List<RawItemPartyModel>> {
         val result = partiesDataSource.getAllPartyNotes().map { list ->
             list.map {
@@ -112,7 +118,10 @@ class PartyRepositoryImpl @Inject constructor(
                             )?.toPlayerModel()
                         )
                             .mapValues {
-                                if (it.value == null) return@withContext ResultDataBase.Error<Map<Players, PlayerModel>>(message = R.string.message_error_bad_database)
+                                if (it.value == null)
+                                    return@withContext ResultDataBase.Error<Map<Players, PlayerModel>>(
+                                        message = R.string.message_error_bad_database
+                                    )
                                 it.value!!
                             }
                     )
@@ -132,14 +141,18 @@ class PartyRepositoryImpl @Inject constructor(
                     val party = partyResult.value
                     val gamesCount = gamesDataSource.calculateGamesCountByPartyId(partyId)
                     when (gamesCount) {
-                        is ResultDataBase.Error -> ResultDataBase.Error(message = gamesCount.message)
+                        is ResultDataBase.Error -> ResultDataBase.Error(
+                            message = gamesCount.message
+                        )
                         is ResultDataBase.Success -> {
-                            val playerId = when (gamesCount.value % 4) {
-                                0 -> party.playerOneId
-                                1 -> party.playerTwoId
-                                2 -> party.playerThreeId
-                                3 -> party.playerFourId
-                                else -> return@withContext ResultDataBase.Error(message = R.string.message_error_data_load)
+                            val playerId = when (gamesCount.value % NUMBER_OF_PLAYERS) {
+                                MOD_PLAYER1 -> party.playerOneId
+                                MOD_PLAYER2 -> party.playerTwoId
+                                MOD_PLAYER3 -> party.playerThreeId
+                                MOD_PLAYER4 -> party.playerFourId
+                                else -> return@withContext ResultDataBase.Error(
+                                    message = R.string.message_error_data_load
+                                )
                             }
                             return@withContext playersDataSource.getPlayerProfileById(playerId)
                                 .mapResult { it.toPlayerModel() }

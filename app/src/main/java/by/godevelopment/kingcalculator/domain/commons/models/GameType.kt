@@ -1,6 +1,5 @@
 package by.godevelopment.kingcalculator.domain.commons.models
 
-import android.content.Context
 import androidx.annotation.StringRes
 import by.godevelopment.kingcalculator.R
 
@@ -36,14 +35,5 @@ enum class GameType(
             DoNotTakeBFG -> this.trickScores
             else -> this.tricksCount * this.trickScores
         }
-    }
-
-    fun getDescription(context: Context): String {
-        return context.getString(res)
-    }
-
-    companion object {
-        fun getGameTypeByIdOrNull(key: Int): GameType? =
-            GameType.values().firstOrNull { key == it.id }
     }
 }

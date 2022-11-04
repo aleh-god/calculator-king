@@ -4,6 +4,9 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import by.godevelopment.kingcalculator.R
+import by.godevelopment.kingcalculator.commons.EMPTY_STRING
+import by.godevelopment.kingcalculator.commons.PLAYER_ID_NAVIGATION_ARGUMENT
+import by.godevelopment.kingcalculator.commons.RELOAD_MAX_LIMIT
 import by.godevelopment.kingcalculator.domain.commons.models.ResultDataBase
 import by.godevelopment.kingcalculator.domain.playersdomain.models.PlayerModel
 import by.godevelopment.kingcalculator.domain.playersdomain.repositories.PlayerCardRepository
@@ -27,8 +30,8 @@ class PlayerCardViewModel @Inject constructor(
     private val _uiState: MutableStateFlow<CardUiState> = MutableStateFlow(
         CardUiState(
             PlayerModel(
-                name = "",
-                email = "",
+                name = EMPTY_STRING,
+                email = EMPTY_STRING,
                 isActive = false
             )
         )
@@ -38,23 +41,23 @@ class PlayerCardViewModel @Inject constructor(
     private val _uiEvent = Channel<PlayerCardUiEvent>()
     val uiEvent: Flow<PlayerCardUiEvent> = _uiEvent.receiveAsFlow()
 
-    private val idPlayer = state.get<Long>("playerId")
+    private val idPlayer = state.get<Long>(PLAYER_ID_NAVIGATION_ARGUMENT)
     private var fetchJob: Job? = null
-    private var reloadsNumber = 0
+    private var reloadsCount = 0
 
     init {
         fetchDataModel(idPlayer)
     }
 
     private fun reloadDataModel() {
-        if (reloadsNumber > 3) {
+        if (reloadsCount > RELOAD_MAX_LIMIT) {
             fetchJob?.cancel()
             fetchJob = viewModelScope.launch {
-                reloadsNumber = 0
+                reloadsCount = 0
                 _uiEvent.send(PlayerCardUiEvent.NavigateToBackScreen)
             }
         } else {
-            reloadsNumber++
+            reloadsCount++
             fetchDataModel(idPlayer)
         }
     }

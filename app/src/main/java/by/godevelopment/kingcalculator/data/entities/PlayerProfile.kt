@@ -5,11 +5,13 @@ import androidx.annotation.DrawableRes
 import androidx.room.Entity
 import androidx.room.Index
 import androidx.room.PrimaryKey
+import by.godevelopment.kingcalculator.commons.PLAYERS_TABLE_NAME
+import by.godevelopment.kingcalculator.commons.LONG_ZERO_STUB
 
-@Entity(tableName = "players", indices = [Index(value = ["email"], unique = true), Index(value = ["name"], unique = true)])
+@Entity(tableName = PLAYERS_TABLE_NAME, indices = [Index(value = ["email"], unique = true), Index(value = ["name"], unique = true)])
 data class PlayerProfile(
     @PrimaryKey(autoGenerate = true)
-    val id: Long = 0,
+    val id: Long = LONG_ZERO_STUB,
     val email: String,
     val name: String,
     val isActive: Boolean = true,

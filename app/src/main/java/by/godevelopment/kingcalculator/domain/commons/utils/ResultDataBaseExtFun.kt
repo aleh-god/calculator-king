@@ -1,9 +1,7 @@
 package by.godevelopment.kingcalculator.domain.commons.utils
 
-import android.util.Log
 import androidx.annotation.StringRes
 import by.godevelopment.kingcalculator.R
-import by.godevelopment.kingcalculator.commons.TAG
 import by.godevelopment.kingcalculator.domain.commons.models.ResultDataBase
 
 suspend fun <T> wrapResult(
@@ -16,7 +14,6 @@ suspend fun <T> wrapResult(
         if (result != null) ResultDataBase.Success<T>(value = result)
         else ResultDataBase.Error<T>(message = R.string.message_error_bad_database)
     } catch (e: Exception) {
-        Log.i(TAG, "wrapResultBy: ${e.message}")
         ResultDataBase.Error<T>(message = message)
     }
 }
@@ -32,7 +29,6 @@ suspend fun <T, K> wrapResultBy(
         if (result != null) ResultDataBase.Success<T>(value = result)
         else ResultDataBase.Error<T>(message = R.string.message_error_bad_database)
     } catch (e: Exception) {
-        Log.i(TAG, "wrapResultBy: ${e.message}")
         ResultDataBase.Error<T>(message = message)
     }
 }

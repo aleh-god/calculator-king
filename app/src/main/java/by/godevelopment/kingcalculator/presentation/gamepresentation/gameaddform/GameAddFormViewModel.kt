@@ -1,13 +1,13 @@
 package by.godevelopment.kingcalculator.presentation.gamepresentation.gameaddform
 
-import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import by.godevelopment.kingcalculator.R
 import by.godevelopment.kingcalculator.commons.BODY_ROW_TYPE
-import by.godevelopment.kingcalculator.commons.TAG
-import by.godevelopment.kingcalculator.commons.ZERO
+import by.godevelopment.kingcalculator.commons.GAME_ID_NAVIGATION_ARGUMENT
+import by.godevelopment.kingcalculator.commons.INT_ZERO_STUB
+import by.godevelopment.kingcalculator.commons.RELOAD_MAX_LIMIT
 import by.godevelopment.kingcalculator.domain.commons.models.Players
 import by.godevelopment.kingcalculator.domain.commons.models.ResultDataBase
 import by.godevelopment.kingcalculator.domain.gamesdomain.models.MultiItemModel
@@ -31,7 +31,7 @@ class GameAddFormViewModel @Inject constructor(
     private val saveGameUseCase: SaveGameUseCase
 ) : ViewModel() {
 
-    private val gameId: Long? = state.get<Long>("gameId")
+    private val gameId: Long? = state.get<Long>(GAME_ID_NAVIGATION_ARGUMENT)
 
     private val _uiState: MutableStateFlow<UiState> = MutableStateFlow(UiState())
     val uiState: StateFlow<UiState> = _uiState.asStateFlow()
@@ -40,11 +40,10 @@ class GameAddFormViewModel @Inject constructor(
     val uiEvent: Flow<GameAddFormUiEvent> = _uiEvent.receiveAsFlow()
 
     private var fetchJob: Job? = null
-    private var reloadsNumber = 0
+    private var reloadsCount = 0
 
     init {
         fetchDataModel()
-        Log.i(TAG, "GameAddFormViewModel: gameId = $gameId")
     }
 
     private fun fetchDataModel() {
@@ -68,7 +67,6 @@ class GameAddFormViewModel @Inject constructor(
                     }
                 }
             } catch (e: Exception) {
-                Log.i(TAG, "fetchDataModel.catch: ${e.message}")
                 _uiEvent.send(
                     GameAddFormUiEvent.ShowMessage(
                         message = R.string.message_error_data_load,
@@ -81,14 +79,14 @@ class GameAddFormViewModel @Inject constructor(
     }
 
     private fun reloadDataModel() {
-        if (reloadsNumber > 3) {
+        if (reloadsCount > RELOAD_MAX_LIMIT) {
             fetchJob?.cancel()
             fetchJob = viewModelScope.launch {
-                reloadsNumber = 0
+                reloadsCount = 0
                 _uiEvent.send(GameAddFormUiEvent.NavigateToBackScreen)
             }
         } else {
-            reloadsNumber++
+            reloadsCount++
             fetchDataModel()
         }
     }
@@ -146,7 +144,7 @@ class GameAddFormViewModel @Inject constructor(
                 .map {
                     newList.sumOf { item ->
                         if (item.itemViewType == BODY_ROW_TYPE && item.playerNumber == it) item.score
-                        else ZERO
+                        else INT_ZERO_STUB
                     }
                 }
 
@@ -221,7 +219,6 @@ class GameAddFormViewModel @Inject constructor(
                         }
                     }
                 } catch (e: Exception) {
-                    Log.i(TAG, "saveGameData.catch: ${e.message}")
                     _uiEvent.send(
                         GameAddFormUiEvent.ShowMessage(
                             message = R.string.message_error_data_save,
@@ -250,7 +247,7 @@ class GameAddFormViewModel @Inject constructor(
 
     data class UiState(
         val isFetchingData: Boolean = false,
-        val gameTotalScore: Int = 0,
+        val gameTotalScore: Int = INT_ZERO_STUB,
         val listMultiItems: List<MultiItemModel> = listOf()
     )
 }
