@@ -1,10 +1,9 @@
 package by.godevelopment.kingcalculator.presentation.partypresentation.partieslist
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import by.godevelopment.kingcalculator.R
-import by.godevelopment.kingcalculator.commons.TAG
+import by.godevelopment.kingcalculator.commons.RELOAD_MAX_LIMIT
 import by.godevelopment.kingcalculator.domain.commons.models.ResultDataBase
 import by.godevelopment.kingcalculator.domain.partiesdomain.models.ItemPartyModel
 import by.godevelopment.kingcalculator.domain.partiesdomain.usecases.DeletePartyUseCase
@@ -31,7 +30,7 @@ class PartiesListViewModel @Inject constructor(
     val uiEvent: Flow<PartiesListUiEvent> = _uiEvent.receiveAsFlow()
 
     private var fetchJob: Job? = null
-    private var reloadsNumber = 0
+    private var reloadsCount = 0
 
     init {
         fetchDataModel()
@@ -42,8 +41,7 @@ class PartiesListViewModel @Inject constructor(
         fetchJob = viewModelScope.launch {
             getPartyModelItemsUseCase()
                 .onStart { _uiState.update { it.copy(isFetchingData = true) } }
-                .catch { exception ->
-                    Log.i(TAG, "PartiesListViewModel viewModelScope.catch ${exception.message}")
+                .catch { _ ->
                     _uiState.update { it.copy(isFetchingData = false) }
                     _uiEvent.send(
                         PartiesListUiEvent.ShowMessage(
@@ -86,10 +84,10 @@ class PartiesListViewModel @Inject constructor(
     }
 
     private fun reloadDataModel() {
-        if (reloadsNumber > 3) {
+        if (reloadsCount > RELOAD_MAX_LIMIT) {
             fetchJob?.cancel()
             fetchJob = viewModelScope.launch {
-                reloadsNumber = 0
+                reloadsCount = 0
                 _uiEvent.send(
                     PartiesListUiEvent.ShowMessage(
                         message = R.string.message_error_bad_database,
@@ -99,7 +97,7 @@ class PartiesListViewModel @Inject constructor(
                 )
             }
         } else {
-            reloadsNumber++
+            reloadsCount++
             fetchDataModel()
         }
     }

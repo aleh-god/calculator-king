@@ -1,9 +1,10 @@
 package by.godevelopment.kingcalculator.domain.partiesdomain.models
 
+import by.godevelopment.kingcalculator.commons.LONG_ZERO_STUB
 import by.godevelopment.kingcalculator.domain.playersdomain.models.PlayerModel
 
 data class ItemPartyModel(
-    val id: Long = 0,
+    val id: Long = LONG_ZERO_STUB,
     val partyName: String,
     val partyStartTime: String,
     val partyLastTime: String,

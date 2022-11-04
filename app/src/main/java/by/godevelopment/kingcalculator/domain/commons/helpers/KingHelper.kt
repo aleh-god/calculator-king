@@ -6,6 +6,6 @@ import javax.inject.Inject
 class KingHelper @Inject constructor() {
     fun calculateScoreToString(tricks: List<TricksNote>): String =
         tricks
-            .sumOf { it.gameType.getTotalGameScore(it.tricksCount) }
+            .sumOf { it.gameType.getGameScore(it.tricksCount) }
             .toString()
 }

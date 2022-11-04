@@ -1,6 +1,5 @@
 package by.godevelopment.kingcalculator.domain.commons.models
 
-import android.content.Context
 import androidx.annotation.StringRes
 import by.godevelopment.kingcalculator.R
 
@@ -26,16 +25,15 @@ enum class GameType(
     DoNotTakeLastTwo(16, -20, 2, R.string.game_type_ntl),
     DoNotTakeBFG(17, -240, 31, R.string.game_type_ntfg);
 
-    fun getTotalGameScore(countTricks: Int): Int {
+    fun getGameScore(countTricks: Int): Int {
         return countTricks * this.trickScores
     }
 
-    fun getDescription(context: Context): String {
-        return context.getString(res)
-    }
-
-    companion object {
-        fun getGameTypeByIdOrNull(key: Int): GameType? =
-            GameType.values().firstOrNull { key == it.id }
+    fun getTotalGameScore(): Int {
+        return when (this) {
+            TakeBFG -> this.trickScores
+            DoNotTakeBFG -> this.trickScores
+            else -> this.tricksCount * this.trickScores
+        }
     }
 }

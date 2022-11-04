@@ -58,7 +58,10 @@ class GameRepositoryImpl @Inject constructor(
                             )?.toPlayerModel()
                     )
                         .mapValues {
-                            if (it.value == null) return@withContext ResultDataBase.Error<Map<Players, PlayerModel>>(message = R.string.message_error_bad_database)
+                            if (it.value == null)
+                                return@withContext ResultDataBase.Error<Map<Players, PlayerModel>>(
+                                    message = R.string.message_error_bad_database
+                                )
                             it.value!!
                         }
                     )

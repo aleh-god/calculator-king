@@ -19,27 +19,26 @@ class GetGamesScoreByPartyIdUseCase @Inject constructor(
                 when (gamesResult) {
                     is ResultDataBase.Error -> ResultDataBase.Error<List<PartyInfoItemModel>>(message = gamesResult.message)
                     is ResultDataBase.Success -> {
-                        var index = 0
                         val scoresList = gamesResult
                             .value
                             .sortedBy { it.id }
-                            .map { game ->
+                            .mapIndexed { index, game ->
                                 val tricksResult = partyRepository.getAllTricksNotesByGameId(game.id)
                                 PartyInfoItemModel(
-                                    id = index++,
+                                    id = index,
                                     gameType = game.gameType,
                                     oneGameScore = tricksResult
                                         .filter { it.playerId == party.playerOneId }
-                                        .sumOf { it.gameType.getTotalGameScore(it.tricksCount) },
+                                        .sumOf { it.gameType.getGameScore(it.tricksCount) },
                                     twoGameScore = tricksResult
                                         .filter { it.playerId == party.playerTwoId }
-                                        .sumOf { it.gameType.getTotalGameScore(it.tricksCount) },
+                                        .sumOf { it.gameType.getGameScore(it.tricksCount) },
                                     threeGameScore = tricksResult
                                         .filter { it.playerId == party.playerThreeId }
-                                        .sumOf { it.gameType.getTotalGameScore(it.tricksCount) },
+                                        .sumOf { it.gameType.getGameScore(it.tricksCount) },
                                     fourGameScore = tricksResult
                                         .filter { it.playerId == party.playerFourId }
-                                        .sumOf { it.gameType.getTotalGameScore(it.tricksCount) }
+                                        .sumOf { it.gameType.getGameScore(it.tricksCount) }
                                 )
                             }
                         ResultDataBase.Success(value = scoresList)

@@ -1,11 +1,11 @@
 package by.godevelopment.kingcalculator.presentation.partypresentation.partycard
 
-import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import by.godevelopment.kingcalculator.R
-import by.godevelopment.kingcalculator.commons.TAG
+import by.godevelopment.kingcalculator.commons.PARTY_ID_NAVIGATION_ARGUMENT
+import by.godevelopment.kingcalculator.commons.RELOAD_MAX_LIMIT
 import by.godevelopment.kingcalculator.domain.commons.models.GameType
 import by.godevelopment.kingcalculator.domain.commons.models.ResultDataBase
 import by.godevelopment.kingcalculator.domain.partiesdomain.models.GamesTableItemModel
@@ -29,7 +29,7 @@ class PartyCardViewModel @Inject constructor(
     state: SavedStateHandle
 ) : ViewModel() {
 
-    val partyId = state.get<Long>("partyId")
+    val partyId = state.get<Long>(PARTY_ID_NAVIGATION_ARGUMENT)
 
     private val _uiState: MutableStateFlow<UiState> = MutableStateFlow(UiState())
     val uiState: StateFlow<UiState> = _uiState.asStateFlow()
@@ -38,7 +38,7 @@ class PartyCardViewModel @Inject constructor(
     val uiEvent: Flow<PartyCardUiEvent> = _uiEvent.receiveAsFlow()
 
     private var fetchJob: Job? = null
-    private var reloadsNumber = 0
+    private var reloadsCount = 0
 
     fun checkUnfinishedGame() {
         fetchJob?.cancel()
@@ -153,14 +153,14 @@ class PartyCardViewModel @Inject constructor(
     }
 
     private fun reloadDataModel() {
-        if (reloadsNumber > 3) {
+        if (reloadsCount > RELOAD_MAX_LIMIT) {
             fetchJob?.cancel()
             fetchJob = viewModelScope.launch {
-                reloadsNumber = 0
+                reloadsCount = 0
                 _uiEvent.send(PartyCardUiEvent.NavigateToBackScreen)
             }
         } else {
-            reloadsNumber++
+            reloadsCount++
             fetchDataModel()
         }
     }
@@ -189,7 +189,6 @@ class PartyCardViewModel @Inject constructor(
                     }
                 }
             } catch (e: Exception) {
-                Log.i(TAG, "PartyCardViewModel createGameNote.catch ${e.message} ")
                 _uiEvent.send(
                     PartyCardUiEvent.ShowMessage(
                         message = R.string.message_error_data_save,

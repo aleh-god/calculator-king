@@ -61,7 +61,7 @@
     <string name="nav_label_data_settings">Data settings</string>
 
     <string name="help_text_parties_list">Here you can manage parties: View game statistics, delete old or create new competitions.</string>
-    <string name="help_text_players_list">Here you can manage players: View personal statistics, delete a player or create a new character.list</string>
+    <string name="help_text_players_list">Here you can manage players: View personal statistics, delete a player or create a new character.</string>
     <string name="help_text_player_card">Here you can change the name of the player. Email cannot be changed, but you can delete your account and create a new one.</string>
     <string name="help_text_player_info">Here you can see the player\'s personal statistics. New types of statistics will be added in the next version.</string>
     <string name="help_text_player_add_form">Here you can create a new player. Player name and email must be unique.</string>
@@ -74,7 +74,7 @@
     <string name="snackbar_btn_return">Return to table</string>
     <string name="snackbar_btn_reload">Reload</string>
     <string name="snackbar_btn_neutral_ok">OK</string>
-    <string name="dialog_neutral_btn_text">OK</string>
+
     <string name="button_save_player">Save player</string>
     <string name="button_delete_player">Delete player</string>
     <string name="button_start_party">Start party</string>
@@ -95,6 +95,8 @@
     <string name="use_case_type_parties">Player total parties</string>
     <string name="use_case_type_games">Player total games</string>
     <string name="use_case_type_score">Player total score</string>
+    <string name="use_case_type_percent">Average percentage by game type</string>
+    <string name="use_case_score_by_type">Total score by game type</string>
 
     <string name="message_data_load">Data load successfully</string>
     <string name="message_data_save">Data save successfully</string>
@@ -153,6 +155,8 @@
     <string name="alert_confirm_message">Confirm selected game as %1s</string>
     <string name="input_tricks_title">Tricks count</string>
     <string name="input_tricks_message">Input new value</string>
+    <string name="dialog_neutral_btn_text">OK</string>
+    <string name="alert_help_text_title">Help note</string>
 
     <string name="action_yes">Yes</string>
     <string name="action_dismiss">Dismiss</string>

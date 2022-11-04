@@ -4,6 +4,9 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import by.godevelopment.kingcalculator.R
+import by.godevelopment.kingcalculator.commons.EMPTY_STRING
+import by.godevelopment.kingcalculator.commons.PLAYER_ID_NAVIGATION_ARGUMENT
+import by.godevelopment.kingcalculator.commons.RELOAD_MAX_LIMIT
 import by.godevelopment.kingcalculator.domain.commons.models.ResultDataBase
 import by.godevelopment.kingcalculator.domain.playersdomain.models.ItemPlayerInfoModel
 import by.godevelopment.kingcalculator.domain.playersdomain.repositories.PlayerRepository
@@ -22,7 +25,7 @@ class PlayerInfoViewModel @Inject constructor(
     private val playerRepository: PlayerRepository
 ) : ViewModel() {
 
-    val playerId = state.get<Long>("playerId")
+    val playerId = state.get<Long>(PLAYER_ID_NAVIGATION_ARGUMENT)
 
     private val _uiState: MutableStateFlow<UiState> = MutableStateFlow(UiState())
     val uiState: StateFlow<UiState> = _uiState.asStateFlow()
@@ -31,7 +34,7 @@ class PlayerInfoViewModel @Inject constructor(
     val uiEvent: Flow<PlayerInfoUiEvent> = _uiEvent.receiveAsFlow()
 
     private var fetchJob: Job? = null
-    private var reloadsNumber = 0
+    private var reloadsCount = 0
 
     init {
         fetchDataModel()
@@ -86,21 +89,21 @@ class PlayerInfoViewModel @Inject constructor(
     }
 
     private fun reloadDataModel() {
-        if (reloadsNumber > 3) {
+        if (reloadsCount > RELOAD_MAX_LIMIT) {
             fetchJob?.cancel()
             fetchJob = viewModelScope.launch {
-                reloadsNumber = 0
+                reloadsCount = 0
                 _uiEvent.send(PlayerInfoUiEvent.NavigateToBackScreen)
             }
         } else {
-            reloadsNumber++
+            reloadsCount++
             fetchDataModel()
         }
     }
 
     data class UiState(
         val isFetchingData: Boolean = false,
-        val playerName: String = "",
+        val playerName: String = EMPTY_STRING,
         val dataList: List<ItemPlayerInfoModel> = emptyList()
     )
 }

@@ -6,6 +6,8 @@ import javax.inject.Inject
 
 class ValidatePlayersChoiceUseCase @Inject constructor() {
 
+    private val UNIQUE_NAMES_LOWER_LIMIT = 4
+
     fun execute(playerNames: List<String>): ValidationResult {
         if (playerNames.any { it.isBlank() }) {
             return ValidationResult(successful = false)
@@ -13,7 +15,7 @@ class ValidatePlayersChoiceUseCase @Inject constructor() {
         val uniqueNames = playerNames.toSet().filterNot {
             it.isBlank()
         }
-        if (uniqueNames.size < 4) {
+        if (uniqueNames.size < UNIQUE_NAMES_LOWER_LIMIT) {
             return ValidationResult(
                 successful = false,
                 errorMessage = R.string.message_error_validate_email_different

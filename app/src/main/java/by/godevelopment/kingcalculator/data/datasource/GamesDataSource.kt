@@ -54,7 +54,4 @@ class GamesDataSource @Inject constructor(
 
     suspend fun getGameNotesByPartyId(partyId: Long): ResultDataBase<List<GameNote>> =
         wrapResultBy(partyId) { gamesDao.getGameNotesByPartyId(it) }
-
-    suspend fun getLastGameByPartyIdRaw(partyId: Long): GameNote? =
-        gamesDao.getGameNotesByPartyId(partyId).maxByOrNull { it.finishedAt }
 }

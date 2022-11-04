@@ -1,6 +1,7 @@
 package by.godevelopment.kingcalculator.domain.partiesdomain.usecases
 
 import by.godevelopment.kingcalculator.R
+import by.godevelopment.kingcalculator.commons.LONG_ZERO_STUB
 import by.godevelopment.kingcalculator.commons.NUMBER_OF_ALL_KING_GAMES
 import by.godevelopment.kingcalculator.commons.toDataString
 import by.godevelopment.kingcalculator.domain.commons.helpers.KingHelper
@@ -18,8 +19,8 @@ class GetPartyModelItemsUseCase @Inject constructor(
     private val stringHelper: StringHelper
 ) {
     operator fun invoke(): Flow<List<ItemPartyModel>> {
-        val deletedPlayer: PlayerModel = PlayerModel(
-            id = 0,
+        val deletedPlayer = PlayerModel(
+            id = LONG_ZERO_STUB,
             name = stringHelper.getString(R.string.player_null),
             email = stringHelper.getString(R.string.player_null),
             isActive = false

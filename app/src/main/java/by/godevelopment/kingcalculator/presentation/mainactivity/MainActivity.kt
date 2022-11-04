@@ -10,7 +10,6 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
 import by.godevelopment.kingcalculator.R
 import by.godevelopment.kingcalculator.databinding.ActivityMainBinding
-import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -69,7 +68,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun showHelpText() {
-        val helpText = when (navController.currentDestination?.id) {
+        when (navController.currentDestination?.id) {
             R.id.partiesListFragment -> R.string.help_text_parties_list
             R.id.playersListFragment -> R.string.help_text_players_list
             R.id.playerCardFragment -> R.string.help_text_player_card
@@ -81,15 +80,10 @@ class MainActivity : AppCompatActivity() {
             R.id.gameAddFormFragment -> R.string.help_text_game_add_form
             R.id.settingsFragment -> R.string.help_text_data_settings
             else -> R.string.message_error_data_null
+        }.let {
+            HelpTextDialogFragment.newFragmentInstance(it)
+                .show(supportFragmentManager, HelpTextDialogFragment.KEY_ARG)
         }
-
-        Snackbar.make(
-            binding.root,
-            helpText,
-            Snackbar.LENGTH_INDEFINITE
-        )
-            .setAction(R.string.snackbar_btn_neutral_ok) {}
-            .show()
     }
 
     override fun onDestroy() {
