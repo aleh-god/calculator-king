@@ -133,11 +133,16 @@
     </style>
 
     <style name="Widget.KingCalculator.TextInputOutlined" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
-
+        <item name="android:layout_width">@dimen/material_textview_width</item>
+        <item name="android:layout_marginTop">@dimen/medium_margin</item>
+        <item name="android:layout_marginBottom">@dimen/small_margin</item>
+        <item name="android:layout_marginStart">@dimen/small_margin</item>
+        <item name="android:layout_marginEnd">@dimen/small_margin</item>
     </style>
 
     <style name="Widget.KingCalculator.ExposedDropdownMenu" parent="Widget.MaterialComponents.TextInputLayout.FilledBox.ExposedDropdownMenu">
-
+        <item name="android:layout_width">@dimen/material_textview_width</item>
+        <item name="android:layout_margin">@dimen/small_margin</item>
     </style>
 
     <style name="Widget.KingCalculator.OutlinedButton" parent="Widget.MaterialComponents.Button.OutlinedButton">
