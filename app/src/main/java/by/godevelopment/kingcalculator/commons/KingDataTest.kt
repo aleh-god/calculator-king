@@ -13,14 +13,7 @@ object KingDataTest {
     val player_raph_name: String = "Raphael"
     val player_don_name: String = "Donatello"
     val player_mich_name: String = "Michelangelo"
-
-    val nullPlayerProfile = PlayerProfile(
-        name = DELETED_STRING_VALUE,
-        email = DELETED_STRING_VALUE,
-        avatar = 0,
-        color = 0
-    )
-
+    
     val playerLeoProfile = PlayerProfile(
         id = 0,
         email = "leo@sewers.splinter",
@@ -71,88 +64,91 @@ object KingDataTest {
         playerFourId = 4
     )
 
-    val games = (0..3)
-        .flatMap { GameType.values().toList() }
-        .mapIndexed { index, gameType ->
-            GameNote(
-                id = 0,
-                partyId = 1,
-                gameType = gameType,
-                finishedAt = System.currentTimeMillis()
-            )
-        }
-
-    private val gamesX = (0..3)
-        .flatMap { GameType.values().toList() }
-        .mapIndexed { index, gameType ->
-            GameNote(
-                id = (index + 1).toLong(),
-                partyId = 1,
-                gameType = gameType,
-                finishedAt = System.currentTimeMillis()
-            )
-        }
-
-    val tricks = gamesX.flatMap { game ->
-        when (game.gameType) {
-            GameType.DoNotTakeBFG -> {
-                GameType.values()
-                    .toList()
-                    .filterNot { it == GameType.DoNotTakeBFG || it.trickScores > 0 }
-                    .flatMap { gameType ->
-                        val randomWinner = Random().nextInt(3) + 1
-                        (1..4).map { player ->
-                            TricksNote(
-                                id = 0,
-                                gameId = game.id,
-                                playerId = player.toLong(),
-                                gameType = gameType,
-                                tricksCount = if (player == randomWinner) gameType.tricksCount else 0
-                            )
-                        }
-                    }
+    fun getGames(): List<GameNote> {
+        val p1 = GameType.values().toList().shuffled()
+        val p2 = GameType.values().toList().shuffled()
+        val p3 = GameType.values().toList().shuffled()
+        val p4 = GameType.values().toList().shuffled()
+        return (0..13)
+            .map { listOf(p1[it],p2[it],p3[it],p4[it]) }
+            .flatten()
+            .map { gameType ->
+                GameNote(
+                    id = 0L,
+                    partyId = 1,
+                    gameType = gameType,
+                    finishedAt = System.currentTimeMillis()
+                )
             }
-            GameType.TakeBFG -> {
-                GameType.values()
-                    .toList()
-                    .filterNot { it.trickScores < 0 || it == GameType.TakeBFG }
-                    .flatMap { gameType ->
-                        val randomWinner = Random().nextInt(3) + 1
-                        (1..4).map { player ->
-                            TricksNote(
-                                id = 0,
-                                gameId = game.id,
-                                playerId = player.toLong(),
-                                gameType = gameType,
-                                tricksCount = if (player == randomWinner) gameType.tricksCount else 0
-                            )
-                        }
-                    }
+    }
+
+    fun getGamesIndexed(): List<GameNote> {
+        val p1 = GameType.values().toList().shuffled()
+        val p2 = GameType.values().toList().shuffled()
+        val p3 = GameType.values().toList().shuffled()
+        val p4 = GameType.values().toList().shuffled()
+        return (0..13)
+            .map { listOf(p1[it],p2[it],p3[it],p4[it]) }
+            .flatten()
+            .mapIndexed { index, gameType ->
+                GameNote(
+                    id = (index + 1).toLong(),
+                    partyId = 1,
+                    gameType = gameType,
+                    finishedAt = System.currentTimeMillis()
+                )
             }
-            else -> {
-                val randomWinner = Random().nextInt(3) + 1
-                (1..4).map { player ->
-                    TricksNote(
-                        id = 0,
-                        gameId = game.id,
-                        playerId = player.toLong(),
-                        gameType = game.gameType,
-                        tricksCount = if (player == randomWinner) game.gameType.tricksCount else 0
-                    )
+    }
+
+    fun getTricks() = getGamesIndexed()
+        .flatMap { game ->
+            when (game.gameType) {
+                GameType.DoNotTakeBFG -> {
+                    GameType.values()
+                        .toList()
+                        .filterNot { it == GameType.DoNotTakeBFG || it.trickScores > 0 }
+                        .flatMap { gameType ->
+                            val randomWinner = Random().nextInt(3) + 1
+                            (1..4).map { player ->
+                                TricksNote(
+                                    id = 0,
+                                    gameId = game.id,
+                                    playerId = player.toLong(),
+                                    gameType = gameType,
+                                    tricksCount = if (player == randomWinner) gameType.tricksCount else 0
+                                )
+                            }
+                        }
+                }
+                GameType.TakeBFG -> {
+                    GameType.values()
+                        .toList()
+                        .filterNot { it.trickScores < 0 || it == GameType.TakeBFG }
+                        .flatMap { gameType ->
+                            val randomWinner = Random().nextInt(3) + 1
+                            (1..4).map { player ->
+                                TricksNote(
+                                    id = 0,
+                                    gameId = game.id,
+                                    playerId = player.toLong(),
+                                    gameType = gameType,
+                                    tricksCount = if (player == randomWinner) gameType.tricksCount else 0
+                                )
+                            }
+                        }
+                }
+                else -> {
+                    val randomWinner = Random().nextInt(3) + 1
+                    (1..4).map { player ->
+                        TricksNote(
+                            id = 0,
+                            gameId = game.id,
+                            playerId = player.toLong(),
+                            gameType = game.gameType,
+                            tricksCount = if (player == randomWinner) game.gameType.tricksCount else 0
+                        )
+                    }
                 }
             }
         }
-    }
-
-    private fun getRandomCalendar() = Calendar.getInstance().apply {
-        val randomValue = Random().nextInt(12)
-        set(
-            2021,
-            randomValue,
-            randomValue,
-            randomValue,
-            randomValue,
-            randomValue
-        )
-    }
 }
