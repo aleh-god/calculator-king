@@ -130,7 +130,7 @@ class PartiesListViewModel @Inject constructor(
         }
     }
 
-    fun checkPayersIsActiveAndNavigateToPartyCard(partyId: Long) {
+    fun checkPlayersIsActiveAndNavigateToPartyCard(partyId: Long) {
         viewModelScope.launch {
             _uiState.update { it.copy(isFetchingData = true) }
             _uiState.value.dataList.firstOrNull { it.id == partyId }?.let {
