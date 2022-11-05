@@ -12,19 +12,15 @@
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/party_name"
         android:layout_height="wrap_content"
-        android:layout_width="@dimen/material_textview_width"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toTopOf="@id/player_one_menu"
         app:layout_constraintVertical_chainStyle="packed"
-        android:layout_marginTop="@dimen/medium_margin"
-        android:layout_marginBottom="@dimen/small_margin"
-        android:layout_marginHorizontal="@dimen/small_margin"
         android:hint="@string/card_party_name"
+        app:helperText="@string/form_helper_party_text"
         app:endIconMode="clear_text"
         app:helperTextEnabled="true"
-        app:helperText="@string/form_helper_party_text"
         app:counterEnabled="true"
         app:counterMaxLength="20"
         style="@style/Widget.KingCalculator.TextInputOutlined"
@@ -41,13 +37,11 @@
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/player_one_menu"
-        android:layout_width="@dimen/material_textview_width"
         android:layout_height="wrap_content"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/party_name"
         app:layout_constraintBottom_toTopOf="@id/player_two_menu"
-        android:layout_margin="@dimen/small_margin"
         android:hint="@string/hint_text_player_one"
         style="@style/Widget.KingCalculator.ExposedDropdownMenu"
         >
@@ -56,19 +50,18 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="none"
+            android:imeOptions="actionNext"
             />
 
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/player_two_menu"
-        android:layout_width="@dimen/material_textview_width"
         android:layout_height="wrap_content"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/player_one_menu"
         app:layout_constraintBottom_toTopOf="@id/player_three_menu"
-        android:layout_margin="@dimen/small_margin"
         android:hint="@string/hint_text_player_two"
         style="@style/Widget.KingCalculator.ExposedDropdownMenu"
         >
@@ -77,19 +70,18 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="none"
+            android:imeOptions="actionNext"
             />
 
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/player_three_menu"
-        android:layout_width="@dimen/material_textview_width"
         android:layout_height="wrap_content"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/player_two_menu"
         app:layout_constraintBottom_toTopOf="@id/player_four_menu"
-        android:layout_margin="@dimen/small_margin"
         android:hint="@string/hint_text_player_three"
         style="@style/Widget.KingCalculator.ExposedDropdownMenu"
         >
@@ -98,19 +90,18 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="none"
+            android:imeOptions="actionNext"
             />
 
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/player_four_menu"
-        android:layout_width="@dimen/material_textview_width"
         android:layout_height="wrap_content"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/player_three_menu"
         app:layout_constraintBottom_toTopOf="@id/bttn_start"
-        android:layout_margin="@dimen/small_margin"
         android:hint="@string/hint_text_player_four"
         style="@style/Widget.KingCalculator.ExposedDropdownMenu"
         >
@@ -119,6 +110,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="none"
+            android:imeOptions="actionNext"
             />
     </com.google.android.material.textfield.TextInputLayout>
 

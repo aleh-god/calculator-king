@@ -43,7 +43,7 @@ class PartiesListFragment : Fragment() {
 
     private fun setupUi() {
         val rvAdapter = PartiesAdapter(
-            onItemClick = ::checkPayersIsActiveAndNavigateToPartyCard,
+            onItemClick = ::checkPlayersIsActiveAndNavigateToPartyCard,
             onStatClick = ::navigateToPartyInfo,
             onDelClick = ::deleteParty
         )
@@ -92,8 +92,8 @@ class PartiesListFragment : Fragment() {
         viewModel.deleteParty(partyId)
     }
 
-    private fun checkPayersIsActiveAndNavigateToPartyCard(partyId: Long) {
-        viewModel.checkPayersIsActiveAndNavigateToPartyCard(partyId)
+    private fun checkPlayersIsActiveAndNavigateToPartyCard(partyId: Long) {
+        viewModel.checkPlayersIsActiveAndNavigateToPartyCard(partyId)
     }
 
     private fun navigateToPartyAddForm() {

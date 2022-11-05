@@ -28,13 +28,13 @@ class PrepopulateCallBack(
     }
 
     private suspend fun addTricks() {
-        KingDataTest.tricks.forEach {
+        KingDataTest.getTricks().forEach {
             providerTricks.get().insertTricksNote(it)
         }
     }
 
     private suspend fun addGames() {
-        KingDataTest.games.forEach {
+        KingDataTest.getGames().forEach {
             providerGames.get().insertGamesNote(it)
         }
     }
