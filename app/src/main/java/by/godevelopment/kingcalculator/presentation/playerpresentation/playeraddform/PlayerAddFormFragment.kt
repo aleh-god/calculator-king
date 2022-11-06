@@ -46,7 +46,7 @@ class PlayerAddFormFragment : Fragment() {
             .onEach { uiState ->
                 showProgressUi(uiState.showsProgress)
                 playerName.error = uiState.playerNameError?.let { getString(it) }
-                playerEmail.error = uiState.emailError?.let { getString(it) }
+                playerRealName.error = uiState.realNameError?.let { getString(it) }
             }
             .launchIn(lifecycle.coroutineScope)
     }
@@ -58,8 +58,8 @@ class PlayerAddFormFragment : Fragment() {
         playerNameEdit.doAfterTextChanged {
             viewModel.onEvent(AddFormUserEvent.PlayerNameChanged(it.toString()))
         }
-        playerEmailEdit.doAfterTextChanged {
-            viewModel.onEvent(AddFormUserEvent.EmailChanged(it.toString()))
+        playerRealNameEdit.doAfterTextChanged {
+            viewModel.onEvent(AddFormUserEvent.RealNameChanged(it.toString()))
         }
     }
 

@@ -15,7 +15,7 @@
         android:layout_width="@dimen/material_textview_width"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/player_email"
+        app:layout_constraintBottom_toTopOf="@id/player_real_name"
         android:layout_marginBottom="@dimen/big_margin"
         android:hint="@string/card_player_name"
         app:endIconMode="clear_text"
@@ -31,12 +31,12 @@
             android:maxLines="1"
             android:inputType="text"
             android:imeOptions="actionNext"
-            android:nextFocusDown="@id/player_email"
+            android:nextFocusDown="@id/player_real_name"
             />
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/player_email"
+        android:id="@+id/player_real_name"
         android:layout_height="wrap_content"
         android:layout_width="@dimen/material_textview_width"
         app:layout_constraintStart_toStartOf="parent"
@@ -45,16 +45,16 @@
         android:layout_marginBottom="@dimen/big_margin"
         app:endIconMode="clear_text"
         app:helperTextEnabled="true"
-        app:helperText="@string/form_helper_email_text"
+        app:helperText="@string/form_helper_real_name_text"
         app:counterEnabled="true"
         app:counterMaxLength="@integer/custom_counter_length"
         >
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/player_email_edit"
+            android:id="@+id/player_real_name_edit"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/card_email"
-            android:inputType="textEmailAddress"
+            android:hint="@string/card_real_name"
+            android:inputType="textPersonName"
             android:maxLines="1"
             android:imeOptions="actionDone"
             />

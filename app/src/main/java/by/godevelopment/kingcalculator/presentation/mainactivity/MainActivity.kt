@@ -76,7 +76,7 @@ class MainActivity : AppCompatActivity() {
             R.id.playerAddFormFragment -> R.string.help_text_player_add_form
             R.id.partyCardFragment -> R.string.help_text_party_card
             R.id.partyInfoFragment -> R.string.help_text_party_info
-            R.id.partyAddFormFragment -> R.string.help_text_player_add_form
+            R.id.partyAddFormFragment -> R.string.help_text_party_add_form
             R.id.gameAddFormFragment -> R.string.help_text_game_add_form
             R.id.settingsFragment -> R.string.help_text_data_settings
             else -> R.string.message_error_data_null

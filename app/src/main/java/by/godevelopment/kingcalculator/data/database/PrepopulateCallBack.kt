@@ -10,9 +10,6 @@ import javax.inject.Provider
 
 class PrepopulateCallBack(
     private val providerPlayers: Provider<PlayersDao>,
-    private val providerParties: Provider<PartiesDao>,
-    private val providerGames: Provider<GamesDao>,
-    private val providerTricks: Provider<TricksDao>,
     private val applicationScope: CoroutineScope,
     private val dispatcher: CoroutineDispatcher
 ) : RoomDatabase.Callback() {
@@ -21,26 +18,7 @@ class PrepopulateCallBack(
         super.onCreate(db)
         applicationScope.launch(dispatcher) {
             addPlayers()
-            addParty()
-            addGames()
-            addTricks()
         }
-    }
-
-    private suspend fun addTricks() {
-        KingDataTest.getTricks().forEach {
-            providerTricks.get().insertTricksNote(it)
-        }
-    }
-
-    private suspend fun addGames() {
-        KingDataTest.getGames().forEach {
-            providerGames.get().insertGamesNote(it)
-        }
-    }
-
-    private suspend fun addParty() {
-        providerParties.get().insertPartyNote(KingDataTest.party)
     }
 
     private suspend fun addPlayers() {

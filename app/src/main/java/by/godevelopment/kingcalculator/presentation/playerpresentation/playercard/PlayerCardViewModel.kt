@@ -31,7 +31,7 @@ class PlayerCardViewModel @Inject constructor(
         CardUiState(
             PlayerModel(
                 name = EMPTY_STRING,
-                email = EMPTY_STRING,
+                realName = EMPTY_STRING,
                 isActive = false
             )
         )

@@ -3,9 +3,9 @@ package by.godevelopment.kingcalculator.presentation.playerpresentation.playerad
 import by.godevelopment.kingcalculator.commons.EMPTY_STRING
 
 data class AddFormState(
-    val email: String = EMPTY_STRING,
-    val emailError: Int? = null,
     val playerName: String = EMPTY_STRING,
     val playerNameError: Int? = null,
+    val realName: String = EMPTY_STRING,
+    val realNameError: Int? = null,
     val showsProgress: Boolean = false
 )

@@ -66,7 +66,7 @@ class PlayersAdapter(
         fun bind(itemPlayerModel: PlayerModel) = with(binding) {
             itemId = itemPlayerModel.id
             playerName.text = itemPlayerModel.name
-            playerEmail.text = itemPlayerModel.email
+            playerEmail.text = itemPlayerModel.realName
         }
     }
 }

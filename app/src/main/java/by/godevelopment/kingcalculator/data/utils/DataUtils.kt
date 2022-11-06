@@ -24,7 +24,7 @@ fun PartyNote.toPartyModel(): PartyModel =
 fun PlayerModel.toPlayerProfile(): PlayerProfile =
     PlayerProfile(
         id = id,
-        email = email,
+        realName = realName,
         name = name,
         isActive = isActive,
         color = color,
@@ -34,7 +34,7 @@ fun PlayerModel.toPlayerProfile(): PlayerProfile =
 fun PlayerProfile.toPlayerModel(): PlayerModel =
     PlayerModel(
         id = id,
-        email = email,
+        realName = realName,
         name = name,
         isActive = isActive,
         avatar = avatar,
