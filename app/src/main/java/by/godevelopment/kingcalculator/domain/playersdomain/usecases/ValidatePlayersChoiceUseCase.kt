@@ -18,7 +18,7 @@ class ValidatePlayersChoiceUseCase @Inject constructor() {
         if (uniqueNames.size < UNIQUE_NAMES_LOWER_LIMIT) {
             return ValidationResult(
                 successful = false,
-                errorMessage = R.string.message_error_validate_email_different
+                errorMessage = R.string.message_error_validate_real_name_different
             )
         }
         return ValidationResult(successful = true)

@@ -22,7 +22,7 @@ class GetPartyModelItemsUseCase @Inject constructor(
         val deletedPlayer = PlayerModel(
             id = LONG_ZERO_STUB,
             name = stringHelper.getString(R.string.player_null),
-            email = stringHelper.getString(R.string.player_null),
+            realName = stringHelper.getString(R.string.player_null),
             isActive = false
         )
         return partyRepository.getAllParties()

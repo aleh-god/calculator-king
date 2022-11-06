@@ -39,10 +39,7 @@ object DataBaseModule {
     @Singleton
     fun provideKingDatabase(
         @ApplicationContext appContext: Context,
-        providerPlayers: Provider<PlayersDao>,
-        providerParties: Provider<PartiesDao>,
-        providerGames: Provider<GamesDao>,
-        providerTricks: Provider<TricksDao>
+        providerPlayers: Provider<PlayersDao>
     ): KingDatabase = Room.databaseBuilder(
         appContext,
         KingDatabase::class.java,
@@ -51,9 +48,6 @@ object DataBaseModule {
         .addCallback(
             PrepopulateCallBack(
                 providerPlayers = providerPlayers,
-                providerParties = providerParties,
-                providerGames = providerGames,
-                providerTricks = providerTricks,
                 applicationScope = applicationScope,
                 dispatcher = dispatcher
             )

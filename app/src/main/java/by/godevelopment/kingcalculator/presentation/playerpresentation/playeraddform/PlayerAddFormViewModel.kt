@@ -6,7 +6,6 @@ import by.godevelopment.kingcalculator.R
 import by.godevelopment.kingcalculator.domain.commons.models.ResultDataBase
 import by.godevelopment.kingcalculator.domain.playersdomain.models.PlayerModel
 import by.godevelopment.kingcalculator.domain.playersdomain.repositories.PlayerRepository
-import by.godevelopment.kingcalculator.domain.playersdomain.usecases.ValidateEmailUseCase
 import by.godevelopment.kingcalculator.domain.playersdomain.usecases.ValidatePlayerNameUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
@@ -18,7 +17,6 @@ import javax.inject.Inject
 @HiltViewModel
 class PlayerAddFormViewModel @Inject constructor(
     private val playerRepository: PlayerRepository,
-    private val validateEmailUseCase: ValidateEmailUseCase,
     private val validatePlayerNameUseCase: ValidatePlayerNameUseCase
 ) : ViewModel() {
 
@@ -32,21 +30,19 @@ class PlayerAddFormViewModel @Inject constructor(
 
     fun onEvent(event: AddFormUserEvent) {
         when (event) {
-            is AddFormUserEvent.EmailChanged -> {
-                val emailResult = validateEmailUseCase.execute(event.email)
+            is AddFormUserEvent.RealNameChanged -> {
                 _uiState.update {
                     it.copy(
-                        email = event.email,
-                        emailError = emailResult.errorMessage
+                        realName = event.realName,
+                        realNameError = validatePlayerNameUseCase(event.realName).errorMessage
                     )
                 }
             }
             is AddFormUserEvent.PlayerNameChanged -> {
-                val playerNameResult = validatePlayerNameUseCase(event.playerName)
                 _uiState.update {
                     it.copy(
                         playerName = event.playerName,
-                        playerNameError = playerNameResult.errorMessage
+                        playerNameError = validatePlayerNameUseCase(event.playerName).errorMessage
                     )
                 }
             }
@@ -69,9 +65,10 @@ class PlayerAddFormViewModel @Inject constructor(
     }
 
     private fun checkErrorInFiledUiState(): Boolean {
-        val emailResult = validateEmailUseCase.execute(_uiState.value.email)
-        val playerNameResult = validatePlayerNameUseCase(_uiState.value.playerName)
-        return listOf(emailResult, playerNameResult).any { !it.successful }
+        return listOf(
+            validatePlayerNameUseCase(_uiState.value.realName),
+            validatePlayerNameUseCase(_uiState.value.playerName)
+        ).any { !it.successful }
     }
 
     private fun savePlayerDataToRepository() {
@@ -81,7 +78,7 @@ class PlayerAddFormViewModel @Inject constructor(
             val result = playerRepository.createPlayer(
                 PlayerModel(
                     name = uiState.value.playerName,
-                    email = uiState.value.email,
+                    realName = uiState.value.realName,
                     isActive = true
                 )
             )

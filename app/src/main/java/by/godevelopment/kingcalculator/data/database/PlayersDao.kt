@@ -22,14 +22,14 @@ interface PlayersDao {
     @Query("SELECT * FROM players ORDER BY id DESC")
     suspend fun getSuspendAllPlayerProfiles(): List<PlayerProfile>
 
-    @Query("SELECT * from players WHERE email = :key")
-    suspend fun getPlayerProfileByEmail(key: String): PlayerProfile?
+    @Query("SELECT * from players WHERE real_name = :key")
+    suspend fun getPlayerProfileByRealName(key: String): PlayerProfile?
 
     @Query("SELECT * from players WHERE id = :key")
     suspend fun getPlayerProfileById(key: Long): PlayerProfile?
 
-    @Query("DELETE FROM players WHERE email = :key")
-    suspend fun deletePlayerProfileByEmail(key: String): Int
+    @Query("DELETE FROM players WHERE real_name = :key")
+    suspend fun deletePlayerProfileByRealName(key: String): Int
 
     @Query("DELETE FROM players")
     suspend fun deleteAll(): Int
