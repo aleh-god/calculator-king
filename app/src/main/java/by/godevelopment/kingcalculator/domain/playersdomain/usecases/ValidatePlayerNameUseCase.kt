@@ -7,6 +7,7 @@ import javax.inject.Inject
 class ValidatePlayerNameUseCase @Inject constructor() {
 
     private val STRING_LOWER_LIMIT = 1
+    private val STRING_HIGHER_LIMIT = 20
     private val PLAYER_NAME_MIN_LENGTH = 3
 
     operator fun invoke(playerName: String): ValidationResult {
@@ -14,6 +15,12 @@ class ValidatePlayerNameUseCase @Inject constructor() {
             return ValidationResult(
                 successful = false,
                 errorMessage = R.string.message_error_validate_player_name_length
+            )
+        }
+        if (playerName.length > STRING_HIGHER_LIMIT) {
+            return ValidationResult(
+                successful = false,
+                errorMessage = R.string.message_error_validate_player_name_high_length
             )
         }
         return ValidationResult(successful = true)

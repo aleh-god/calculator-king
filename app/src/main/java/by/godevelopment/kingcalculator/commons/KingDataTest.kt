@@ -11,7 +11,7 @@ object KingDataTest {
 
     val playerLeoProfile = PlayerProfile(
         id = 0,
-        realName = "da Vinci",
+        realName = "Leonardo da Vinci",
         name = player_leo_name,
         color = 0,
         avatar = 0
@@ -19,7 +19,7 @@ object KingDataTest {
 
     val playerRaphProfile = PlayerProfile(
         id = 0,
-        realName = "Santi",
+        realName = "Raphael Santi",
         name = player_raph_name,
         color = 0,
         avatar = 0
@@ -27,7 +27,7 @@ object KingDataTest {
 
     val playerDonProfile = PlayerProfile(
         id = 0,
-        realName = "di Niccolo",
+        realName = "Donatello di Niccolo",
         name = player_don_name,
         color = 0,
         avatar = 0
@@ -35,7 +35,7 @@ object KingDataTest {
 
     val playerMichProfile = PlayerProfile(
         id = 0,
-        realName = "di Lodovico",
+        realName = "Michelangelo di Lodovico",
         name = player_mich_name,
         color = 0,
         avatar = 0
