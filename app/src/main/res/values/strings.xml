@@ -115,7 +115,9 @@
     <string name="message_error_validate_real_name_blank">The real name can\'t be blank</string>
     <string name="message_error_validate_real_name">That\'s not a valid real name</string>
     <string name="message_error_validate_player_name_length">The player name needs to consist of at least 3 characters</string>
+    <string name="message_error_validate_player_name_high_length">The player name needs to consist of at most 20 characters</string>
     <string name="message_error_validate_party_name_length">The party name needs to consist of at least 3 characters</string>
+    <string name="message_error_validate_party_name_high_length">The party name needs to consist of at most 20 characters</string>
     <string name="message_error_validate_real_name_different">Players names must be different</string>
     <string name="message_error_validate_payers_count">Not enough players</string>
     <string name="message_error_validate_players_is_active">Somebody players is deleted</string>

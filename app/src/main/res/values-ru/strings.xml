@@ -147,4 +147,6 @@
     <string name="hint_text_player_four_real_name">Имя четвертого игрока</string>
     <string name="enter_real_name">Введите настоящее имя</string>
     <string name="real_name_check">Это имя не зарегестрировано</string>
+    <string name="message_error_validate_player_name_high_length">Имя игрока должно состоять не более чем из 20 символов.</string>
+    <string name="message_error_validate_party_name_high_length">Название группы должно состоять не более чем из 20 символов</string>
 </resources>
