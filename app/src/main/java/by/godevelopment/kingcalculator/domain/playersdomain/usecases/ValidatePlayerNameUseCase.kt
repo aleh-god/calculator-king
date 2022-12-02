@@ -6,7 +6,7 @@ import javax.inject.Inject
 
 class ValidatePlayerNameUseCase @Inject constructor() {
 
-    private val STRING_LOWER_LIMIT = 1
+    private val STRING_LOWER_LIMIT = 0
     private val STRING_HIGHER_LIMIT = 20
     private val PLAYER_NAME_MIN_LENGTH = 3
 
