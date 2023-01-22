@@ -35,8 +35,6 @@ class GameAddFormFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentGameAddFormBinding.inflate(inflater, container, false)
-        setupUi()
-        setupEvent()
         requireActivity().onBackPressedDispatcher.addCallback(
             viewLifecycleOwner,
             object : OnBackPressedCallback(true) {
@@ -48,6 +46,12 @@ class GameAddFormFragment : Fragment() {
             }
         )
         return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        setupUi()
+        setupEvent()
     }
 
     private fun setupUi() {
@@ -118,8 +122,8 @@ class GameAddFormFragment : Fragment() {
         findNavController().navigate(action)
     }
 
-    override fun onDestroy() {
+    override fun onDestroyView() {
         _binding = null
-        super.onDestroy()
+        super.onDestroyView()
     }
 }
