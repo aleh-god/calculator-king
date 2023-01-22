@@ -34,10 +34,14 @@ class PlayerAddFormFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentPlayerAddFormBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        setupListeners()
         setupUi()
         setupEvent()
-        setupListeners()
-        return binding.root
     }
 
     private fun setupUi() = with(binding) {
@@ -102,8 +106,8 @@ class PlayerAddFormFragment : Fragment() {
         super.onStop()
     }
 
-    override fun onDestroy() {
+    override fun onDestroyView() {
         _binding = null
-        super.onDestroy()
+        super.onDestroyView()
     }
 }

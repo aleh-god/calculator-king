@@ -35,10 +35,14 @@ class PartiesListFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentPartiesListBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        setupListeners()
         setupUi()
         setupEvent()
-        setupListeners()
-        return binding.root
     }
 
     private fun setupUi() {
@@ -118,8 +122,8 @@ class PartiesListFragment : Fragment() {
         super.onStop()
     }
 
-    override fun onDestroy() {
+    override fun onDestroyView() {
         _binding = null
-        super.onDestroy()
+        super.onDestroyView()
     }
 }

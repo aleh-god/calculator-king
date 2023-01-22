@@ -37,12 +37,14 @@ class PlayersListFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentPlayersListBinding.inflate(inflater, container, false)
-        viewLifecycleOwner.lifecycle.also {
-            setupUi(it)
-            setupEvent(it)
-        }
-        setupListeners()
         return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        setupListeners()
+        setupUi()
+        setupEvent()
     }
 
     private fun setupListeners() {
@@ -51,7 +53,7 @@ class PlayersListFragment : Fragment() {
         }
     }
 
-    private fun setupUi(lifecycle: Lifecycle) {
+    private fun setupUi() {
         val rvAdapter = PlayersAdapter(
             onClickItem = ::navigateToPlayerCard,
             onClickImage = ::navigateToPlayerInfo
@@ -59,19 +61,18 @@ class PlayersListFragment : Fragment() {
         with(binding) {
             rv.adapter = rvAdapter
             rv.layoutManager = LinearLayoutManager(requireContext())
-            lifecycle.coroutineScope.launch {
                 viewModel.uiState
                     .flowWithLifecycle(lifecycle)
-                    .collect { uiState ->
+                    .onEach { uiState ->
                         if (!uiState.isFetchingData) progress.visibility = View.GONE
                         else progress.visibility = View.VISIBLE
                         rvAdapter.itemList = uiState.dataList
                     }
-            }
+                    .launchIn(lifecycle.coroutineScope)
         }
     }
 
-    private fun setupEvent(lifecycle: Lifecycle) {
+    private fun setupEvent() {
         viewModel.uiEvent
             .flowWithLifecycle(lifecycle)
             .onEach { event ->
@@ -112,8 +113,8 @@ class PlayersListFragment : Fragment() {
         super.onStop()
     }
 
-    override fun onDestroy() {
+    override fun onDestroyView() {
         _binding = null
-        super.onDestroy()
+        super.onDestroyView()
     }
 }
